@@ -40,32 +40,29 @@ function CardBox() {
         </Box>
       </AbsoluteCenter>
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
+          <ModalOverlay />
         <ModalContent>
-          <ModalHeader>
-            <ModalCloseButton />
-          </ModalHeader>
-          <Divider mt={5} variant={"solid"} />
           <ModalBody>
-            <Text textAlign={"center"} mt={5} mb={5}>
-              Silahkan Hubungi Pihak Koperasi
+            <ModalCloseButton color={"#FF0000"} />
+            <Text
+              textAlign={"center"}
+              mt={5}
+              mb={5}
+              color={"#FF0000"}
+              fontWeight={"bold"}
+            >
+              Forgot Password
+            </Text>
+            <Text
+              textAlign={"center"}
+              mt={5}
+              mb={5}
+              color={"#6096B4"}
+              fontWeight={"bold"}
+            >
+              Please Contact Admin
             </Text>
           </ModalBody>
-          <Divider variant={"solid"} />
-          <ModalFooter>
-            <Button
-              bg={"royalRed.200"}
-              color={"white"}
-              mr={3}
-              onClick={onClose}
-              _hover={{
-                background: "royalRed.200",
-                color: "white",
-              }}
-            >
-              Tutup
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </Center>
