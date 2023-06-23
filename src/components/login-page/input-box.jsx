@@ -12,7 +12,7 @@ function InputBox() {
         borderStyle={"solid"}
         width={286.41}
         height={"36px"}
-        color={"#6096b4"}
+        color={"black"}
       ></Input>
     </Flex>
   );
