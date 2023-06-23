@@ -14,6 +14,7 @@ import {
 import "./box.css";
 import InputBox from "./input-box";
 import PasswordInput from "./password";
+import { ButtonBoxSignIn } from "./button-box";
 
 function LoginBox() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -31,8 +32,8 @@ function LoginBox() {
               Password
               <PasswordInput />
             </Box>
-            <Button className="button-box" color={'#f5f5f5'} backgroundColor={'#bdcdd6'} >Sign In</Button>
-            <Text className="button-text" onClick={onOpen} cursor="pointer" >
+            <ButtonBoxSignIn>Sign In</ButtonBoxSignIn>
+            <Text className="button-text" onClick={onOpen} cursor="pointer">
               Forgot password?
             </Text>
           </SimpleGrid>

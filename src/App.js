@@ -1,10 +1,12 @@
-import Login from "./components/login-page/login";
+// import Login from "./components/login-page/login";
 import "./App.css";
+import Register from "./components/abaikan/Register";
 
 function App() {
   return (
     <div>
-      <Login />
+      {/* <Login /> */}
+      <Register/>
     </div>
   );
 }

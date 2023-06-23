@@ -18,9 +18,9 @@ function PasswordInput() {
         color={"black"}
         type={show ? "text" : "password"}
       />
-      <InputRightElement width='3rem'>
-        <Button size="sm" onClick={handleClick} variant={'ghost'}>
-          {show ? <Logo/> : <Logo/>}
+      <InputRightElement width="3rem">
+        <Button size="sm" onClick={handleClick} variant={"ghost"}>
+          {show ? <Logo /> : <Logo />}
         </Button>
       </InputRightElement>
     </InputGroup>

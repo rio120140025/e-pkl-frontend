@@ -14,7 +14,7 @@ function Login() {
       backgroundPosition="center"
       backgroundSize="cover"
     >
-      <Header/>
+      <Header />
       <LoginBox />
     </Box>
   );

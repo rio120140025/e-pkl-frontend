@@ -17,11 +17,19 @@ function RegisterBox() {
               <InputBox />
             </Box>
             <Box>
-              NRK/NIP
+              Email
               <InputBox />
             </Box>
             <Box>
-              Email
+              NIM
+              <InputBox />
+            </Box>
+            <Box>
+              Lokasi PKL
+              <InputBox />
+            </Box>
+            <Box>
+              Nomor Telepon
               <InputBox />
             </Box>
             <Box>

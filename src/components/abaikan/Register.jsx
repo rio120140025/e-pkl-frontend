@@ -1,10 +1,9 @@
 import React from "react";
-import Header from "./Header";
-import FormMahasiswaBox from "./FormMahasiswaBox";
+import Header from "../register-page/header";
 import { Box } from "@chakra-ui/layout";
+import RegisterBox from "../register-page/register-mahasiswa-box";
 
-
-function FormMahasiswa() {
+function Register() {
     return (
         <Box
             bgImage={"background.jpg"}
@@ -16,9 +15,9 @@ function FormMahasiswa() {
             backgroundSize="cover"
         >
             <Header />
-            <FormMahasiswaBox />
+            <RegisterBox/>
         </Box>
     );
 }
 
-export default FormMahasiswa;
+export default Register;

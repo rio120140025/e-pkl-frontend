@@ -1,9 +1,10 @@
 import React from "react";
 import { AbsoluteCenter, Center, SimpleGrid } from "@chakra-ui/layout";
-import { Box, Button } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import "../login-page/box.css";
 import InputBox from "../login-page/input-box";
 import PasswordInput from "../login-page/password";
+import { ButtonBoxSignUp } from "../login-page/button-box";
 
 function RegisterBox() {
   return (
@@ -35,13 +36,7 @@ function RegisterBox() {
               Password
               <PasswordInput />
             </Box>
-            <Button
-              className="button-box"
-              color={"#f5f5f5"}
-              backgroundColor={"#bdcdd6"}
-            >
-              Sign Up
-            </Button>
+            <ButtonBoxSignUp />
           </SimpleGrid>
         </Box>
       </AbsoluteCenter>
