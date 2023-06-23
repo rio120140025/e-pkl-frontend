@@ -1,5 +1,5 @@
 import React from "react";
-import { AbsoluteCenter, Center, Divider, SimpleGrid } from "@chakra-ui/layout";
+import { AbsoluteCenter, Center, SimpleGrid } from "@chakra-ui/layout";
 import {
   Box,
   Button,
@@ -9,12 +9,11 @@ import {
   ModalOverlay,
   ModalCloseButton,
   ModalContent,
-  ModalHeader,
   ModalBody,
-  ModalFooter,
 } from "@chakra-ui/react";
 import "./box.css";
 import InputBox from "./input-box";
+import PasswordInput from "./password";
 
 function CardBox() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -30,17 +29,17 @@ function CardBox() {
             </Box>
             <Box>
               Password
-              <InputBox />
+              <PasswordInput />
             </Box>
-            <Button className="button-box">Sign In</Button>
-            <Text className="button-text" onClick={onOpen} cursor="pointer">
+            <Button className="button-box" color={'#f5f5f5'} backgroundColor={'#bdcdd6'} >Sign In</Button>
+            <Text className="button-text" onClick={onOpen} cursor="pointer" >
               Forgot password?
             </Text>
           </SimpleGrid>
         </Box>
       </AbsoluteCenter>
       <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
+        <ModalOverlay />
         <ModalContent>
           <ModalBody>
             <ModalCloseButton color={"#FF0000"} />

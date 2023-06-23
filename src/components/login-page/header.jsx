@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, ButtonGroup } from "@chakra-ui/react";
 import { Box, Flex, Spacer, Heading } from "@chakra-ui/layout";
-import './header.css'
+import "./header.css";
 
 function Header() {
   return (
