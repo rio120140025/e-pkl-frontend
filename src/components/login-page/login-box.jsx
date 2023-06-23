@@ -15,7 +15,7 @@ import "./box.css";
 import InputBox from "./input-box";
 import PasswordInput from "./password";
 
-function CardBox() {
+function LoginBox() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -67,4 +67,4 @@ function CardBox() {
     </Center>
   );
 }
-export default CardBox;
+export default LoginBox;

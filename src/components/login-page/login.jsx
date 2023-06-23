@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "./header";
-import CardBox from "./login-box";
+import LoginBox from "./login-box";
 import { Box } from "@chakra-ui/layout";
 
 function Login() {
@@ -14,8 +14,8 @@ function Login() {
       backgroundPosition="center"
       backgroundSize="cover"
     >
-      <Header />
-      <CardBox />
+      <Header/>
+      <LoginBox />
     </Box>
   );
 }

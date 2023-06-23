@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, ButtonGroup } from "@chakra-ui/react";
 import { Box, Flex, Spacer, Heading } from "@chakra-ui/layout";
-import "./header.css";
+import "../login-page/header.css";
 
 function Header() {
   return (
@@ -14,21 +14,21 @@ function Header() {
         <Button
           borderRadius="15"
           bgColor={"#f5f5f5"}
-          borderColor={"fff"}
-          width={86.78}
+          boxShadow={"xl"}
+          width={88.78}
           height={25}
           color={"#6096b4"}
+          className="border"
         >
           Sign Up
         </Button>
         <Button
           borderRadius="15"
           bgColor={"#f5f5f5"}
-          boxShadow={"xl"}
-          width={88.78}
+          borderColor={"fff"}
+          width={86.78}
           height={25}
           color={"#6096b4"}
-          className="border"
         >
           Sign in
         </Button>
