@@ -2,7 +2,6 @@ import React from "react";
 import { AbsoluteCenter, Center, SimpleGrid } from "@chakra-ui/layout";
 import {
   Box,
-  Button,
   Text,
   Modal,
   useDisclosure,
