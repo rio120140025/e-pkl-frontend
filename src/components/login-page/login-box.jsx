@@ -1,22 +1,21 @@
 import React from "react";
-import { AbsoluteCenter, Center, Divider, SimpleGrid } from "@chakra-ui/layout";
+import { AbsoluteCenter, Center, SimpleGrid } from "@chakra-ui/layout";
 import {
   Box,
-  Button,
   Text,
   Modal,
   useDisclosure,
   ModalOverlay,
   ModalCloseButton,
   ModalContent,
-  ModalHeader,
   ModalBody,
-  ModalFooter,
 } from "@chakra-ui/react";
 import "./box.css";
 import InputBox from "./input-box";
+import PasswordInput from "./password";
+import { ButtonBoxSignIn } from "./button-box";
 
-function CardBox() {
+function LoginBox() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -30,9 +29,9 @@ function CardBox() {
             </Box>
             <Box>
               Password
-              <InputBox />
+              <PasswordInput />
             </Box>
-            <Button className="button-box">Sign In</Button>
+            <ButtonBoxSignIn >Sign In</ButtonBoxSignIn>
             <Text className="button-text" onClick={onOpen} cursor="pointer">
               Forgot password?
             </Text>
@@ -42,33 +41,30 @@ function CardBox() {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>
-            <ModalCloseButton />
-          </ModalHeader>
-          <Divider mt={5} variant={"solid"} />
           <ModalBody>
-            <Text textAlign={"center"} mt={5} mb={5}>
-              Silahkan Hubungi Pihak Koperasi
+            <ModalCloseButton color={"#FF0000"} />
+            <Text
+              textAlign={"center"}
+              mt={5}
+              mb={5}
+              color={"#FF0000"}
+              fontWeight={"bold"}
+            >
+              Forgot Password
+            </Text>
+            <Text
+              textAlign={"center"}
+              mt={5}
+              mb={5}
+              color={"#6096B4"}
+              fontWeight={"bold"}
+            >
+              Please Contact Admin
             </Text>
           </ModalBody>
-          <Divider variant={"solid"} />
-          <ModalFooter>
-            <Button
-              bg={"royalRed.200"}
-              color={"white"}
-              mr={3}
-              onClick={onClose}
-              _hover={{
-                background: "royalRed.200",
-                color: "white",
-              }}
-            >
-              Tutup
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </Center>
   );
 }
-export default CardBox;
+export default LoginBox;

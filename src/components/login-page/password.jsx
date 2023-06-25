@@ -1,15 +1,27 @@
 import React, { useState } from "react";
-import { FormControl, FormErrorMessage, FormHelperText, Input } from "@chakra-ui/react";
-import { Flex } from "@chakra-ui/layout";
+import {
+  Button,
+  FormControl,
+  FormErrorMessage,
+  FormHelperText,
+  Input,
+  InputGroup,
+  InputRightElement,
+} from "@chakra-ui/react";
+import { ReactComponent as Logo } from "../../assets/icon-showpass.svg";
 
-function InputBox() {
+function PasswordInput() {
+  const [show, setShow] = React.useState(false);
+  const handleClick = () => setShow(!show);
+
   const [input, setInput] = useState("");
 
   const handleInputChange = (e) => setInput(e.target.value);
 
   const isError = input === "";
+
   return (
-    <Flex>
+    <InputGroup size="md">
       <FormControl isInvalid={isError}>
         <Input
           value={input}
@@ -21,6 +33,7 @@ function InputBox() {
           width={286.41}
           height={"36px"}
           color={"black"}
+          type={show ? "text" : "password"}
         />
         {!isError ? (
           <FormHelperText />
@@ -28,8 +41,13 @@ function InputBox() {
           <FormErrorMessage>*this field must be filled</FormErrorMessage>
         )}
       </FormControl>
-    </Flex>
+      <InputRightElement width="3rem">
+        <Button size="sm" onClick={handleClick} variant={"ghost"}>
+          {show ? <Logo /> : <Logo />}
+        </Button>
+      </InputRightElement>
+    </InputGroup>
   );
 }
 
-export default InputBox;
+export default PasswordInput;
