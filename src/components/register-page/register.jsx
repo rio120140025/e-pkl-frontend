@@ -1,8 +1,11 @@
 import React from "react";
 import Header from "./header";
 import RoleBox from "./register-role";
+import RegisterBoxMahasiswa from "./register-mahasiswa-box";
+import RegisterBoxDosen from "./register-dosen-box";
+import RegisterBoxDPL from "./register-dpl-box";
 
-function Register() {
+function RoleRegister() {
   return (
     <div>
       <Header />
@@ -11,4 +14,36 @@ function Register() {
   );
 }
 
-export default Register;
+function RoleRegisterMahasiswa() {
+  return (
+    <div>
+      <Header />
+      <RegisterBoxMahasiswa />
+    </div>
+  );
+}
+
+function RoleRegisterDosen() {
+  return (
+    <div>
+      <Header />
+      <RegisterBoxDosen />
+    </div>
+  );
+}
+
+function RoleRegisterDPL() {
+  return (
+    <div>
+      <Header />
+      <RegisterBoxDPL />
+    </div>
+  );
+}
+
+export {
+  RoleRegister,
+  RoleRegisterDPL,
+  RoleRegisterDosen,
+  RoleRegisterMahasiswa,
+};

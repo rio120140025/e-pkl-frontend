@@ -1,8 +1,9 @@
 import React from "react";
 import { ButtonGroup } from "@chakra-ui/react";
 import { Box, Flex, Spacer, Heading } from "@chakra-ui/layout";
-import "../login-page/header.css";
 import { Link } from "react-router-dom";
+
+import "../login-page/header.css";
 
 function Header() {
   return (
