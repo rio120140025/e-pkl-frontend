@@ -1,4 +1,6 @@
 .button-nonclick {
+  border: 2px solid #6096b4;
+  box-sizing: border-box;
   border-radius: 15px;
   background-color: #f5f5f5;
   border-color: #fff;
