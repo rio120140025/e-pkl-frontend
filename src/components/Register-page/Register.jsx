@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "./Header";
+import Header from "./header";
 import RegisterRole from "./RegisterRole.jsx";
 import { Box } from "@chakra-ui/layout";
 
