@@ -12,14 +12,14 @@ function InputBox(props) {
   const [isTouched, setIsTouched] = useState(false);
   const handleInputBlur = () => setIsTouched(true);
 
-  const isError = isTouched && input === "";
+  const isError = isTouched && props.input === "";
 
   return (
     <Flex>
       <FormControl isInvalid={isError}>
         <Input
-          value={props.mail}
-          onChange={(e) => props.handleSetEmail(e)}
+          value={props.input}
+          onChange={(e) => props.handleSet(e)}
           onBlur={handleInputBlur}
           borderRadius="5"
           bgColor={"#fff"}
@@ -39,4 +39,5 @@ function InputBox(props) {
   );
 }
 
-export default InputBox;
+
+export default InputBox

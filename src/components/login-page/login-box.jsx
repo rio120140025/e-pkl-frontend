@@ -9,6 +9,7 @@ import {
   ModalCloseButton,
   ModalContent,
   ModalBody,
+  useToast
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -17,9 +18,19 @@ import "./box.css";
 
 import InputBox from "./input-box";
 import PasswordInput from "./password";
-import { ButtonBoxSignIn } from "./button-box";
+import ButtonBoxSign from "./button-box";
 
 function LoginBox() {
+  const toast = useToast()
+  function callToast(title, status) {
+    toast({
+      title: title,
+      status: status,
+      duration: 3000,
+      isClosable: true,
+    })
+  }
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [email, setEmail] = useState("");
@@ -43,14 +54,16 @@ function LoginBox() {
       .then(response => {
         setCookie("jwt_token", response)
         if (response != null) {
-          navigate("/dashboard");
+          callToast("Berhasil Login", 'success')
+          navigate('/dashboard')
         }
         else {
           console.log("Token tidak digenerated")
         }
       })
       .catch(error => {
-        console.error(error.response.data);
+        console.error(error.response.data.reason);
+        callToast(error.response.data.reason, 'error')
       });
   };
 
@@ -61,13 +74,13 @@ function LoginBox() {
           <SimpleGrid spacingY="20px">
             <Box>
               Email
-              <InputBox email={email} handleSetEmail={(e) => setEmail(e.target.value)} />
+              <InputBox input={email} handleSet={(e) => setEmail(e.target.value)} />
             </Box>
             <Box>
               Password
               <PasswordInput password={password} handleSetPassword={(e) => setPassword(e.target.value)} />
             </Box>
-            <ButtonBoxSignIn handleSignIn={() => handleSignIn()}>Sign In</ButtonBoxSignIn>
+            <ButtonBoxSign handle={() => handleSignIn()} buttonType='Sign In' />
             <Text className="button-text" onClick={onOpen} cursor="pointer">
               Forgot password?
             </Text>

@@ -21,7 +21,7 @@ function PasswordInput(props) {
 
   const handleInputBlur = () => setIsTouched(true);
 
-  const isError = isTouched && input === "";
+  const isError = isTouched && props.password === "";
 
   return (
     <InputGroup size="md">

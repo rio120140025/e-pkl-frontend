@@ -6,9 +6,10 @@ import "../login-page/box.css";
 
 import InputBox from "../login-page/input-box";
 import PasswordInput from "../login-page/password";
-import { ButtonBoxSignUp } from "../login-page/button-box";
+import ButtonBoxSign from "../login-page/button-box";
 
 function RegisterBoxDPL() {
+
   return (
     <Center>
       <AbsoluteCenter>
@@ -38,7 +39,7 @@ function RegisterBoxDPL() {
               Password
               <PasswordInput />
             </Box>
-            <ButtonBoxSignUp />
+            <ButtonBoxSign buttonType='Sign In' />
           </SimpleGrid>
         </Box>
       </AbsoluteCenter>

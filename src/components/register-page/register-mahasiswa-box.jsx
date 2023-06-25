@@ -8,7 +8,7 @@ import "../login-page/box.css";
 
 import InputBox from "../login-page/input-box";
 import PasswordInput from "../login-page/password";
-import { ButtonBoxSignUp } from "../login-page/button-box";
+import ButtonBoxSign from "../login-page/button-box";
 
 function RegisterBoxMahasiswa() {
   const [nama, setNama] = useState("");
@@ -21,16 +21,13 @@ function RegisterBoxMahasiswa() {
 
   const handleRegister = () => {
     const loginData = {
-      nama: { nama },
-      email: { email },
-      password: { password },
+      nama: nama,
+      email: email,
+      password: password,
       roles_id: "1",
-      lokasi: { lokasi },
-      nim: { nim },
-      notelp: { notelp },
-
-
-
+      lokasi: lokasi,
+      nim: nim,
+      notelp: notelp,
     };
 
     axios
@@ -71,9 +68,9 @@ function RegisterBoxMahasiswa() {
             </Box>
             <Box>
               Password
-              <PasswordInput onChange={e => setPassword(e.target.value)} />
+              <PasswordInput onChange={e => setPassword(e.target.value)} bottonType="Sign Up" />
             </Box>
-            <ButtonBoxSignUp onClick={handleRegister} />
+            <ButtonBoxSign handle={() => handleRegister()} buttonType='Sign In' />
           </SimpleGrid>
         </Box>
       </AbsoluteCenter>
