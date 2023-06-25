@@ -1,7 +1,8 @@
 import React from "react";
-import { Button, ButtonGroup } from "@chakra-ui/react";
+import { ButtonGroup } from "@chakra-ui/react";
 import { Box, Flex, Spacer, Heading } from "@chakra-ui/layout";
 import "./header.css";
+import { Link } from "react-router-dom";
 
 function Header() {
   return (
@@ -11,27 +12,12 @@ function Header() {
       </Box>
       <Spacer />
       <ButtonGroup gap="22px" paddingRight={84}>
-        <Button
-          borderRadius="15"
-          bgColor={"#f5f5f5"}
-          borderColor={"fff"}
-          width={86.78}
-          height={25}
-          color={"#6096b4"}
-        >
+        <Link className="button-nonclick" to="/register">
           Sign Up
-        </Button>
-        <Button
-          borderRadius="15"
-          bgColor={"#f5f5f5"}
-          boxShadow={"xl"}
-          width={88.78}
-          height={25}
-          color={"#6096b4"}
-          className="border"
-        >
+        </Link>
+        <Link className="button-click" to="/">
           Sign in
-        </Button>
+        </Link>
       </ButtonGroup>
     </Flex>
   );

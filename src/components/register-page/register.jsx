@@ -1,14 +1,14 @@
 import React from "react";
-import LoginBox from "./login-box";
 import Header from "./header";
+import RoleBox from "./register-role";
 
-function Login() {
+function Register() {
   return (
     <div>
       <Header />
-      <LoginBox />
+      <RoleBox />
     </div>
   );
 }
 
-export default Login;
+export default Register;
