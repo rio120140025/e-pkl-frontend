@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { FormControl, FormErrorMessage, FormHelperText, Input } from "@chakra-ui/react";
+import {
+  FormControl,
+  FormErrorMessage,
+  FormHelperText,
+  Input,
+} from "@chakra-ui/react";
 import { Flex } from "@chakra-ui/layout";
 
 function InputBox() {
@@ -22,11 +27,11 @@ function InputBox() {
           height={"36px"}
           color={"black"}
         />
-          {!isError ? (
-            <FormHelperText/>
-          ) : (
-            <FormErrorMessage>*this field must be filled</FormErrorMessage>
-          )}
+        {!isError ? (
+          <FormHelperText />
+        ) : (
+          <FormErrorMessage>*this field must be filled</FormErrorMessage>
+        )}
       </FormControl>
     </Flex>
   );
