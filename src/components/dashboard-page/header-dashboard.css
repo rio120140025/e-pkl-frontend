@@ -1,6 +1,7 @@
 .button-nonclick-dashboard {
   height: 25px;
   text-align: center;
+  font-weight: 700;
 }
 
 .button-click-dashboard {
@@ -14,4 +15,15 @@
   justify-content: flex-start;
   position: relative;
   text-transform: capitalize;
+  font-weight: bolder;
+}
+
+.button-nonclick-dashboard:hover {
+  color: #E1E7EA;
+  cursor: pointer;
+}
+
+.button-click-dashboard:hover {
+  color: black;
+  cursor: pointer;
 }

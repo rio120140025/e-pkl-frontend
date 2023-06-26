@@ -14,8 +14,8 @@ function Header() {
         </Box>
         <Spacer />
         <ButtonGroup gap="22px" paddingRight={84}>
-          <Link className="button-click-dashboard">Dashboard</Link>
-          <Link className="button-nonclick-dashboard">Profile</Link>
+          <Link className="button-nonclick-dashboard">Dashboard</Link>
+          <Link className="button-click-dashboard">Profile</Link>
           <Link className="button-nonclick-dashboard">Rencana Kegiatan</Link>
           <Link className="button-nonclick-dashboard">Log Harian</Link>
           <Link className="button-nonclick-dashboard">Kehadiran</Link>
