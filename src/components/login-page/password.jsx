@@ -16,10 +16,12 @@ function PasswordInput() {
   const handleClick = () => setShow(!show);
 
   const [input, setInput] = useState("");
+  const [isTouched, setIsTouched] = useState(false);
 
   const handleInputChange = (e) => setInput(e.target.value);
+  const handleInputBlur = () => setIsTouched(true);
 
-  const isError = input === "";
+  const isError = isTouched && input === "";
 
   return (
     <InputGroup size="md">
@@ -27,6 +29,7 @@ function PasswordInput() {
         <Input
           value={input}
           onChange={handleInputChange}
+          onBlur={handleInputBlur}
           borderRadius="5"
           bgColor={"#fff"}
           borderColor={"#bdcdd6"}

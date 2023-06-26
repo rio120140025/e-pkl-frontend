@@ -3,21 +3,18 @@ import { Box } from "@chakra-ui/layout";
 
 import "./App.css";
 
-// import Login from "./components/login-page/login";
-// import {
-//   RoleRegister,
-//   RoleRegisterDPL,
-//   RoleRegisterDosen,
-//   RoleRegisterMahasiswa,
-// } from "./components/register-page/register";
-
-import Dashboard from "./components/dashboard-page/dashboard";
+import Login from "./components/login-page/login";
+import {
+  RoleRegister,
+  RoleRegisterDPL,
+  RoleRegisterDosen,
+  RoleRegisterMahasiswa,
+} from "./components/register-page/register";
 
 function App() {
   return (
     <BrowserRouter>
-      <Dashboard />
-      {/* <Box
+      <Box
         bgImage={"background.jpg"}
         height={"100vh"}
         width={"100vw"}
@@ -41,7 +38,7 @@ function App() {
             Component={RoleRegisterDPL}
           />
         </Routes>
-      </Box> */}
+      </Box>
     </BrowserRouter>
   );
 }

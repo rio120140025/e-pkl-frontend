@@ -9,16 +9,20 @@ import { Flex } from "@chakra-ui/layout";
 
 function InputBox() {
   const [input, setInput] = useState("");
+  const [isTouched, setIsTouched] = useState(false);
 
   const handleInputChange = (e) => setInput(e.target.value);
+  const handleInputBlur = () => setIsTouched(true);
 
-  const isError = input === "";
+  const isError = isTouched && input === "";
+
   return (
     <Flex>
       <FormControl isInvalid={isError}>
         <Input
           value={input}
           onChange={handleInputChange}
+          onBlur={handleInputBlur}
           borderRadius="5"
           bgColor={"#fff"}
           borderColor={"#bdcdd6"}
