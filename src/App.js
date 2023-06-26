@@ -11,12 +11,9 @@ import {
   RoleRegisterMahasiswa,
 } from "./components/register-page/register";
 
-import Dashboard from "./components/dashboard-page/dashboard";
-
 function App() {
   return (
     <BrowserRouter>
-      {/* <Dashboard /> */}
       <Box
         bgImage={"background.jpg"}
         height={"100vh"}
