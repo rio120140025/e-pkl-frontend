@@ -3,7 +3,7 @@ import { ButtonGroup } from "@chakra-ui/react";
 import { Box, Flex, Spacer, Heading } from "@chakra-ui/layout";
 import { Link } from "react-router-dom";
 
-import "./header.css";
+import "../login-page/header.css";
 
 function Header() {
   return (
@@ -13,10 +13,10 @@ function Header() {
       </Box>
       <Spacer />
       <ButtonGroup gap="22px" paddingRight={84}>
-        <Link className="button-nonclick" to="/register">
+        <Link className="button-click" to="/register">
           Sign Up
         </Link>
-        <Link className="button-click" to="/">
+        <Link className="button-nonclick" to="/">
           Sign in
         </Link>
       </ButtonGroup>

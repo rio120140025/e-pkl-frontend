@@ -8,6 +8,7 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
+
 import { ReactComponent as Logo } from "../../assets/icon-showpass.svg";
 
 function PasswordInput() {

@@ -10,7 +10,9 @@ import {
   ModalContent,
   ModalBody,
 } from "@chakra-ui/react";
+
 import "./box.css";
+
 import InputBox from "./input-box";
 import PasswordInput from "./password";
 import { ButtonBoxSignIn } from "./button-box";
