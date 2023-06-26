@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { AbsoluteCenter, Center, SimpleGrid } from "@chakra-ui/layout";
 import {
   Box,
@@ -10,6 +10,7 @@ import {
   ModalContent,
   ModalBody,
 } from "@chakra-ui/react";
+import axios from "axios"; // Tambahkan impor Axios
 
 import "./box.css";
 
@@ -20,6 +21,22 @@ import { ButtonBoxSignIn } from "./button-box";
 function LoginBox() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSignIn = async () => {
+    try {
+      const response = await axios.post("127.0.0.1:8000/api/mahasiswa/login", {
+        email,
+        password,
+      });
+      console.log(response.data);
+      window.location.href = "./components/dashboard-page/dashboard";
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Center>
       <AbsoluteCenter>
@@ -27,13 +44,13 @@ function LoginBox() {
           <SimpleGrid spacingY="20px">
             <Box>
               Email
-              <InputBox />
+              <InputBox value={email} onChange={e => setEmail(e.target.value)} />
             </Box>
             <Box>
               Password
-              <PasswordInput />
+              <PasswordInput value={password} onChange={e => setPassword(e.target.value)} />
             </Box>
-            <ButtonBoxSignIn>Sign In</ButtonBoxSignIn>
+            <ButtonBoxSignIn onClick={handleSignIn}>Sign In</ButtonBoxSignIn>
             <Text className="button-text" onClick={onOpen} cursor="pointer">
               Forgot password?
             </Text>
@@ -69,4 +86,5 @@ function LoginBox() {
     </Center>
   );
 }
+
 export default LoginBox;

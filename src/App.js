@@ -11,10 +11,13 @@ import {
   RoleRegisterMahasiswa,
 } from "./components/register-page/register";
 
+import Dashboard from "./components/dashboard-page/dashboard";
+
 function App() {
   return (
     <BrowserRouter>
-      <Box
+      <Dashboard />
+      {/* <Box
         bgImage={"background.jpg"}
         height={"100vh"}
         width={"100vw"}
@@ -38,7 +41,7 @@ function App() {
             Component={RoleRegisterDPL}
           />
         </Routes>
-      </Box>
+      </Box> */}
     </BrowserRouter>
   );
 }
