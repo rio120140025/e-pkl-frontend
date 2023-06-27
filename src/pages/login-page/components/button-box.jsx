@@ -1,12 +1,13 @@
 import React from "react";
 import { Button } from "@chakra-ui/button";
 
-function ButtonBoxSignIn() {
+function ButtonBoxSignIn(cek) {
   return (
     <Button
       className="button-box"
       color={"#f5f5f5"}
       backgroundColor={"#bdcdd6"}
+      onClick={() => cek.handleSignIn()}
     >
       Sign In
     </Button>

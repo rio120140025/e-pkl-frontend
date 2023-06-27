@@ -1,0 +1,34 @@
+.icon {
+  position: absolute;
+  top: 84px;
+  left: 78px;
+  border-radius: 5px;
+  background-color: #bdcdd6;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  padding: 7px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  cursor: pointer;
+}
+
+.homeVectorIcon {
+  position: relative;
+  width: 36.81px;
+  height: 35.92px;
+}
+
+.desc-1 {
+  position: absolute;
+  top: 82px;
+  left: 144px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.desc-2 {
+  position: absolute;
+  top: 109px;
+  left: 144px;
+}

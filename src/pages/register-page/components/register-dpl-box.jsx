@@ -2,11 +2,11 @@ import React from "react";
 import { AbsoluteCenter, Center, SimpleGrid } from "@chakra-ui/layout";
 import { Box } from "@chakra-ui/react";
 
-import "../login-page/box.css";
+import "../../login-page/components/box.css";
 
-import InputBox from "../login-page/input-box";
-import PasswordInput from "../login-page/password";
-import { ButtonBoxSignUp } from "../login-page/button-box";
+import InputBox from "../../login-page/components/input-box";
+import PasswordInput from "../../login-page/components/password";
+import { ButtonBoxSignUp } from "../../login-page/components/button-box";
 
 function RegisterBoxDPL() {
   return (
