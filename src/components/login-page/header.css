@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap');
+
+html {
+  font-family: 'Poppins', sans-serif;
+}
+
 .e-pkl {
   padding-left: 84px;
 }
@@ -25,4 +31,44 @@
   width: 84.78px;
   height: 25px;
   color: #6096b4;
+}
+
+.auth-header-container {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 12px 80px 12px 80px;
+   background: #BDCDD6;
+}
+
+.auth-header-right {
+   display: flex;
+   justify-content: space-around;
+   align-items: center;
+}
+
+.auth-header-right .link {
+  margin: 0 15px;
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 21px;
+}
+
+.auth-header-right .active a {
+  background: #FFFFFF;
+  padding: 4px 12px 4px 12px;
+  border-radius: 16px;
+  color: #BDCDD6 !important;
+}
+
+.auth-header-right .link:hover a {
+  background: #FFFFFF;
+  padding: 4px 12px 4px 12px;
+  border-radius: 16px;
+  color: #BDCDD6;
+}
+
+.auth-header-right .link a {
+  text-decoration: none;
+  color: #000000;
 }
