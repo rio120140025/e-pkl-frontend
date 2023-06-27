@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { AbsoluteCenter, Center, SimpleGrid } from "@chakra-ui/layout";
 import {
   Box,
@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import { useCookies } from 'react-cookie';
 import "./box.css";
 
 import InputBox from "./input-box";
@@ -24,27 +24,35 @@ function LoginBox() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const [cookies, setCookie] = useCookies(['name']);
 
+  const navigate = useNavigate();
+  if (cookies.jwt_token != null) {
+    window.location.href = "/dashboard";
+  } else {
+
+  }
   const handleSignIn = () => {
     const loginData = {
-      email: { email },
-      password: { password },
+      email: email,
+      password: password,
     };
 
     axios
-      .post("http://127.0.0.1:8000/api/user/register", loginData)
+      .post("http://127.0.0.1:8000/api/user/login", loginData)
       .then(response => {
-        navigate("/dashboard");
+        setCookie("jwt_token", response)
+        if (response != null) {
+          navigate("/dashboard");
+        }
+        else {
+          console.log("Token tidak digenerated")
+        }
       })
       .catch(error => {
         console.error(error.response.data);
       });
   };
-
-  useEffect(() => {
-    handleSignIn();
-  }, [navigate]);
 
   return (
     <Center>
@@ -53,13 +61,13 @@ function LoginBox() {
           <SimpleGrid spacingY="20px">
             <Box>
               Email
-              <InputBox onChange={e => setEmail(e.target.value)} />
+              <InputBox email={email} handleSetEmail={(e) => setEmail(e.target.value)} />
             </Box>
             <Box>
               Password
-              <PasswordInput onChange={e => setPassword(e.target.value)} />
+              <PasswordInput password={password} handleSetPassword={(e) => setPassword(e.target.value)} />
             </Box>
-            <ButtonBoxSignIn onClick={handleSignIn}>Sign In</ButtonBoxSignIn>
+            <ButtonBoxSignIn handleSignIn={() => handleSignIn()}>Sign In</ButtonBoxSignIn>
             <Text className="button-text" onClick={onOpen} cursor="pointer">
               Forgot password?
             </Text>

@@ -11,14 +11,14 @@ import {
 
 import { ReactComponent as Logo } from "../../assets/icon-showpass.svg";
 
-function PasswordInput() {
+function PasswordInput(props) {
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
 
   const [input, setInput] = useState("");
   const [isTouched, setIsTouched] = useState(false);
 
-  const handleInputChange = (e) => setInput(e.target.value);
+
   const handleInputBlur = () => setIsTouched(true);
 
   const isError = isTouched && input === "";
@@ -27,8 +27,8 @@ function PasswordInput() {
     <InputGroup size="md">
       <FormControl isInvalid={isError}>
         <Input
-          value={input}
-          onChange={handleInputChange}
+          value={props.password}
+          onChange={e => props.handleSetPassword(e)}
           onBlur={handleInputBlur}
           borderRadius="5"
           bgColor={"#fff"}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { AbsoluteCenter, Center, SimpleGrid } from "@chakra-ui/layout";
 import { Box } from "@chakra-ui/react";
 import axios from "axios";
@@ -34,7 +34,7 @@ function RegisterBoxMahasiswa() {
     };
 
     axios
-      .post("http://127.0.0.1:8000/api/user/login", loginData)
+      .post("http://127.0.0.1:8000/api/user/register", loginData)
       .then(response => {
         // navigate("/dashboard");
         console.log(loginData)
@@ -44,10 +44,6 @@ function RegisterBoxMahasiswa() {
       });
   };
 
-  useEffect(() => {
-    handleRegister();
-  }, //[navigate]);
-    null)
   return (
     <Center>
       <AbsoluteCenter>
