@@ -3,7 +3,7 @@ import { AbsoluteCenter, Center, SimpleGrid } from "@chakra-ui/layout";
 import { Box, Text, useRadio, useRadioGroup } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
-import "./RegisterRoleBox.css";
+import "./register-role-box.css";
 
 function Option(props) {
   const { getInputProps, getRadioProps } = useRadio(props);

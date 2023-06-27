@@ -3,7 +3,7 @@ import { ButtonGroup } from "@chakra-ui/react";
 import { Box, Flex, Spacer, Heading } from "@chakra-ui/layout";
 import { Link } from "react-router-dom";
 
-import "../login-page/header.css";
+import "../../login-page/components/header.css";
 
 function Header() {
   return (

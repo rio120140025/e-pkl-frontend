@@ -9,9 +9,9 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 
-import { ReactComponent as Logo } from "../../assets/icon-showpass.svg";
+import { ReactComponent as Logo } from "../../../assets/icon-showpass.svg";
 
-function PasswordInput() {
+function PasswordInput(props) {
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
 
@@ -27,8 +27,10 @@ function PasswordInput() {
     <InputGroup size="md">
       <FormControl isInvalid={isError}>
         <Input
-          value={input}
-          onChange={handleInputChange}
+          // value={input}
+          // onChange={handleInputChange}
+          value={props.password}
+          onChange={(e) => props.handleSetPassword(e)}
           onBlur={handleInputBlur}
           borderRadius="5"
           bgColor={"#fff"}

@@ -2,31 +2,22 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Box } from "@chakra-ui/layout";
 
 import "./App.css";
+import Dashboard from "./pages/dashboard-page/dashboard";
 
-import Login from "./components/login-page/login";
+import Login from "./pages/login-page/login";
 import {
   RoleRegister,
   RoleRegisterDPL,
   RoleRegisterDosen,
   RoleRegisterMahasiswa,
-} from "./components/register-page/register";
-
-import Dashboard from "./components/dashboard-page/dashboard";
+} from "./pages/register-page/register";
 
 function App() {
   return (
     <BrowserRouter>
-      <Dashboard />
-      {/* <Box
-        bgImage={"background.jpg"}
-        height={"100vh"}
-        width={"100vw"}
-        w="100%"
-        bgRepeat="no-repeat"
-        backgroundPosition="center"
-        backgroundSize="cover"
-      >
-        <Routes>
+      <Box>
+        <Dashboard />
+        {/* <Routes>
           <Route exact path="/" Component={Login} />
           <Route exact path="/register" Component={RoleRegister} />
           <Route
@@ -40,8 +31,8 @@ function App() {
             path="/register-Dosen Pembimbing"
             Component={RoleRegisterDPL}
           />
-        </Routes>
-      </Box> */}
+        </Routes> */}
+      </Box>
     </BrowserRouter>
   );
 }
