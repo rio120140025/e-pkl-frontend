@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { AbsoluteCenter, Center, SimpleGrid } from "@chakra-ui/layout";
 import {
   Box,
@@ -10,6 +10,8 @@ import {
   ModalContent,
   ModalBody,
 } from "@chakra-ui/react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import "./box.css";
 
@@ -20,6 +22,30 @@ import { ButtonBoxSignIn } from "./button-box";
 function LoginBox() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSignIn = () => {
+    const loginData = {
+      email: { email },
+      password: { password },
+    };
+
+    axios
+      .post("http://127.0.0.1:8000/api/user/register", loginData)
+      .then(response => {
+        navigate("/dashboard");
+      })
+      .catch(error => {
+        console.error(error.response.data);
+      });
+  };
+
+  useEffect(() => {
+    handleSignIn();
+  }, [navigate]);
+
   return (
     <Center>
       <AbsoluteCenter>
@@ -27,13 +53,13 @@ function LoginBox() {
           <SimpleGrid spacingY="20px">
             <Box>
               Email
-              <InputBox />
+              <InputBox onChange={e => setEmail(e.target.value)} />
             </Box>
             <Box>
               Password
-              <PasswordInput />
+              <PasswordInput onChange={e => setPassword(e.target.value)} />
             </Box>
-            <ButtonBoxSignIn>Sign In</ButtonBoxSignIn>
+            <ButtonBoxSignIn onClick={handleSignIn}>Sign In</ButtonBoxSignIn>
             <Text className="button-text" onClick={onOpen} cursor="pointer">
               Forgot password?
             </Text>
@@ -69,4 +95,5 @@ function LoginBox() {
     </Center>
   );
 }
+
 export default LoginBox;

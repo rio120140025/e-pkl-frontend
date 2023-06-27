@@ -21,6 +21,7 @@ function Header() {
           <Link className="button-nonclick-dashboard">Kehadiran</Link>
           <Link className="button-nonclick-dashboard">Penilaian PKL</Link>
           <Link className="button-nonclick-dashboard">Kuisioner</Link>
+          <Link className="button-nonclick-dashboard" to="/">Logout</Link>
         </ButtonGroup>
       </Flex>
     </Box>

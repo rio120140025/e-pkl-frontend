@@ -6,44 +6,44 @@ import RegisterBoxDosen from "./register-dosen-box";
 import RegisterBoxDPL from "./register-dpl-box";
 
 function RoleRegister() {
-  return (
-    <div>
-      <Header />
-      <RoleBox />
-    </div>
-  );
+    return (
+        <div>
+            <Header />
+            <RoleBox />
+        </div>
+    );
 }
 
 function RoleRegisterMahasiswa() {
-  return (
-    <div>
-      <Header />
-      <RegisterBoxMahasiswa />
-    </div>
-  );
+    return (
+        <div>
+            <Header />
+            <RegisterBoxMahasiswa />
+        </div>
+    );
 }
 
 function RoleRegisterDosen() {
-  return (
-    <div>
-      <Header />
-      <RegisterBoxDosen />
-    </div>
-  );
+    return (
+        <div>
+            <Header />
+            <RegisterBoxDosen />
+        </div>
+    );
 }
 
 function RoleRegisterDPL() {
-  return (
-    <div>
-      <Header />
-      <RegisterBoxDPL />
-    </div>
-  );
+    return (
+        <div>
+            <Header />
+            <RegisterBoxDPL />
+        </div>
+    );
 }
 
 export {
-  RoleRegister,
-  RoleRegisterDPL,
-  RoleRegisterDosen,
-  RoleRegisterMahasiswa,
+    RoleRegister,
+    RoleRegisterDPL,
+    RoleRegisterDosen,
+    RoleRegisterMahasiswa,
 };

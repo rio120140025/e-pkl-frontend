@@ -11,6 +11,10 @@ import {
   RoleRegisterMahasiswa,
 } from "./components/register-page/register";
 
+import Profile from './components/profile-page/profile'
+import Dashboard from "./components/dashboard-page/dashboard";
+
+
 function App() {
   return (
     <BrowserRouter>
@@ -36,6 +40,16 @@ function App() {
             exact
             path="/register-Dosen Pembimbing"
             Component={RoleRegisterDPL}
+          />
+          <Route
+            exact
+            path="/profile"
+            Component={Profile}
+          />
+          <Route
+            exact
+            path="/dashboard"
+            Component={Dashboard}
           />
         </Routes>
       </Box>
