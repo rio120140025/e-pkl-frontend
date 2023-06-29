@@ -15,16 +15,17 @@ function ButtonBoxDownload() {
     </Button>
   );
 }
-function ButtonBoxSignUp() {
+function ButtonBoxUbah() {
   return (
     <Button
       className="button-box"
-      color={"#f5f5f5"}
-      backgroundColor={"#bdcdd6"}
+      variant="solid"
+      w="121px"
+      colorScheme="93BFCF"
     >
-      Sign Up
+      Ubah
     </Button>
   );
 }
 
-export { ButtonBoxDownload, ButtonBoxSignUp };
+export { ButtonBoxDownload, ButtonBoxUbah };

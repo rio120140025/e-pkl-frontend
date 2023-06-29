@@ -14,13 +14,27 @@ function HeaderDashboard() {
         </Box>
         <Spacer />
         <ButtonGroup gap="22px" paddingRight={84}>
-          <Link className="button-click-dashboard">Dashboard</Link>
-          <Link className="button-nonclick-dashboard">Profile</Link>
-          <Link className="button-nonclick-dashboard">Rencana Kegiatan</Link>
-          <Link className="button-nonclick-dashboard">Log Harian</Link>
-          <Link className="button-nonclick-dashboard">Kehadiran</Link>
-          <Link className="button-nonclick-dashboard">Penilaian PKL</Link>
-          <Link className="button-nonclick-dashboard">Kuisioner</Link>
+          <Link className="button-click-dashboard" to="/dashboard">
+            Dashboard
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/profile">
+            Profile
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/rencana-kegiatan">
+            Rencana Kegiatan
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/log-harian">
+            Log Harian
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/kehadiran">
+            Kehadiran
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/penilaian-pkl">
+            Penilaian PKL
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/kuisioner">
+            Kuisioner
+          </Link>
         </ButtonGroup>
       </Flex>
     </Box>
@@ -36,13 +50,27 @@ function HeaderKehadiran() {
         </Box>
         <Spacer />
         <ButtonGroup gap="22px" paddingRight={84}>
-          <Link className="button-nonclick-dashboard">Dashboard</Link>
-          <Link className="button-nonclick-dashboard">Profile</Link>
-          <Link className="button-nonclick-dashboard">Rencana Kegiatan</Link>
-          <Link className="button-nonclick-dashboard">Log Harian</Link>
-          <Link className="button-click-dashboard">Kehadiran</Link>
-          <Link className="button-nonclick-dashboard">Penilaian PKL</Link>
-          <Link className="button-nonclick-dashboard">Kuisioner</Link>
+          <Link className="button-nonclick-dashboard" to="/dashboard">
+            Dashboard
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/profile">
+            Profile
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/rencana-kegiatan">
+            Rencana Kegiatan
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/log-harian">
+            Log Harian
+          </Link>
+          <Link className="button-click-dashboard" to="/kehadiran">
+            Kehadiran
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/penilaian-pkl">
+            Penilaian PKL
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/kuisioner">
+            Kuisioner
+          </Link>
         </ButtonGroup>
       </Flex>
     </Box>
@@ -58,13 +86,27 @@ function HeaderKuisioner() {
         </Box>
         <Spacer />
         <ButtonGroup gap="22px" paddingRight={84}>
-          <Link className="button-nonclick-dashboard">Dashboard</Link>
-          <Link className="button-click-dashboard">Profile</Link>
-          <Link className="button-nonclick-dashboard">Rencana Kegiatan</Link>
-          <Link className="button-nonclick-dashboard">Log Harian</Link>
-          <Link className="button-nonclick-dashboard">Kehadiran</Link>
-          <Link className="button-nonclick-dashboard">Penilaian PKL</Link>
-          <Link className="button-nonclick-dashboard">Kuisioner</Link>
+          <Link className="button-nonclick-dashboard" to="/dashboard">
+            Dashboard
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/profile">
+            Profile
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/rencana-kegiatan">
+            Rencana Kegiatan
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/log-harian">
+            Log Harian
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/kehadiran">
+            Kehadiran
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/penilaian-pkl">
+            Penilaian PKL
+          </Link>
+          <Link className="button-click-dashboard" to="/kuisioner">
+            Kuisioner
+          </Link>
         </ButtonGroup>
       </Flex>
     </Box>
@@ -80,13 +122,27 @@ function HeaderLogHarian() {
         </Box>
         <Spacer />
         <ButtonGroup gap="22px" paddingRight={84}>
-          <Link className="button-nonclick-dashboard">Dashboard</Link>
-          <Link className="button-nonclick-dashboard">Profile</Link>
-          <Link className="button-nonclick-dashboard">Rencana Kegiatan</Link>
-          <Link className="button-click-dashboard">Log Harian</Link>
-          <Link className="button-nonclick-dashboard">Kehadiran</Link>
-          <Link className="button-nonclick-dashboard">Penilaian PKL</Link>
-          <Link className="button-nonclick-dashboard">Kuisioner</Link>
+          <Link className="button-nonclick-dashboard" to="/dashboard">
+            Dashboard
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/profile">
+            Profile
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/rencana-kegiatan">
+            Rencana Kegiatan
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/log-harian">
+            Log Harian
+          </Link>
+          <Link className="button-click-dashboard" to="/kehadiran">
+            Kehadiran
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/penilaian-pkl">
+            Penilaian PKL
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/kuisioner">
+            Kuisioner
+          </Link>
         </ButtonGroup>
       </Flex>
     </Box>
@@ -102,13 +158,27 @@ function HeaderPenilaian() {
         </Box>
         <Spacer />
         <ButtonGroup gap="22px" paddingRight={84}>
-          <Link className="button-nonclick-dashboard">Dashboard</Link>
-          <Link className="button-nonclick-dashboard">Profile</Link>
-          <Link className="button-nonclick-dashboard">Rencana Kegiatan</Link>
-          <Link className="button-nonclick-dashboard">Log Harian</Link>
-          <Link className="button-nonclick-dashboard">Kehadiran</Link>
-          <Link className="button-click-dashboard">Penilaian PKL</Link>
-          <Link className="button-nonclick-dashboard">Kuisioner</Link>
+          <Link className="button-nonclick-dashboard" to="/dashboard">
+            Dashboard
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/profile">
+            Profile
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/rencana-kegiatan">
+            Rencana Kegiatan
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/log-harian">
+            Log Harian
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/kehadiran">
+            Kehadiran
+          </Link>
+          <Link className="button-click-dashboard" to="/penilaian-pkl">
+            Penilaian PKL
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/kuisioner">
+            Kuisioner
+          </Link>
         </ButtonGroup>
       </Flex>
     </Box>
@@ -124,13 +194,27 @@ function HeaderProfil() {
         </Box>
         <Spacer />
         <ButtonGroup gap="22px" paddingRight={84}>
-          <Link className="button-nonclick-dashboard">Dashboard</Link>
-          <Link className="button-click-dashboard">Profile</Link>
-          <Link className="button-nonclick-dashboard">Rencana Kegiatan</Link>
-          <Link className="button-nonclick-dashboard">Log Harian</Link>
-          <Link className="button-nonclick-dashboard">Kehadiran</Link>
-          <Link className="button-nonclick-dashboard">Penilaian PKL</Link>
-          <Link className="button-nonclick-dashboard">Kuisioner</Link>
+          <Link className="button-nonclick-dashboard" to="/dashboard">
+            Dashboard
+          </Link>
+          <Link className="button-click-dashboard" to="/profile">
+            Profile
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/rencana-kegiatan">
+            Rencana Kegiatan
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/log-harian">
+            Log Harian
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/kehadiran">
+            Kehadiran
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/penilaian-pkl">
+            Penilaian PKL
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/kuisioner">
+            Kuisioner
+          </Link>
         </ButtonGroup>
       </Flex>
     </Box>
@@ -146,13 +230,27 @@ function HeaderRencanaKegiatan() {
         </Box>
         <Spacer />
         <ButtonGroup gap="22px" paddingRight={84}>
-          <Link className="button-nonclick-dashboard">Dashboard</Link>
-          <Link className="button-nonclick-dashboard">Profile</Link>
-          <Link className="button-nonclick-dashboard">Rencana Kegiatan</Link>
-          <Link className="button-nonclick-dashboard">Log Harian</Link>
-          <Link className="button-nonclick-dashboard">Kehadiran</Link>
-          <Link className="button-nonclick-dashboard">Penilaian PKL</Link>
-          <Link className="button-click-dashboard">Kuisioner</Link>
+          <Link className="button-nonclick-dashboard" to="/dashboard">
+            Dashboard
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/profile">
+            Profile
+          </Link>
+          <Link className="button-click-dashboard" to="/rencana-kegiatan">
+            Rencana Kegiatan
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/log-harian">
+            Log Harian
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/kehadiran">
+            Kehadiran
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/penilaian-pkl">
+            Penilaian PKL
+          </Link>
+          <Link className="button-nonclick-dashboard" to="/kuisioner">
+            Kuisioner
+          </Link>
         </ButtonGroup>
       </Flex>
     </Box>
