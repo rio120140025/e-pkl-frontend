@@ -4,6 +4,7 @@ import LoginBox from "./components/login-box";
 import Header from "./components/header";
 
 import { Box } from "@chakra-ui/layout";
+import { Link } from "react-router-dom";
 
 function Login() {
   return (
@@ -17,7 +18,9 @@ function Login() {
       backgroundSize="cover"
     >
       <Header />
-      <LoginBox />
+      <LoginBox>
+        <Link to="/dashboard" />
+      </LoginBox>
     </Box>
   );
 }

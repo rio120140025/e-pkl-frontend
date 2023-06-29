@@ -2,7 +2,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Box } from "@chakra-ui/layout";
 
 import "./App.css";
-import Dashboard from "./pages/dashboard-page/dashboard";
 
 import Login from "./pages/login-page/login";
 import {
@@ -11,13 +10,13 @@ import {
   RoleRegisterDosen,
   RoleRegisterMahasiswa,
 } from "./pages/register-page/register";
+import { Dashboard, Profile } from "./pages/dashboard-page/dashboard"
 
 function App() {
   return (
     <BrowserRouter>
       <Box>
-        <Dashboard />
-        {/* <Routes>
+        <Routes>
           <Route exact path="/" Component={Login} />
           <Route exact path="/register" Component={RoleRegister} />
           <Route
@@ -31,7 +30,9 @@ function App() {
             path="/register-Dosen Pembimbing"
             Component={RoleRegisterDPL}
           />
-        </Routes> */}
+          <Route exact path="/dashboard" Component={Dashboard} />
+          <Route exact path="/profile" Component={Profile} />
+        </Routes>
       </Box>
     </BrowserRouter>
   );
