@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AbsoluteCenter, Center, SimpleGrid } from "@chakra-ui/layout";
-import { Box } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -10,7 +10,19 @@ import InputBox from "../login-page/input-box";
 import PasswordInput from "../login-page/password";
 import ButtonBoxSign from "../login-page/button-box";
 
+
+
 function RegisterBoxMahasiswa() {
+  const toast = useToast()
+  function callToast(title, status) {
+    toast({
+      title: title,
+      status: status,
+      duration: 3000,
+      isClosable: true,
+    })
+  }
+
   const [nama, setNama] = useState("");
   const [email, setEmail] = useState("");
   const [nim, setNim] = useState("");
@@ -33,11 +45,13 @@ function RegisterBoxMahasiswa() {
     axios
       .post("http://127.0.0.1:8000/api/user/register", loginData)
       .then(response => {
-        // navigate("/dashboard");
+        callToast("Berhasil Membuat Akun", 'success')
+        navigate("/");
         console.log(loginData)
       })
       .catch(error => {
-        console.error(error.response.data);
+        console.error(error.response.data.errors.email);
+        callToast(error.response.data.reason.email, 'error')
       });
   };
 
@@ -48,29 +62,29 @@ function RegisterBoxMahasiswa() {
           <SimpleGrid spacingY="5px">
             <Box>
               Nama
-              <InputBox onChange={e => setNama(e.target.value)} />
+              <InputBox input={nama} handleSet={(e) => setNama(e.target.value)} />
             </Box>
             <Box>
               Email
-              <InputBox onChange={e => setEmail(e.target.value)} />
+              <InputBox input={email} handleSet={(e) => setEmail(e.target.value)} />
             </Box>
             <Box>
               NIM
-              <InputBox onChange={e => setNim(e.target.value)} />
+              <InputBox input={nim} handleSet={(e) => setNim(e.target.value)} />
             </Box>
             <Box>
               Lokasi PKL
-              <InputBox onChange={e => setLokasi(e.target.value)} />
+              <InputBox input={lokasi} handleSet={(e) => setLokasi(e.target.value)} />
             </Box>
             <Box>
               Nomor Telepon
-              <InputBox onChange={e => setNotelp(e.target.value)} />
+              <InputBox input={notelp} handleSet={(e) => setNotelp(e.target.value)} />
             </Box>
             <Box>
               Password
-              <PasswordInput onChange={e => setPassword(e.target.value)} bottonType="Sign Up" />
+              <PasswordInput input={password} handleSetPassword={(e) => setPassword(e.target.value)} />
             </Box>
-            <ButtonBoxSign handle={() => handleRegister()} buttonType='Sign In' />
+            <ButtonBoxSign handle={() => handleRegister()} buttonType='Sign Up' />
           </SimpleGrid>
         </Box>
       </AbsoluteCenter>

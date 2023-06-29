@@ -62,7 +62,7 @@ function LoginBox() {
         }
       })
       .catch(error => {
-        console.error(error.response.data.reason);
+        console.error(error.response);
         callToast(error.response.data.reason, 'error')
       });
   };

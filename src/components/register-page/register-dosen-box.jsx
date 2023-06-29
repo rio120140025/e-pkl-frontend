@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AbsoluteCenter, Center, SimpleGrid } from "@chakra-ui/layout";
-import { Box } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import "../login-page/box.css";
 
@@ -11,6 +11,16 @@ import { useNavigate } from "react-router-dom";
 
 
 function RegisterBoxDosen() {
+  const toast = useToast()
+  function callToast(title, status) {
+    toast({
+      title: title,
+      status: status,
+      duration: 3000,
+      isClosable: true,
+    })
+  }
+
   const [nama, setNama] = useState("");
   const [email, setEmail] = useState("");
   const [nip, setNip] = useState("");
@@ -31,11 +41,13 @@ function RegisterBoxDosen() {
     axios
       .post("http://127.0.0.1:8000/api/user/register", loginData)
       .then(response => {
+        callToast("Berhasil Membuat Akun", 'success')
         navigate("/");
         console.log(loginData)
       })
       .catch(error => {
-        console.error(error.response.data);
+        console.error(error.response.data.errors.email);
+        callToast(error.response.data.reason.email, 'error')
       });
   };
   return (
