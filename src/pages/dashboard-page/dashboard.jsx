@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "@chakra-ui/layout";
 
-import Header from "./components/header-dashboard";
+import { HeaderDashboard } from "./components/header-dashboard";
 import {
   DashboardLogo,
   ProfileLogo,
@@ -11,6 +11,8 @@ import {
   PenilaianLogo,
   KuisionerLogo,
 } from "./components/description";
+import HaloUser from "./components/halo-user";
+import DashboardBox from "./components/dashboard-box";
 
 function Dashboard() {
   return (
@@ -21,9 +23,12 @@ function Dashboard() {
       bgRepeat="no-repeat"
       backgroundPosition="center"
       backgroundSize="cover"
+      backgroundColor="#f4f8fa"
     >
-      <Header />
+      <HeaderDashboard />
       <DashboardLogo />
+      <HaloUser />
+      <DashboardBox />
     </Box>
   );
 }
