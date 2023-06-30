@@ -20,8 +20,10 @@ function InputBox(props) {
     <Flex>
       <FormControl isInvalid={isError}>
         <Input
-          value={props.email}
-          onChange={(e) => props.handleSetEmail(e)}
+          value={input}
+          onChange={handleInputChange}
+          // value={props.email}
+          // onChange={(e) => props.handleSetEmail(e)}
           onBlur={handleInputBlur}
           borderRadius="5"
           bgColor={"#fff"}

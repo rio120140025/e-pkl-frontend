@@ -28,6 +28,7 @@ const data = [
     dosenPembimbingLapangan: "Prof. Johnson",
     tempat: "Lab A",
   },
+
   {
     no: "2",
     nama: "Jane",
@@ -36,9 +37,81 @@ const data = [
     dosenPembimbingLapangan: "Prof. Davis",
     tempat: "Lab B",
   },
+
+  {
+    no: "3",
+    nama: "Michael",
+    nim: "54321",
+    dosenPembimbing: "Dr. Wilson",
+    dosenPembimbingLapangan: "Prof. Thompson",
+    tempat: "Lab C",
+  },
+
+  {
+    no: "4",
+    nama: "Sarah",
+    nim: "98765",
+    dosenPembimbing: "Dr. Martinez",
+    dosenPembimbingLapangan: "Prof. Lewis",
+    tempat: "Lab D",
+  },
+
+  {
+    no: "5",
+    nama: "David",
+    nim: "13579",
+    dosenPembimbing: "Dr. Anderson",
+    dosenPembimbingLapangan: "Prof. Turner",
+    tempat: "Lab E",
+  },
+
+  {
+    no: "6",
+    nama: "Emily",
+    nim: "02468",
+    dosenPembimbing: "Dr. Clark",
+    dosenPembimbingLapangan: "Prof. Roberts",
+    tempat: "Lab F",
+  },
+
+  {
+    no: "7",
+    nama: "Daniel",
+    nim: "24680",
+    dosenPembimbing: "Dr. Walker",
+    dosenPembimbingLapangan: "Prof. Moore",
+    tempat: "Lab G",
+  },
+
+  {
+    no: "8",
+    nama: "Olivia",
+    nim: "97531",
+    dosenPembimbing: "Dr. Garcia",
+    dosenPembimbingLapangan: "Prof. Perez",
+    tempat: "Lab H",
+  },
+
+  {
+    no: "9",
+    nama: "Jacob",
+    nim: "80246",
+    dosenPembimbing: "Dr. Hernandez",
+    dosenPembimbingLapangan: "Prof. Ramirez",
+    tempat: "Lab I",
+  },
+
+  {
+    no: "10",
+    nama: "Sophia",
+    nim: "46802",
+    dosenPembimbing: "Dr. Patel",
+    dosenPembimbingLapangan: "Prof. Lee",
+    tempat: "Lab J",
+  },
 ];
 
-const TableComponent = () => {
+const TableDashboard = () => {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
@@ -257,4 +330,4 @@ const Pagination = ({ rowsPerPage, totalRows, paginate }) => {
   );
 };
 
-export default TableComponent;
+export default TableDashboard;

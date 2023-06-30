@@ -3,9 +3,9 @@ import { Box } from "@chakra-ui/layout";
 
 import Header from "./components/header";
 import RoleBox from "./components/register-role";
-import RegisterBoxMahasiswa from "./components/mahasiswa/register-mahasiswa-box";
-import RegisterBoxDosen from "./components/dosen/register-dosen-box";
-import RegisterBoxDPL from "./components/dpl/register-dpl-box";
+import RegisterBoxMahasiswa from "./pages/register-mahasiswa-box";
+import RegisterBoxDosen from "./pages/register-dosen-box";
+import RegisterBoxDPL from "./pages/register-dpl-box";
 
 function RoleRegister() {
   return (
