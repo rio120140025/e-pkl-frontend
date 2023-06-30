@@ -27,10 +27,10 @@ function PasswordInput(props) {
     <InputGroup size="md">
       <FormControl isInvalid={isError}>
         <Input
-          // value={input}
-          // onChange={handleInputChange}
-          value={props.password}
-          onChange={(e) => props.handleSetPassword(e)}
+          value={input}
+          onChange={handleInputChange}
+          // value={props.password}
+          // onChange={(e) => props.handleSetPassword(e)}
           onBlur={handleInputBlur}
           borderRadius="5"
           bgColor={"#fff"}

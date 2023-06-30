@@ -10,7 +10,13 @@ import {
   RoleRegisterDosen,
   RoleRegisterMahasiswa,
 } from "./pages/register-page/register";
-import { Dashboard, Profile } from "./pages/dashboard-page/dashboard"
+import {
+  Dashboard,
+  Profile,
+  ProfileChange,
+  RencanaKegiatan,
+  RencanaKegiatanDetail,
+} from "./pages/dashboard-page/dashboard";
 
 function App() {
   return (
@@ -32,6 +38,9 @@ function App() {
           />
           <Route exact path="/dashboard" Component={Dashboard} />
           <Route exact path="/profile" Component={Profile} />
+          <Route exact path="/profile/ubah" Component={ProfileChange} />
+          <Route exact path="/rencana-kegiatan" Component={RencanaKegiatan} />
+          <Route exact path="/rencana-kegiatan/detail" Component={RencanaKegiatanDetail} />
         </Routes>
       </Box>
     </BrowserRouter>

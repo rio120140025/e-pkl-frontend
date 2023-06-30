@@ -2,13 +2,13 @@ import React from "react";
 import { AbsoluteCenter, Center, SimpleGrid } from "@chakra-ui/layout";
 import { Box } from "@chakra-ui/react";
 
-import "../../../login-page/components/box.css";
+import "../../login-page/components/box.css";
 
-import InputBox from "../../../login-page/components/input-box";
-import PasswordInput from "../../../login-page/components/password";
-import { ButtonBoxSignUp } from "../../../login-page/components/button-box";
+import InputBox from "../../login-page/components/input-box";
+import PasswordInput from "../../login-page/components/password";
+import { ButtonBoxSignUp } from "../../login-page/components/button-box";
 
-function RegisterBoxMahasiswa() {
+function RegisterBoxDPL() {
   return (
     <Center>
       <AbsoluteCenter>
@@ -19,19 +19,19 @@ function RegisterBoxMahasiswa() {
               <InputBox />
             </Box>
             <Box>
+              NRK/NIP
+              <InputBox />
+            </Box>
+            <Box>
+              Jabatan
+              <InputBox />
+            </Box>
+            <Box>
+              Instansi
+              <InputBox />
+            </Box>
+            <Box>
               Email
-              <InputBox />
-            </Box>
-            <Box>
-              NIM
-              <InputBox />
-            </Box>
-            <Box>
-              Lokasi PKL
-              <InputBox />
-            </Box>
-            <Box>
-              Nomor Telepon
               <InputBox />
             </Box>
             <Box>
@@ -45,4 +45,4 @@ function RegisterBoxMahasiswa() {
     </Center>
   );
 }
-export default RegisterBoxMahasiswa;
+export default RegisterBoxDPL;

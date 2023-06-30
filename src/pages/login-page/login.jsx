@@ -1,6 +1,6 @@
 import React from "react";
 
-import LoginBox from "./components/login-box";
+import LoginBox from "./pages/login-box";
 import Header from "./components/header";
 
 import { Box } from "@chakra-ui/layout";
