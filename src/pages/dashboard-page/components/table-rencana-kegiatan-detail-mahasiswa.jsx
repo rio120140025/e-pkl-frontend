@@ -35,7 +35,7 @@ import {
   ButtonBoxSimpanRencanaKegiatan,
 } from "./button-box";
 import { Link } from "react-router-dom";
-import TableEdit from "./table-edit";
+import {TableEdit} from "./table-edit";
 
 const TableRencanaKegiatanDetailMahasiswa = () => {
   const [search, setSearch] = useState("");

@@ -97,9 +97,7 @@ function BreadcrumbLogHarian() {
         </BreadcrumbItem>
 
         <BreadcrumbItem isCurrentPage>
-          <BreadcrumbLink href="/rencana-kegiatan/detail">
-            Log Harian
-          </BreadcrumbLink>
+          <BreadcrumbLink href="/log-harian">Log Harian</BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
     </Flex>
@@ -116,15 +114,64 @@ function BreadcrumbLogHarianDetail() {
         </BreadcrumbItem>
 
         <BreadcrumbItem>
-          <BreadcrumbLink color={"#6096B4"} href="/rencana-kegiatan">
+          <BreadcrumbLink color={"#6096B4"} href="/log-harian">
             Log Harian
           </BreadcrumbLink>
         </BreadcrumbItem>
 
         <BreadcrumbItem isCurrentPage>
-          <BreadcrumbLink href="/rencana-kegiatan/detail">
-            Detail
+          <BreadcrumbLink href="/log-harian/detail">Detail</BreadcrumbLink>
+        </BreadcrumbItem>
+      </Breadcrumb>
+    </Flex>
+  );
+}
+function BreadcrumbKehadiran() {
+  return (
+    <Flex marginRight={84} marginTop={65}>
+      <Breadcrumb>
+        <BreadcrumbItem>
+          <BreadcrumbLink color={"#6096B4"} href="/dashboard">
+            Dashboard
           </BreadcrumbLink>
+        </BreadcrumbItem>
+
+        <BreadcrumbItem isCurrentPage>
+          <BreadcrumbLink href="/kehadiran">Kehadiran</BreadcrumbLink>
+        </BreadcrumbItem>
+      </Breadcrumb>
+    </Flex>
+  );
+}
+function BreadcrumbPenilaian() {
+  return (
+    <Flex marginRight={84} marginTop={65}>
+      <Breadcrumb>
+        <BreadcrumbItem>
+          <BreadcrumbLink color={"#6096B4"} href="/dashboard">
+            Dashboard
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+
+        <BreadcrumbItem isCurrentPage>
+          <BreadcrumbLink href="/penilaian">Penilaian</BreadcrumbLink>
+        </BreadcrumbItem>
+      </Breadcrumb>
+    </Flex>
+  );
+}
+function BreadcrumbKuisioner() {
+  return (
+    <Flex marginRight={84} marginTop={65}>
+      <Breadcrumb>
+        <BreadcrumbItem>
+          <BreadcrumbLink color={"#6096B4"} href="/dashboard">
+            Dashboard
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+
+        <BreadcrumbItem isCurrentPage>
+          <BreadcrumbLink href="/kuisioner">Kuisioner</BreadcrumbLink>
         </BreadcrumbItem>
       </Breadcrumb>
     </Flex>
@@ -138,4 +185,7 @@ export {
   BreadcrumbRencanaKegiatanDetail,
   BreadcrumbLogHarian,
   BreadcrumbLogHarianDetail,
+  BreadcrumbKehadiran,
+  BreadcrumbPenilaian,
+  BreadcrumbKuisioner,
 };
