@@ -31,9 +31,8 @@ import { ReactComponent as BackButton } from "../../../assets/button-back.svg";
 import { ReactComponent as EditButton } from "../../../assets/button-edit.svg";
 import { ReactComponent as DeleteButton } from "../../../assets/button-delete.svg";
 import {
-  ButtonBoxDetail,
-  ButtonBoxSimpan,
   ButtonBoxTambahRencana,
+  ButtonBoxSimpanRencanaKegiatan,
 } from "./button-box";
 import { Link } from "react-router-dom";
 import TableEdit from "./table-edit";
@@ -333,7 +332,7 @@ const TableRencanaKegiatanDetailMahasiswa = () => {
             <TableEdit />
           </ModalBody>
           <ModalFooter>
-            <ButtonBoxSimpan />
+            <ButtonBoxSimpanRencanaKegiatan />
           </ModalFooter>
         </ModalContent>
       </Modal>

@@ -1,12 +1,11 @@
 import React, { useRef, useEffect } from "react";
 import { Box } from "@chakra-ui/react";
+import TableLogHarianMahasiswa from "../components/table-log-harian-mahasiswa";
+import TableLogHarianDosen from "../components/table-log-harian-dosen";
+import TableLogHarianMahasiswaDosenDetail from "../components/table-log-harian-detail-mahasiswa-dosen";
+import TableLogHarianDPLDetail from "../components/table-log-harian-detail-dpl";
 
-import TableRencanaKegiatan from "../components/table-rencana-kegiatan";
-import TableRencanaKegiatanDetailMahasiswa from "../components/table-rencana-kegiatan-detail-mahasiswa";
-import TableRencanaKegiatanDetailDosen from "../components/table-rencana-kegiatan-detail-dosen";
-import TableRencanaKegiatanDetailDPL from "../components/table-rencana-kegiatan-detail-dpl";
-
-function RencanaKegiatanBox() {
+function LogHarianMahasiswa() {
   const boxRef = useRef(null);
 
   useEffect(() => {
@@ -34,12 +33,11 @@ function RencanaKegiatanBox() {
       width="1375px"
       fontSize="15px"
     >
-      <TableRencanaKegiatan />
+      <TableLogHarianMahasiswa />
     </Box>
   );
 }
-
-function RencanaKegiatanBoxDetailMahasiswa() {
+function LogHarianMahasiswaDosenDetail() {
   const boxRef = useRef(null);
 
   useEffect(() => {
@@ -67,12 +65,11 @@ function RencanaKegiatanBoxDetailMahasiswa() {
       width="1375px"
       fontSize="15px"
     >
-      <TableRencanaKegiatanDetailMahasiswa />
+      <TableLogHarianMahasiswaDosenDetail />
     </Box>
   );
 }
-
-function RencanaKegiatanBoxDetailDosen() {
+function LogHarianDosen() {
   const boxRef = useRef(null);
 
   useEffect(() => {
@@ -100,12 +97,11 @@ function RencanaKegiatanBoxDetailDosen() {
       width="1375px"
       fontSize="15px"
     >
-      <TableRencanaKegiatanDetailDosen />
+      <TableLogHarianDosen />
     </Box>
   );
 }
-
-function RencanaKegiatanBoxDetailDPL() {
+function LogHarianDPLDetail() {
   const boxRef = useRef(null);
 
   useEffect(() => {
@@ -133,9 +129,14 @@ function RencanaKegiatanBoxDetailDPL() {
       width="1375px"
       fontSize="15px"
     >
-      <TableRencanaKegiatanDetailDPL />
+      <TableLogHarianDPLDetail />
     </Box>
   );
 }
 
-export {RencanaKegiatanBox, RencanaKegiatanBoxDetailMahasiswa, RencanaKegiatanBoxDetailDosen, RencanaKegiatanBoxDetailDPL};
+export {
+  LogHarianMahasiswa,
+  LogHarianMahasiswaDosenDetail,
+  LogHarianDosen,
+  LogHarianDPLDetail,
+};

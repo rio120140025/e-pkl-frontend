@@ -12,6 +12,8 @@ import {
 } from "./pages/register-page/register";
 import {
   Dashboard,
+  LogHarian,
+  LogHarianDetail,
   Profile,
   ProfileChange,
   RencanaKegiatan,
@@ -41,6 +43,8 @@ function App() {
           <Route exact path="/profile/ubah" Component={ProfileChange} />
           <Route exact path="/rencana-kegiatan" Component={RencanaKegiatan} />
           <Route exact path="/rencana-kegiatan/detail" Component={RencanaKegiatanDetail} />
+          <Route exact path="/log-harian" Component={LogHarian} />
+          <Route exact path="/log-harian/detail" Component={LogHarianDetail} />
         </Routes>
       </Box>
     </BrowserRouter>
