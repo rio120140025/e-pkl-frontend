@@ -29,15 +29,10 @@ import { ReactComponent as SortButton } from "../../../assets/button-sort.svg";
 import { ReactComponent as SearchIcon } from "../../../assets/icon-search.svg";
 import { ReactComponent as EditButton } from "../../../assets/button-edit.svg";
 import { ReactComponent as DeleteButton } from "../../../assets/button-delete.svg";
-import {
-  ButtonBoxDetailLogHarianMahasiswa,
-  ButtonBoxExport,
-  ButtonBoxSimpanLogHarian,
-  ButtonBoxTambahRencanaLogHarian,
-} from "./button-box";
-import { TableEdit } from "./table-edit";
+import { ButtonBoxSimpanLogHarian } from "./button-box";
+import { TableEditPenilaian } from "./table-edit";
 
-const TableLogHarianMahasiswa = () => {
+const TablePenilaianDPL = () => {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
@@ -47,71 +42,23 @@ const TableLogHarianMahasiswa = () => {
     {
       no: "1",
       nama: "John",
-      nim: "12345",
       dosenPembimbing: "Dr. Smith",
+      lokasi: "Microdata",
+      waktu: "01-06-2023 s.d 01-07-2023",
     },
-
     {
       no: "2",
-      nama: "Jane",
-      nim: "67890",
-      dosenPembimbing: "Dr. Brown",
+      nama: "John",
+      dosenPembimbing: "Dr. Smith",
+      lokasi: "Microdata",
+      waktu: "01-06-2023 s.d 01-07-2023",
     },
-
     {
       no: "3",
-      nama: "Michael",
-      nim: "54321",
-      dosenPembimbing: "Dr. Wilson",
-    },
-
-    {
-      no: "4",
-      nama: "Sarah",
-      nim: "98765",
-      dosenPembimbing: "Dr. Martinez",
-    },
-
-    {
-      no: "5",
-      nama: "David",
-      nim: "13579",
-      dosenPembimbing: "Dr. Anderson",
-    },
-
-    {
-      no: "6",
-      nama: "Emily",
-      nim: "02468",
-      dosenPembimbing: "Dr. Clark",
-    },
-
-    {
-      no: "7",
-      nama: "Daniel",
-      nim: "24680",
-      dosenPembimbing: "Dr. Walker",
-    },
-
-    {
-      no: "8",
-      nama: "Olivia",
-      nim: "97531",
-      dosenPembimbing: "Dr. Garcia",
-    },
-
-    {
-      no: "9",
-      nama: "Jacob",
-      nim: "80246",
-      dosenPembimbing: "Dr. Hernandez",
-    },
-
-    {
-      no: "10",
-      nama: "Sophia",
-      nim: "46802",
-      dosenPembimbing: "Dr. Patel",
+      nama: "John",
+      dosenPembimbing: "Dr. Smith",
+      lokasi: "Microdata",
+      waktu: "01-06-2023 s.d 01-07-2023",
     },
   ]);
 
@@ -178,27 +125,25 @@ const TableLogHarianMahasiswa = () => {
       bgColor="#F9FAFC"
       boxShadow="0 0 0 1px rgba(152, 161, 178, 0.1), 0 1px 4px rgba(69, 75, 87, 0.12), 0 0 2px rgba(0, 0, 0, 0.08)"
     >
-      <HStack marginLeft={665} spacing={19}>
-        <InputGroup
-          top="12px"
-          marginBottom={2}
-          backgroundColor="#fff"
-          width="418px"
-          fontSize="14px"
-          color="#a1a9b8"
-        >
-          <InputLeftElement>
-            <SearchIcon />
-          </InputLeftElement>
-          <Input
-            type="text"
-            placeholder="Search..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </InputGroup>
-        <ButtonBoxTambahRencanaLogHarian />
-      </HStack>
+      <InputGroup
+        top="12px"
+        marginBottom={2}
+        marginLeft={875}
+        backgroundColor="#fff"
+        width="418px"
+        fontSize="14px"
+        color="#a1a9b8"
+      >
+        <InputLeftElement>
+          <SearchIcon />
+        </InputLeftElement>
+        <Input
+          type="text"
+          placeholder="Search..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </InputGroup>
       <Table variant="striped" top="1384px" left="0" width="1314px">
         <Thead>
           <Tr>
@@ -215,23 +160,11 @@ const TableLogHarianMahasiswa = () => {
               </Button>
             </Th>
             <Th>
-              Mahasiswa{" "}
+              Nama{" "}
               <Button
                 variant="link"
                 onClick={() => {
                   setSortKey("nama");
-                  toggleSortOrder();
-                }}
-              >
-                <SortButton />
-              </Button>
-            </Th>
-            <Th>
-              NIM{" "}
-              <Button
-                variant="link"
-                onClick={() => {
-                  setSortKey("nim");
                   toggleSortOrder();
                 }}
               >
@@ -250,7 +183,43 @@ const TableLogHarianMahasiswa = () => {
                 <SortButton />
               </Button>
             </Th>
-            <Th colSpan={4} textAlign={"center"}>
+            <Th>
+              Lokasi PKL{" "}
+              <Button
+                variant="link"
+                onClick={() => {
+                  setSortKey("lokasi");
+                  toggleSortOrder();
+                }}
+              >
+                <SortButton />
+              </Button>
+            </Th>
+            <Th>
+              Waktu{" "}
+              <Button
+                variant="link"
+                onClick={() => {
+                  setSortKey("waktu");
+                  toggleSortOrder();
+                }}
+              >
+                <SortButton />
+              </Button>
+            </Th>
+            <Th>
+              Nilai{" "}
+              <Button
+                variant="link"
+                onClick={() => {
+                  setSortKey("nilai");
+                  toggleSortOrder();
+                }}
+              >
+                <SortButton />
+              </Button>
+            </Th>
+            <Th colSpan={2} textAlign={"center"}>
               Aksi
             </Th>
           </Tr>
@@ -264,16 +233,25 @@ const TableLogHarianMahasiswa = () => {
             >
               <Td>{row.no}</Td>
               <Td>{row.nama}</Td>
-              <Td>{row.nim}</Td>
               <Td>{row.dosenPembimbing}</Td>
+              <Td>{row.lokasi}</Td>
+              <Td>{row.waktu}</Td>
               <Td>
                 <Flex>
-                  <ButtonBoxDetailLogHarianMahasiswa />
-                </Flex>
-              </Td>
-              <Td>
-                <Flex>
-                  <ButtonBoxExport />
+                  <Button
+                    variant="solid"
+                    w="81px"
+                    h="26px"
+                    cursor={"pointer"}
+                    textAlign={"center"}
+                    fontWeight={"bold"}
+                    bgColor={"#FFF5D2"}
+                    borderRadius={5}
+                    onClick={onOpenEdit}
+                    color={"#FFD02C"}
+                  >
+                    Beri Nilai
+                  </Button>
                 </Flex>
               </Td>
               <Td>
@@ -322,7 +300,7 @@ const TableLogHarianMahasiswa = () => {
         <ModalContent>
           <ModalBody>
             <ModalCloseButton color={"#BDCDD6"} />
-            <TableEdit />
+            <TableEditPenilaian />
           </ModalBody>
           <ModalFooter>
             <ButtonBoxSimpanLogHarian />
@@ -390,4 +368,4 @@ const Pagination = ({ rowsPerPage, totalRows, paginate }) => {
   );
 };
 
-export default TableLogHarianMahasiswa;
+export default TablePenilaianDPL;

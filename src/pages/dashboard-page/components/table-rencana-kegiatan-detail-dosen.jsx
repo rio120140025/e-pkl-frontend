@@ -14,7 +14,6 @@ import {
   InputLeftElement,
   Flex,
   Spacer,
-  useDisclosure,
 } from "@chakra-ui/react";
 
 import { ReactComponent as SortButton } from "../../../assets/button-sort.svg";
@@ -28,7 +27,7 @@ const TableRencanaKegiatanDetailDosen = () => {
   const [sortOrder, setSortOrder] = useState("asc");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState([
+  const data = [
     {
       no: "1",
       capaian: "Capaian 1",
@@ -99,7 +98,7 @@ const TableRencanaKegiatanDetailDosen = () => {
       jumlahJam: "3",
       status: "Diverifikasi",
     },
-  ]);
+  ];
 
   const filteredData = data.filter((item) =>
     item.capaian.toLowerCase().includes(search.toLowerCase())
@@ -142,25 +141,25 @@ const TableRencanaKegiatanDetailDosen = () => {
       <Link position="relative" marginTop={3} to="/rencana-kegiatan">
         <BackButton />
       </Link>
-        <InputGroup
-          top="12px"
-          marginLeft={875}
-          marginBottom={2}
-          backgroundColor="#fff"
-          width="418px"
-          fontSize="14px"
-          color="#a1a9b8"
-        >
-          <InputLeftElement>
-            <SearchIcon />
-          </InputLeftElement>
-          <Input
-            type="text"
-            placeholder="Search..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </InputGroup>
+      <InputGroup
+        top="12px"
+        marginLeft={875}
+        marginBottom={2}
+        backgroundColor="#fff"
+        width="418px"
+        fontSize="14px"
+        color="#a1a9b8"
+      >
+        <InputLeftElement>
+          <SearchIcon />
+        </InputLeftElement>
+        <Input
+          type="text"
+          placeholder="Search..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </InputGroup>
       <Table variant="striped" top="1384px" left="0" width="1314px">
         <Thead>
           <Tr>
@@ -214,10 +213,13 @@ const TableRencanaKegiatanDetailDosen = () => {
             </Th>
             <Th>
               Status{" "}
-              <Button variant="link" onClick={() => {
+              <Button
+                variant="link"
+                onClick={() => {
                   setSortKey("status");
                   toggleSortOrder();
-                }}>
+                }}
+              >
                 <SortButton />
               </Button>
             </Th>

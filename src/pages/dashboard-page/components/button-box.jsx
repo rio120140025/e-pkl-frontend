@@ -15,8 +15,8 @@ import { Link } from "react-router-dom";
 import "./button.css";
 
 import { ReactComponent as PlusIcon } from "../../../assets/icon-plus.svg";
-import TableEdit from "./table-edit";
-import TableView from "./table-view";
+import { TableEdit, TableEditKehadiran } from "./table-edit";
+import { TableView, TableViewPenilaian } from "./table-view";
 
 function ButtonBoxDownload() {
   return (
@@ -30,6 +30,21 @@ function ButtonBoxDownload() {
       _hover={{ background: "#6096B4" }}
     >
       Download
+    </Button>
+  );
+}
+function ButtonBoxKirim() {
+  return (
+    <Button
+      className="button-box"
+      variant="solid"
+      w="121px"
+      colorScheme="93BFCF"
+      top="38.15px"
+      left="1200px"
+      _hover={{ background: "#6096B4" }}
+    >
+      Kirim
     </Button>
   );
 }
@@ -91,6 +106,41 @@ function ButtonBoxDetailLogHarianMahasiswa() {
     <Link className="button-box-table" to="/log-harian/detail">
       Detail
     </Link>
+  );
+}
+function ButtonBoxDetailPenilaian() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  return (
+    <>
+      <Button
+        variant="solid"
+        color={"white"}
+        fontWeight={"bold"}
+        backgroundColor="#93BFCF"
+        width={81}
+        height={26}
+        marginTop={3}
+        textAlign={"center"}
+        _hover={{ background: "#e1e7ea", color: "#93BFCF" }}
+        onClick={onOpen}
+      >
+        Detail
+      </Button>
+      <Modal isOpen={isOpen} onClose={onClose} size={"1"}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalBody>
+            <ModalCloseButton color={"#BDCDD6"} />
+            <TableViewPenilaian />
+          </ModalBody>
+          <ModalFooter>
+            <button className="button-box-2" onClick={onClose}>
+              Tutup
+            </button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
   );
 }
 function ButtonBoxDetailLogHarianMahasiswaDosenDetail() {
@@ -155,12 +205,12 @@ function ButtonBoxDetailLogHarianDPLDetail() {
           </ModalBody>
           <ModalFooter>
             <HStack spacing={10}>
-            <button className="button-box-2" onClick={onClose}>
-              Tutup
-            </button>
-            <button className="button-box-3" width="200px" onClick={onClose}>
-              Tambah Komentar
-            </button>
+              <button className="button-box-2" onClick={onClose}>
+                Tutup
+              </button>
+              <button className="button-box-3" width="200px" onClick={onClose}>
+                Tambah Komentar
+              </button>
             </HStack>
           </ModalFooter>
         </ModalContent>
@@ -230,6 +280,37 @@ function ButtonBoxTambahRencanaLogHarian() {
     </>
   );
 }
+function ButtonBoxTambahRencanaKehadiran() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  return (
+    <>
+      <Button
+        leftIcon={<PlusIcon />}
+        variant="solid"
+        color={"white"}
+        fontWeight={"bold"}
+        backgroundColor="#6096B4"
+        width={200}
+        marginTop={4}
+        onClick={onOpen}
+      >
+        Tambah Kehadiran
+      </Button>
+      <Modal isOpen={isOpen} onClose={onClose} size={"1"}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalBody>
+            <ModalCloseButton color={"#BDCDD6"} />
+            <TableEditKehadiran />
+          </ModalBody>
+          <ModalFooter>
+            <ButtonBoxSimpanLogHarian />
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+}
 
 function ButtonBoxVerifikasi() {
   return (
@@ -265,6 +346,7 @@ function ButtonBoxTolak() {
 
 export {
   ButtonBoxDownload,
+  ButtonBoxKirim,
   ButtonBoxUbah,
   ButtonBoxSimpanProfile,
   ButtonBoxSimpanRencanaKegiatan,
@@ -273,8 +355,10 @@ export {
   ButtonBoxDetailLogHarianMahasiswa,
   ButtonBoxDetailLogHarianMahasiswaDosenDetail,
   ButtonBoxDetailLogHarianDPLDetail,
+  ButtonBoxDetailPenilaian,
   ButtonBoxTambahRencana,
   ButtonBoxTambahRencanaLogHarian,
+  ButtonBoxTambahRencanaKehadiran,
   ButtonBoxVerifikasi,
   ButtonBoxTolak,
   ButtonBoxExport,

@@ -12,8 +12,12 @@ import {
 } from "./pages/register-page/register";
 import {
   Dashboard,
+  Kehadiran,
+  Kuisioner,
   LogHarian,
   LogHarianDetail,
+  Penilaian,
+  PenilaianDetail,
   Profile,
   ProfileChange,
   RencanaKegiatan,
@@ -39,12 +43,25 @@ function App() {
             Component={RoleRegisterDPL}
           />
           <Route exact path="/dashboard" Component={Dashboard} />
+
           <Route exact path="/profile" Component={Profile} />
           <Route exact path="/profile/ubah" Component={ProfileChange} />
+
           <Route exact path="/rencana-kegiatan" Component={RencanaKegiatan} />
-          <Route exact path="/rencana-kegiatan/detail" Component={RencanaKegiatanDetail} />
+          <Route
+            exact
+            path="/rencana-kegiatan/detail"
+            Component={RencanaKegiatanDetail}
+          />
+
           <Route exact path="/log-harian" Component={LogHarian} />
           <Route exact path="/log-harian/detail" Component={LogHarianDetail} />
+
+          <Route exact path="/kehadiran" Component={Kehadiran} />
+
+          <Route exact path="/penilaian-pkl" Component={Penilaian} />
+
+          <Route exact path="/kuisioner" Component={Kuisioner} />
         </Routes>
       </Box>
     </BrowserRouter>

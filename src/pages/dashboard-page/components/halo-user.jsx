@@ -1,5 +1,5 @@
 import { Box, Flex, Spacer } from "@chakra-ui/react";
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import { Text, Button } from "@chakra-ui/react";
 
 import { ReactComponent as ButtonClose } from "../../../assets/button-close.svg";

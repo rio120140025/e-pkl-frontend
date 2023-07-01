@@ -18,11 +18,8 @@ import {
 
 import { ReactComponent as SortButton } from "../../../assets/button-sort.svg";
 import { ReactComponent as SearchIcon } from "../../../assets/icon-search.svg";
-import { ReactComponent as BackButton } from "../../../assets/button-back.svg";
-import { Link } from "react-router-dom";
 import {
   ButtonBoxDetailLogHarianDPLDetail,
-  ButtonBoxDetailLogHarianMahasiswaDosenDetail,
   ButtonBoxTolak,
   ButtonBoxVerifikasi,
 } from "./button-box";
@@ -144,9 +141,6 @@ const TableLogHarianDPLDetail = () => {
       bgColor="#F9FAFC"
       boxShadow="0 0 0 1px rgba(152, 161, 178, 0.1), 0 1px 4px rgba(69, 75, 87, 0.12), 0 0 2px rgba(0, 0, 0, 0.08)"
     >
-      <Link position="relative" marginTop={3} to="/rencana-kegiatan">
-        <BackButton />
-      </Link>
       <InputGroup
         top="12px"
         marginLeft={875}

@@ -30,93 +30,102 @@ import { ReactComponent as SearchIcon } from "../../../assets/icon-search.svg";
 import { ReactComponent as EditButton } from "../../../assets/button-edit.svg";
 import { ReactComponent as DeleteButton } from "../../../assets/button-delete.svg";
 import {
-  ButtonBoxDetailLogHarianMahasiswa,
-  ButtonBoxExport,
   ButtonBoxSimpanLogHarian,
-  ButtonBoxTambahRencanaLogHarian,
+  ButtonBoxTambahRencanaKehadiran,
 } from "./button-box";
-import { TableEdit } from "./table-edit";
+import { TableEditKehadiran } from "./table-edit";
 
-const TableLogHarianMahasiswa = () => {
+const TableKehadiranMahasiswa = () => {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([
-    {
-      no: "1",
-      nama: "John",
-      nim: "12345",
-      dosenPembimbing: "Dr. Smith",
-    },
-
-    {
-      no: "2",
-      nama: "Jane",
-      nim: "67890",
-      dosenPembimbing: "Dr. Brown",
-    },
-
-    {
-      no: "3",
-      nama: "Michael",
-      nim: "54321",
-      dosenPembimbing: "Dr. Wilson",
-    },
-
-    {
-      no: "4",
-      nama: "Sarah",
-      nim: "98765",
-      dosenPembimbing: "Dr. Martinez",
-    },
-
-    {
-      no: "5",
-      nama: "David",
-      nim: "13579",
-      dosenPembimbing: "Dr. Anderson",
-    },
-
-    {
-      no: "6",
-      nama: "Emily",
-      nim: "02468",
-      dosenPembimbing: "Dr. Clark",
-    },
-
-    {
-      no: "7",
-      nama: "Daniel",
-      nim: "24680",
-      dosenPembimbing: "Dr. Walker",
-    },
-
-    {
-      no: "8",
-      nama: "Olivia",
-      nim: "97531",
-      dosenPembimbing: "Dr. Garcia",
-    },
-
-    {
-      no: "9",
-      nama: "Jacob",
-      nim: "80246",
-      dosenPembimbing: "Dr. Hernandez",
-    },
-
-    {
-      no: "10",
-      nama: "Sophia",
-      nim: "46802",
-      dosenPembimbing: "Dr. Patel",
-    },
+      {
+        no: "1",
+        tanggal: "2023-07-01",
+        waktu: "09:00",
+        kehadiran: "Hadir",
+        keterangan: "Meeting",
+        status: "Selesai",
+      },
+      {
+        no: "2",
+        tanggal: "2023-07-02",
+        waktu: "14:30",
+        kehadiran: "Hadir",
+        keterangan: "Presentasi",
+        status: "Belum Selesai",
+      },
+      {
+        no: "3",
+        tanggal: "2023-07-03",
+        waktu: "10:15",
+        kehadiran: "Tidak Hadir",
+        keterangan: "Cuti",
+        status: "Batal",
+      },
+      {
+        no: "4",
+        tanggal: "2023-07-04",
+        waktu: "11:45",
+        kehadiran: "Hadir",
+        keterangan: "Diskusi",
+        status: "Selesai",
+      },
+      {
+        no: "5",
+        tanggal: "2023-07-05",
+        waktu: "08:30",
+        kehadiran: "Hadir",
+        keterangan: "Pelatihan",
+        status: "Selesai",
+      },
+      {
+        no: "6",
+        tanggal: "2023-07-06",
+        waktu: "13:00",
+        kehadiran: "Hadir",
+        keterangan: "Rapat Proyek",
+        status: "Belum Selesai",
+      },
+      {
+        no: "7",
+        tanggal: "2023-07-07",
+        waktu: "16:45",
+        kehadiran: "Tidak Hadir",
+        keterangan: "Sakit",
+        status: "Batal",
+      },
+      {
+        no: "8",
+        tanggal: "2023-07-08",
+        waktu: "10:30",
+        kehadiran: "Hadir",
+        keterangan: "Presentasi",
+        status: "Selesai",
+      },
+      {
+        no: "9",
+        tanggal: "2023-07-09",
+        waktu: "09:15",
+        kehadiran: "Hadir",
+        keterangan: "Diskusi",
+        status: "Selesai",
+      },
+      {
+        no: "10",
+        tanggal: "2023-07-10",
+        waktu: "14:00",
+        kehadiran: "Hadir",
+        keterangan: "Rapat Tim",
+        status: "Belum Selesai",
+      },    
   ]);
 
   const filteredData = data.filter((item) =>
-    item.nama.toLowerCase().includes(search.toLowerCase())
+    item.waktu.toLowerCase().includes(search.toLowerCase())
   );
 
   const sortedData = filteredData.sort((a, b) => {
@@ -197,7 +206,7 @@ const TableLogHarianMahasiswa = () => {
             onChange={(e) => setSearch(e.target.value)}
           />
         </InputGroup>
-        <ButtonBoxTambahRencanaLogHarian />
+        <ButtonBoxTambahRencanaKehadiran />
       </HStack>
       <Table variant="striped" top="1384px" left="0" width="1314px">
         <Thead>
@@ -215,11 +224,11 @@ const TableLogHarianMahasiswa = () => {
               </Button>
             </Th>
             <Th>
-              Mahasiswa{" "}
+              Tanggal{" "}
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("nama");
+                  setSortKey("tanggal");
                   toggleSortOrder();
                 }}
               >
@@ -227,11 +236,11 @@ const TableLogHarianMahasiswa = () => {
               </Button>
             </Th>
             <Th>
-              NIM{" "}
+              Waktu{" "}
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("nim");
+                  setSortKey("waktu");
                   toggleSortOrder();
                 }}
               >
@@ -239,11 +248,35 @@ const TableLogHarianMahasiswa = () => {
               </Button>
             </Th>
             <Th>
-              Dosen Pembimbing{" "}
+              Kehadiran{" "}
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("dosenPembimbing");
+                  setSortKey("kehadiran");
+                  toggleSortOrder();
+                }}
+              >
+                <SortButton />
+              </Button>
+            </Th>
+            <Th>
+              Keterangan{" "}
+              <Button
+                variant="link"
+                onClick={() => {
+                  setSortKey("Keterangan");
+                  toggleSortOrder();
+                }}
+              >
+                <SortButton />
+              </Button>
+            </Th>
+            <Th>
+              Status{" "}
+              <Button
+                variant="link"
+                onClick={() => {
+                  setSortKey("status");
                   toggleSortOrder();
                 }}
               >
@@ -263,19 +296,11 @@ const TableLogHarianMahasiswa = () => {
               color="black"
             >
               <Td>{row.no}</Td>
-              <Td>{row.nama}</Td>
-              <Td>{row.nim}</Td>
-              <Td>{row.dosenPembimbing}</Td>
-              <Td>
-                <Flex>
-                  <ButtonBoxDetailLogHarianMahasiswa />
-                </Flex>
-              </Td>
-              <Td>
-                <Flex>
-                  <ButtonBoxExport />
-                </Flex>
-              </Td>
+              <Td>{row.tanggal}</Td>
+              <Td>{row.waktu}</Td>
+              <Td>{row.kehadiran}</Td>
+              <Td>{row.keterangan}</Td>
+              <Td>{row.status}</Td>
               <Td>
                 <EditButton onClick={onOpenEdit} />
               </Td>
@@ -322,7 +347,7 @@ const TableLogHarianMahasiswa = () => {
         <ModalContent>
           <ModalBody>
             <ModalCloseButton color={"#BDCDD6"} />
-            <TableEdit />
+            <TableEditKehadiran />
           </ModalBody>
           <ModalFooter>
             <ButtonBoxSimpanLogHarian />
@@ -390,4 +415,4 @@ const Pagination = ({ rowsPerPage, totalRows, paginate }) => {
   );
 };
 
-export default TableLogHarianMahasiswa;
+export default TableKehadiranMahasiswa;

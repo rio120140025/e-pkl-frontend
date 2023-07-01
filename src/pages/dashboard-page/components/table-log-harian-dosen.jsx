@@ -14,31 +14,14 @@ import {
   InputLeftElement,
   Flex,
   Spacer,
-  HStack,
-  Modal,
-  useDisclosure,
-  ModalOverlay,
-  ModalCloseButton,
-  ModalContent,
-  ModalBody,
-  ModalFooter,
-  Center,
 } from "@chakra-ui/react";
 
 import { ReactComponent as SortButton } from "../../../assets/button-sort.svg";
 import { ReactComponent as SearchIcon } from "../../../assets/icon-search.svg";
-import { ReactComponent as BackButton } from "../../../assets/button-back.svg";
-import { ReactComponent as EditButton } from "../../../assets/button-edit.svg";
-import { ReactComponent as DeleteButton } from "../../../assets/button-delete.svg";
 import {
   ButtonBoxDetailLogHarianMahasiswa,
   ButtonBoxExport,
-  ButtonBoxSimpanLogHarian,
-  ButtonBoxTambahRencanaLogHarian,
-  aL,
 } from "./button-box";
-import { Link } from "react-router-dom";
-import TableEdit from "./table-edit";
 
 const TableLogHarianDosen = () => {
   const [search, setSearch] = useState("");
@@ -147,31 +130,6 @@ const TableLogHarianDosen = () => {
   const firstRow = indexOfFirstRow + 1;
   const lastRow = Math.min(indexOfLastRow, totalRows);
 
-  const {
-    isOpen: isOpenDelete,
-    onOpen: onOpenDelete,
-    onClose: onCloseDelete,
-  } = useDisclosure();
-  const {
-    isOpen: isOpenEdit,
-    onOpen: onOpenEdit,
-    onClose: onCloseEdit,
-  } = useDisclosure();
-
-  const [deleteIndex, setDeleteIndex] = useState(null);
-
-  const handleDeleteRow = (index) => {
-    setDeleteIndex(index);
-    onOpenDelete();
-  };
-
-  const handleConfirmDelete = () => {
-    const updatedData = [...data];
-    updatedData.splice(indexOfFirstRow + deleteIndex, 1);
-    setData(updatedData);
-    onCloseDelete();
-  };
-
   return (
     <Box
       marginTop="28.86px"
@@ -181,30 +139,25 @@ const TableLogHarianDosen = () => {
       bgColor="#F9FAFC"
       boxShadow="0 0 0 1px rgba(152, 161, 178, 0.1), 0 1px 4px rgba(69, 75, 87, 0.12), 0 0 2px rgba(0, 0, 0, 0.08)"
     >
-      <Link position="relative" marginTop={3} to="/rencana-kegiatan">
-        <BackButton />
-      </Link>
-      <HStack marginLeft={665} spacing={19}>
-        <InputGroup
-          top="12px"
-          marginBottom={2}
-          backgroundColor="#fff"
-          width="418px"
-          fontSize="14px"
-          color="#a1a9b8"
-        >
-          <InputLeftElement>
-            <SearchIcon />
-          </InputLeftElement>
-          <Input
-            type="text"
-            placeholder="Search..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </InputGroup>
-        <ButtonBoxTambahRencanaLogHarian />
-      </HStack>
+      <InputGroup
+        top="12px"
+        marginBottom={2}
+        marginLeft={875}
+        backgroundColor="#fff"
+        width="418px"
+        fontSize="14px"
+        color="#a1a9b8"
+      >
+        <InputLeftElement>
+          <SearchIcon />
+        </InputLeftElement>
+        <Input
+          type="text"
+          placeholder="Search..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </InputGroup>
       <Table variant="striped" top="1384px" left="0" width="1314px">
         <Thead>
           <Tr>
@@ -286,49 +239,6 @@ const TableLogHarianDosen = () => {
           ))}
         </Tbody>
       </Table>
-      <Modal isOpen={isOpenDelete} onClose={onCloseDelete}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalBody mt={10} textAlign={"center"} fontWeight={"bolder"}>
-            <ModalCloseButton color={"#FF0000"} />
-            Apakah yakin menghapus rencana?
-          </ModalBody>
-          <Center>
-            <ModalFooter>
-              <HStack spacing={20}>
-                <Button
-                  bgColor={"#20B95D"}
-                  color={"white"}
-                  onClick={handleConfirmDelete}
-                  w={70}
-                >
-                  Ya
-                </Button>
-                <Button
-                  bgColor={"#FF0000"}
-                  color={"white"}
-                  onClick={onCloseDelete}
-                  w={70}
-                >
-                  Tidak
-                </Button>
-              </HStack>
-            </ModalFooter>
-          </Center>
-        </ModalContent>
-      </Modal>
-      <Modal isOpen={isOpenEdit} onClose={onCloseEdit} size={"1"}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalBody>
-            <ModalCloseButton color={"#BDCDD6"} />
-            <TableEdit />
-          </ModalBody>
-          <ModalFooter>
-            <ButtonBoxSimpanLogHarian />
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
       <Box>
         <Flex>
           <Box marginLeft="25px" fontSize="14px" color="#687182">

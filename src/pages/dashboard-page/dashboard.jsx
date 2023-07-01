@@ -3,7 +3,10 @@ import { Box, Flex, Spacer } from "@chakra-ui/layout";
 
 import {
   HeaderDashboard,
+  HeaderKehadiran,
+  HeaderKuisioner,
   HeaderLogHarian,
+  HeaderPenilaian,
   HeaderProfil,
   HeaderRencanaKegiatan,
 } from "./components/header-dashboard";
@@ -27,8 +30,12 @@ import {
   ChangeProfileBoxDPL,
 } from "./pages/profile-box";
 import {
+  BreadcrumbKehadiran,
+  BreadcrumbKuisioner,
   BreadcrumbLogHarian,
   BreadcrumbLogHarianDetail,
+  BreadcrumbPenilaian,
+  BreadcrumbPenilaianDetail,
   BreadcrumbProfile,
   BreadcrumbProfileUbah,
   BreadcrumbRencanaKegiatan,
@@ -40,7 +47,19 @@ import {
   RencanaKegiatanBoxDetailDosen,
   RencanaKegiatanBoxDetailMahasiswa,
 } from "./pages/rencana-kegiatan";
-import { LogHarianDPLDetail, LogHarianDosen, LogHarianMahasiswa, LogHarianMahasiswaDosenDetail } from "./pages/log-harian";
+import {
+  LogHarianDPLDetail,
+  LogHarianDosen,
+  LogHarianMahasiswa,
+  LogHarianMahasiswaDosenDetail,
+} from "./pages/log-harian";
+import {
+  KehadiranDPL,
+  KehadiranDosen,
+  KehadiranMahasiswa,
+} from "./pages/kehadiran";
+import KuisionerBox from "./pages/kuisioner";
+import { PenilaianDPL, PenilaianMahasiswaDosen } from "./pages/penilaian";
 
 function Dashboard() {
   return (
@@ -166,7 +185,7 @@ function LogHarian() {
         <Spacer />
         <BreadcrumbLogHarian />
       </Flex>
-      <LogHarianDosen />
+      <LogHarianMahasiswa />
     </Box>
   );
 }
@@ -193,6 +212,72 @@ function LogHarianDetail() {
   );
 }
 
+function Kehadiran() {
+  return (
+    <Box
+      height={"100vh"}
+      width={"100vw"}
+      w="100%"
+      bgRepeat="no-repeat"
+      backgroundPosition="center"
+      backgroundSize="cover"
+      backgroundColor="#f4f8fa"
+    >
+      <HeaderKehadiran />
+      <Flex>
+        <KehadiranLogo />
+        <Spacer />
+        <BreadcrumbKehadiran />
+      </Flex>
+      <KehadiranDPL />
+    </Box>
+  );
+}
+
+function Penilaian() {
+  return (
+    <Box
+      height={"100vh"}
+      width={"100vw"}
+      w="100%"
+      bgRepeat="no-repeat"
+      backgroundPosition="center"
+      backgroundSize="cover"
+      backgroundColor="#f4f8fa"
+    >
+      <HeaderPenilaian />
+      <Flex>
+        <PenilaianLogo />
+        <Spacer />
+        <BreadcrumbPenilaian />
+      </Flex>
+      <PenilaianMahasiswaDosen />
+    </Box>
+  );
+}
+
+function Kuisioner() {
+  return (
+    <Box
+      height={"100vh"}
+      width={"100vw"}
+      w="100%"
+      bgRepeat="no-repeat"
+      backgroundPosition="center"
+      backgroundSize="cover"
+      backgroundColor="#f4f8fa"
+    >
+      <HeaderKuisioner />
+      <Flex>
+        <KuisionerLogo />
+        <Spacer />
+        <BreadcrumbKuisioner />
+      </Flex>
+      <KuisionerBox />
+    </Box>
+  );
+}
+
 export {
   Dashboard,
   Profile,
@@ -201,4 +286,7 @@ export {
   RencanaKegiatanDetail,
   LogHarian,
   LogHarianDetail,
+  Kehadiran,
+  Penilaian,
+  Kuisioner,
 };

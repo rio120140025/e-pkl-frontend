@@ -14,106 +14,44 @@ import {
   InputLeftElement,
   Flex,
   Spacer,
-  HStack,
-  Modal,
-  useDisclosure,
-  ModalOverlay,
-  ModalCloseButton,
-  ModalContent,
-  ModalBody,
-  ModalFooter,
-  Center,
 } from "@chakra-ui/react";
 
 import { ReactComponent as SortButton } from "../../../assets/button-sort.svg";
 import { ReactComponent as SearchIcon } from "../../../assets/icon-search.svg";
-import { ReactComponent as EditButton } from "../../../assets/button-edit.svg";
-import { ReactComponent as DeleteButton } from "../../../assets/button-delete.svg";
-import {
-  ButtonBoxDetailLogHarianMahasiswa,
-  ButtonBoxExport,
-  ButtonBoxSimpanLogHarian,
-  ButtonBoxTambahRencanaLogHarian,
-} from "./button-box";
-import { TableEdit } from "./table-edit";
+import { ButtonBoxDetailPenilaian } from "./button-box";
 
-const TableLogHarianMahasiswa = () => {
+const TablePenilaianMahasiswaDosen = () => {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState([
+  const data = [
     {
       no: "1",
       nama: "John",
-      nim: "12345",
       dosenPembimbing: "Dr. Smith",
+      lokasi: "Microdata",
+      waktu: "01-06-2023 s.d 01-07-2023",
+      nilai: "85",
     },
-
     {
       no: "2",
-      nama: "Jane",
-      nim: "67890",
-      dosenPembimbing: "Dr. Brown",
+      nama: "John",
+      dosenPembimbing: "Dr. Smith",
+      lokasi: "Microdata",
+      waktu: "01-06-2023 s.d 01-07-2023",
+      nilai: "85",
     },
-
     {
       no: "3",
-      nama: "Michael",
-      nim: "54321",
-      dosenPembimbing: "Dr. Wilson",
+      nama: "John",
+      dosenPembimbing: "Dr. Smith",
+      lokasi: "Microdata",
+      waktu: "01-06-2023 s.d 01-07-2023",
+      nilai: "85",
     },
-
-    {
-      no: "4",
-      nama: "Sarah",
-      nim: "98765",
-      dosenPembimbing: "Dr. Martinez",
-    },
-
-    {
-      no: "5",
-      nama: "David",
-      nim: "13579",
-      dosenPembimbing: "Dr. Anderson",
-    },
-
-    {
-      no: "6",
-      nama: "Emily",
-      nim: "02468",
-      dosenPembimbing: "Dr. Clark",
-    },
-
-    {
-      no: "7",
-      nama: "Daniel",
-      nim: "24680",
-      dosenPembimbing: "Dr. Walker",
-    },
-
-    {
-      no: "8",
-      nama: "Olivia",
-      nim: "97531",
-      dosenPembimbing: "Dr. Garcia",
-    },
-
-    {
-      no: "9",
-      nama: "Jacob",
-      nim: "80246",
-      dosenPembimbing: "Dr. Hernandez",
-    },
-
-    {
-      no: "10",
-      nama: "Sophia",
-      nim: "46802",
-      dosenPembimbing: "Dr. Patel",
-    },
-  ]);
+  ];
 
   const filteredData = data.filter((item) =>
     item.nama.toLowerCase().includes(search.toLowerCase())
@@ -144,31 +82,6 @@ const TableLogHarianMahasiswa = () => {
   const firstRow = indexOfFirstRow + 1;
   const lastRow = Math.min(indexOfLastRow, totalRows);
 
-  const {
-    isOpen: isOpenDelete,
-    onOpen: onOpenDelete,
-    onClose: onCloseDelete,
-  } = useDisclosure();
-  const {
-    isOpen: isOpenEdit,
-    onOpen: onOpenEdit,
-    onClose: onCloseEdit,
-  } = useDisclosure();
-
-  const [deleteIndex, setDeleteIndex] = useState(null);
-
-  const handleDeleteRow = (index) => {
-    setDeleteIndex(index);
-    onOpenDelete();
-  };
-
-  const handleConfirmDelete = () => {
-    const updatedData = [...data];
-    updatedData.splice(indexOfFirstRow + deleteIndex, 1);
-    setData(updatedData);
-    onCloseDelete();
-  };
-
   return (
     <Box
       marginTop="28.86px"
@@ -178,27 +91,25 @@ const TableLogHarianMahasiswa = () => {
       bgColor="#F9FAFC"
       boxShadow="0 0 0 1px rgba(152, 161, 178, 0.1), 0 1px 4px rgba(69, 75, 87, 0.12), 0 0 2px rgba(0, 0, 0, 0.08)"
     >
-      <HStack marginLeft={665} spacing={19}>
-        <InputGroup
-          top="12px"
-          marginBottom={2}
-          backgroundColor="#fff"
-          width="418px"
-          fontSize="14px"
-          color="#a1a9b8"
-        >
-          <InputLeftElement>
-            <SearchIcon />
-          </InputLeftElement>
-          <Input
-            type="text"
-            placeholder="Search..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </InputGroup>
-        <ButtonBoxTambahRencanaLogHarian />
-      </HStack>
+      <InputGroup
+        top="12px"
+        marginBottom={2}
+        marginLeft={875}
+        backgroundColor="#fff"
+        width="418px"
+        fontSize="14px"
+        color="#a1a9b8"
+      >
+        <InputLeftElement>
+          <SearchIcon />
+        </InputLeftElement>
+        <Input
+          type="text"
+          placeholder="Search..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </InputGroup>
       <Table variant="striped" top="1384px" left="0" width="1314px">
         <Thead>
           <Tr>
@@ -215,23 +126,11 @@ const TableLogHarianMahasiswa = () => {
               </Button>
             </Th>
             <Th>
-              Mahasiswa{" "}
+              Nama{" "}
               <Button
                 variant="link"
                 onClick={() => {
                   setSortKey("nama");
-                  toggleSortOrder();
-                }}
-              >
-                <SortButton />
-              </Button>
-            </Th>
-            <Th>
-              NIM{" "}
-              <Button
-                variant="link"
-                onClick={() => {
-                  setSortKey("nim");
                   toggleSortOrder();
                 }}
               >
@@ -250,9 +149,43 @@ const TableLogHarianMahasiswa = () => {
                 <SortButton />
               </Button>
             </Th>
-            <Th colSpan={4} textAlign={"center"}>
-              Aksi
+            <Th>
+              Lokasi PKL{" "}
+              <Button
+                variant="link"
+                onClick={() => {
+                  setSortKey("lokasi");
+                  toggleSortOrder();
+                }}
+              >
+                <SortButton />
+              </Button>
             </Th>
+            <Th>
+              Waktu{" "}
+              <Button
+                variant="link"
+                onClick={() => {
+                  setSortKey("waktu");
+                  toggleSortOrder();
+                }}
+              >
+                <SortButton />
+              </Button>
+            </Th>
+            <Th>
+              Nilai{" "}
+              <Button
+                variant="link"
+                onClick={() => {
+                  setSortKey("nilai");
+                  toggleSortOrder();
+                }}
+              >
+                <SortButton />
+              </Button>
+            </Th>
+            <Th>Aksi</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -264,71 +197,19 @@ const TableLogHarianMahasiswa = () => {
             >
               <Td>{row.no}</Td>
               <Td>{row.nama}</Td>
-              <Td>{row.nim}</Td>
               <Td>{row.dosenPembimbing}</Td>
+              <Td>{row.lokasi}</Td>
+              <Td>{row.waktu}</Td>
+              <Td>{row.nilai}</Td>
               <Td>
                 <Flex>
-                  <ButtonBoxDetailLogHarianMahasiswa />
+                  <ButtonBoxDetailPenilaian />
                 </Flex>
-              </Td>
-              <Td>
-                <Flex>
-                  <ButtonBoxExport />
-                </Flex>
-              </Td>
-              <Td>
-                <EditButton onClick={onOpenEdit} />
-              </Td>
-              <Td>
-                <DeleteButton onClick={() => handleDeleteRow(index)} />
               </Td>
             </Tr>
           ))}
         </Tbody>
       </Table>
-      <Modal isOpen={isOpenDelete} onClose={onCloseDelete}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalBody mt={10} textAlign={"center"} fontWeight={"bolder"}>
-            <ModalCloseButton color={"#FF0000"} />
-            Apakah yakin menghapus rencana?
-          </ModalBody>
-          <Center>
-            <ModalFooter>
-              <HStack spacing={20}>
-                <Button
-                  bgColor={"#20B95D"}
-                  color={"white"}
-                  onClick={handleConfirmDelete}
-                  w={70}
-                >
-                  Ya
-                </Button>
-                <Button
-                  bgColor={"#FF0000"}
-                  color={"white"}
-                  onClick={onCloseDelete}
-                  w={70}
-                >
-                  Tidak
-                </Button>
-              </HStack>
-            </ModalFooter>
-          </Center>
-        </ModalContent>
-      </Modal>
-      <Modal isOpen={isOpenEdit} onClose={onCloseEdit} size={"1"}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalBody>
-            <ModalCloseButton color={"#BDCDD6"} />
-            <TableEdit />
-          </ModalBody>
-          <ModalFooter>
-            <ButtonBoxSimpanLogHarian />
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
       <Box>
         <Flex>
           <Box marginLeft="25px" fontSize="14px" color="#687182">
@@ -390,4 +271,4 @@ const Pagination = ({ rowsPerPage, totalRows, paginate }) => {
   );
 };
 
-export default TableLogHarianMahasiswa;
+export default TablePenilaianMahasiswaDosen;
