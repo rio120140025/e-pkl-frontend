@@ -27,6 +27,8 @@ import {
   ChangeProfileBoxDPL,
 } from "./pages/profile-box";
 import {
+  BreadcrumbLogHarian,
+  BreadcrumbLogHarianDetail,
   BreadcrumbProfile,
   BreadcrumbProfileUbah,
   BreadcrumbRencanaKegiatan,
@@ -38,6 +40,7 @@ import {
   RencanaKegiatanBoxDetailDosen,
   RencanaKegiatanBoxDetailMahasiswa,
 } from "./pages/rencana-kegiatan";
+import { LogHarianDPLDetail, LogHarianDosen, LogHarianMahasiswa, LogHarianMahasiswaDosenDetail } from "./pages/log-harian";
 
 function Dashboard() {
   return (
@@ -161,9 +164,31 @@ function LogHarian() {
       <Flex>
         <LogHarianLogo />
         <Spacer />
-        <BreadcrumbRencanaKegiatanDetail />
+        <BreadcrumbLogHarian />
       </Flex>
-      <RencanaKegiatanBoxDetailMahasiswa />
+      <LogHarianDosen />
+    </Box>
+  );
+}
+
+function LogHarianDetail() {
+  return (
+    <Box
+      height={"100vh"}
+      width={"100vw"}
+      w="100%"
+      bgRepeat="no-repeat"
+      backgroundPosition="center"
+      backgroundSize="cover"
+      backgroundColor="#f4f8fa"
+    >
+      <HeaderLogHarian />
+      <Flex>
+        <LogHarianLogo />
+        <Spacer />
+        <BreadcrumbLogHarianDetail />
+      </Flex>
+      <LogHarianMahasiswaDosenDetail />
     </Box>
   );
 }
@@ -174,4 +199,6 @@ export {
   ProfileChange,
   RencanaKegiatan,
   RencanaKegiatanDetail,
+  LogHarian,
+  LogHarianDetail,
 };

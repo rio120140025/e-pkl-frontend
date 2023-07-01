@@ -1,7 +1,7 @@
 import React from "react";
-import { Box, Center, Flex, Select, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Center, Select, SimpleGrid, Text } from "@chakra-ui/react";
 
-import { ButtonBoxUbah, ButtonBoxSimpan } from "../components/button-box";
+import { ButtonBoxUbah, ButtonBoxSimpanProfile } from "../components/button-box";
 import DisplayBox from "../components/display-box";
 import InputBox from "../../login-page/components/input-box";
 import PasswordInput from "../../login-page/components/password";
@@ -287,7 +287,7 @@ function ChangeProfileBoxMahasiswa() {
       </Center>
 
       <Center marginTop={5}>
-        <ButtonBoxSimpan />
+        <ButtonBoxSimpanProfile />
       </Center>
     </Box>
   );
@@ -350,7 +350,7 @@ function ChangeProfileBoxDosen() {
       </Center>
 
       <Center marginTop={5}>
-        <ButtonBoxSimpan />
+        <ButtonBoxSimpanProfile />
       </Center>
     </Box>
   );
@@ -416,7 +416,7 @@ function ChangeProfileBoxDPL() {
       </Center>
 
       <Center marginTop={5}>
-        <ButtonBoxSimpan />
+        <ButtonBoxSimpanProfile />
       </Center>
     </Box>
   );

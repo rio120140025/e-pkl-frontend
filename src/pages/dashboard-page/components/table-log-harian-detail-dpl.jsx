@@ -18,89 +18,96 @@ import {
 
 import { ReactComponent as SortButton } from "../../../assets/button-sort.svg";
 import { ReactComponent as SearchIcon } from "../../../assets/icon-search.svg";
-import { ButtonBoxDetailRencanaKegiatan } from "./button-box";
+import { ReactComponent as BackButton } from "../../../assets/button-back.svg";
+import { Link } from "react-router-dom";
+import {
+  ButtonBoxDetailLogHarianDPLDetail,
+  ButtonBoxDetailLogHarianMahasiswaDosenDetail,
+  ButtonBoxTolak,
+  ButtonBoxVerifikasi,
+} from "./button-box";
 
-const data = [
-  {
-    no: "1",
-    nama: "John",
-    nim: "12345",
-    dosenPembimbing: "Dr. Smith",
-  },
-
-  {
-    no: "2",
-    nama: "Jane",
-    nim: "67890",
-    dosenPembimbing: "Dr. Brown",
-  },
-
-  {
-    no: "3",
-    nama: "Michael",
-    nim: "54321",
-    dosenPembimbing: "Dr. Wilson",
-  },
-
-  {
-    no: "4",
-    nama: "Sarah",
-    nim: "98765",
-    dosenPembimbing: "Dr. Martinez",
-  },
-
-  {
-    no: "5",
-    nama: "David",
-    nim: "13579",
-    dosenPembimbing: "Dr. Anderson",
-  },
-
-  {
-    no: "6",
-    nama: "Emily",
-    nim: "02468",
-    dosenPembimbing: "Dr. Clark",
-  },
-
-  {
-    no: "7",
-    nama: "Daniel",
-    nim: "24680",
-    dosenPembimbing: "Dr. Walker",
-  },
-
-  {
-    no: "8",
-    nama: "Olivia",
-    nim: "97531",
-    dosenPembimbing: "Dr. Garcia",
-  },
-
-  {
-    no: "9",
-    nama: "Jacob",
-    nim: "80246",
-    dosenPembimbing: "Dr. Hernandez",
-  },
-
-  {
-    no: "10",
-    nama: "Sophia",
-    nim: "46802",
-    dosenPembimbing: "Dr. Patel",
-  },
-];
-
-const TableRencanaKegiatan = () => {
+const TableLogHarianDPLDetail = () => {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const data = [
+    {
+      no: "1",
+      kegiatan: "Kegiatan 1",
+      alatBahan: "Alat dan Bahan 1",
+      waktuPelaksanaan: "10",
+      status: "Diverifikasi",
+    },
+    {
+      no: "2",
+      kegiatan: "Kegiatan 2",
+      alatBahan: "Alat dan Bahan 2",
+      waktuPelaksanaan: "8",
+      status: "Belum Diverifikasi",
+    },
+    {
+      no: "3",
+      kegiatan: "Kegiatan 3",
+      alatBahan: "Alat dan Bahan 3",
+      waktuPelaksanaan: "12",
+      status: "Ditolak",
+    },
+    {
+      no: "4",
+      kegiatan: "Kegiatan 4",
+      alatBahan: "Alat dan Bahan 4",
+      waktuPelaksanaan: "6",
+      status: "Diverifikasi",
+    },
+    {
+      no: "5",
+      kegiatan: "Kegiatan 5",
+      alatBahan: "Alat dan Bahan 5",
+      waktuPelaksanaan: "9",
+      status: "Diverifikasi",
+    },
+    {
+      no: "6",
+      kegiatan: "Kegiatan 6",
+      alatBahan: "Alat dan Bahan 6",
+      waktuPelaksanaan: "7",
+      status: "Belum Diverifikasi",
+    },
+    {
+      no: "7",
+      kegiatan: "Kegiatan 7",
+      alatBahan: "Alat dan Bahan 7",
+      waktuPelaksanaan: "11",
+      status: "Diverifikasi",
+    },
+    {
+      no: "8",
+      kegiatan: "Kegiatan 8",
+      alatBahan: "Alat dan Bahan 8",
+      waktuPelaksanaan: "5",
+      status: "Ditolak",
+    },
+    {
+      no: "9",
+      kegiatan: "Kegiatan 9",
+      alatBahan: "Alat dan Bahan 9",
+      waktuPelaksanaan: "14",
+      status: "Belum Diverifikasi",
+    },
+    {
+      no: "10",
+      kegiatan: "Kegiatan 10",
+      alatBahan: "Alat dan Bahan 10",
+      waktuPelaksanaan: "3",
+      status: "Diverifikasi",
+    },
+  ];
 
   const filteredData = data.filter((item) =>
-    item.nama.toLowerCase().includes(search.toLowerCase())
+    item.kegiatan.toLowerCase().includes(search.toLowerCase())
   );
 
   const sortedData = filteredData.sort((a, b) => {
@@ -137,6 +144,9 @@ const TableRencanaKegiatan = () => {
       bgColor="#F9FAFC"
       boxShadow="0 0 0 1px rgba(152, 161, 178, 0.1), 0 1px 4px rgba(69, 75, 87, 0.12), 0 0 2px rgba(0, 0, 0, 0.08)"
     >
+      <Link position="relative" marginTop={3} to="/rencana-kegiatan">
+        <BackButton />
+      </Link>
       <InputGroup
         top="12px"
         marginLeft={875}
@@ -156,7 +166,7 @@ const TableRencanaKegiatan = () => {
           onChange={(e) => setSearch(e.target.value)}
         />
       </InputGroup>
-      <Table variant="striped" top="1384px">
+      <Table variant="striped" top="1384px" left="0" width="1314px">
         <Thead>
           <Tr>
             <Th>
@@ -172,11 +182,11 @@ const TableRencanaKegiatan = () => {
               </Button>
             </Th>
             <Th>
-              Nama{" "}
+              Kegiatan{" "}
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("nama");
+                  setSortKey("kegiatan");
                   toggleSortOrder();
                 }}
               >
@@ -184,11 +194,11 @@ const TableRencanaKegiatan = () => {
               </Button>
             </Th>
             <Th>
-              NIM{" "}
+              Alat dan Bahan{" "}
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("nim");
+                  setSortKey("alatBahan");
                   toggleSortOrder();
                 }}
               >
@@ -196,18 +206,21 @@ const TableRencanaKegiatan = () => {
               </Button>
             </Th>
             <Th>
-              Dosen Pembimbing{" "}
+              Waktu Pelaksanaan{" "}
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("dosenPembimbing");
+                  setSortKey("waktuPelaksanaan");
                   toggleSortOrder();
                 }}
               >
                 <SortButton />
               </Button>
             </Th>
-            <Th>Aksi</Th>
+            <Th colSpan={2} textAlign={"center"}>
+              Status{" "}
+            </Th>
+            <Th textAlign={"center"}>Aksi</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -218,12 +231,18 @@ const TableRencanaKegiatan = () => {
               color="black"
             >
               <Td>{row.no}</Td>
-              <Td>{row.nama}</Td>
-              <Td>{row.nim}</Td>
-              <Td>{row.dosenPembimbing}</Td>
+              <Td>{row.kegiatan}</Td>
+              <Td>{row.alatBahan}</Td>
+              <Td>{row.waktuPelaksanaan}</Td>
+              <Td >
+                  <ButtonBoxVerifikasi/>
+              </Td>
+              <Td>
+                  <ButtonBoxTolak/>
+              </Td>
               <Td>
                 <Flex>
-                  <ButtonBoxDetailRencanaKegiatan />
+                  <ButtonBoxDetailLogHarianDPLDetail />
                 </Flex>
               </Td>
             </Tr>
@@ -291,4 +310,4 @@ const Pagination = ({ rowsPerPage, totalRows, paginate }) => {
   );
 };
 
-export default TableRencanaKegiatan;
+export default TableLogHarianDPLDetail;

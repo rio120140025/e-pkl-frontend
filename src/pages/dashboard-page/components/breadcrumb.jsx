@@ -86,10 +86,56 @@ function BreadcrumbRencanaKegiatanDetail() {
     </Flex>
   );
 }
+function BreadcrumbLogHarian() {
+  return (
+    <Flex marginRight={84} marginTop={65}>
+      <Breadcrumb>
+        <BreadcrumbItem>
+          <BreadcrumbLink color={"#6096B4"} href="/dashboard">
+            Dashboard
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+
+        <BreadcrumbItem isCurrentPage>
+          <BreadcrumbLink href="/rencana-kegiatan/detail">
+            Log Harian
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+      </Breadcrumb>
+    </Flex>
+  );
+}
+function BreadcrumbLogHarianDetail() {
+  return (
+    <Flex marginRight={84} marginTop={65}>
+      <Breadcrumb>
+        <BreadcrumbItem>
+          <BreadcrumbLink color={"#6096B4"} href="/dashboard">
+            Dashboard
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+
+        <BreadcrumbItem>
+          <BreadcrumbLink color={"#6096B4"} href="/rencana-kegiatan">
+            Log Harian
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+
+        <BreadcrumbItem isCurrentPage>
+          <BreadcrumbLink href="/rencana-kegiatan/detail">
+            Detail
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+      </Breadcrumb>
+    </Flex>
+  );
+}
 
 export {
   BreadcrumbProfile,
   BreadcrumbProfileUbah,
   BreadcrumbRencanaKegiatan,
   BreadcrumbRencanaKegiatanDetail,
+  BreadcrumbLogHarian,
+  BreadcrumbLogHarianDetail,
 };

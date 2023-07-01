@@ -131,10 +131,10 @@ function HeaderLogHarian() {
           <Link className="button-nonclick-dashboard" to="/rencana-kegiatan">
             Rencana Kegiatan
           </Link>
-          <Link className="button-nonclick-dashboard" to="/log-harian">
+          <Link className="button-click-dashboard" to="/log-harian">
             Log Harian
           </Link>
-          <Link className="button-click-dashboard" to="/kehadiran">
+          <Link className="button-nonclick-dashboard" to="/kehadiran">
             Kehadiran
           </Link>
           <Link className="button-nonclick-dashboard" to="/penilaian-pkl">
