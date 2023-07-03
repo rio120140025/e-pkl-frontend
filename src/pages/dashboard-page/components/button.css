@@ -34,10 +34,11 @@
   cursor: pointer;
   text-align: center;
   padding-top: 3px;
-  font-weight: bold;
+  font-weight: bolder;
 }
 
 .button-box-table:hover {
   background-color: #e1e7ea;
-  color: #e1e7ea;
+  color: #93bfcf;
+  font-weight: bolder;
 }

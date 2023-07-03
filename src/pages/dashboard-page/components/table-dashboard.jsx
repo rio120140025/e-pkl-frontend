@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Input,
@@ -15,101 +15,11 @@ import {
   Flex,
   Spacer,
 } from "@chakra-ui/react";
+import axios from "axios";
 
 import { ReactComponent as SortButton } from "../../../assets/button-sort.svg";
 import { ReactComponent as SearchIcon } from "../../../assets/icon-search.svg";
-
-const data = [
-  {
-    no: "1",
-    nama: "John",
-    nim: "12345",
-    dosenPembimbing: "Dr. Smith",
-    dosenPembimbingLapangan: "Prof. Johnson",
-    tempat: "Lab A",
-  },
-
-  {
-    no: "2",
-    nama: "Jane",
-    nim: "67890",
-    dosenPembimbing: "Dr. Brown",
-    dosenPembimbingLapangan: "Prof. Davis",
-    tempat: "Lab B",
-  },
-
-  {
-    no: "3",
-    nama: "Michael",
-    nim: "54321",
-    dosenPembimbing: "Dr. Wilson",
-    dosenPembimbingLapangan: "Prof. Thompson",
-    tempat: "Lab C",
-  },
-
-  {
-    no: "4",
-    nama: "Sarah",
-    nim: "98765",
-    dosenPembimbing: "Dr. Martinez",
-    dosenPembimbingLapangan: "Prof. Lewis",
-    tempat: "Lab D",
-  },
-
-  {
-    no: "5",
-    nama: "David",
-    nim: "13579",
-    dosenPembimbing: "Dr. Anderson",
-    dosenPembimbingLapangan: "Prof. Turner",
-    tempat: "Lab E",
-  },
-
-  {
-    no: "6",
-    nama: "Emily",
-    nim: "02468",
-    dosenPembimbing: "Dr. Clark",
-    dosenPembimbingLapangan: "Prof. Roberts",
-    tempat: "Lab F",
-  },
-
-  {
-    no: "7",
-    nama: "Daniel",
-    nim: "24680",
-    dosenPembimbing: "Dr. Walker",
-    dosenPembimbingLapangan: "Prof. Moore",
-    tempat: "Lab G",
-  },
-
-  {
-    no: "8",
-    nama: "Olivia",
-    nim: "97531",
-    dosenPembimbing: "Dr. Garcia",
-    dosenPembimbingLapangan: "Prof. Perez",
-    tempat: "Lab H",
-  },
-
-  {
-    no: "9",
-    nama: "Jacob",
-    nim: "80246",
-    dosenPembimbing: "Dr. Hernandez",
-    dosenPembimbingLapangan: "Prof. Ramirez",
-    tempat: "Lab I",
-  },
-
-  {
-    no: "10",
-    nama: "Sophia",
-    nim: "46802",
-    dosenPembimbing: "Dr. Patel",
-    dosenPembimbingLapangan: "Prof. Lee",
-    tempat: "Lab J",
-  },
-];
+import { useCookies } from "react-cookie";
 
 const TableDashboard = () => {
   const [search, setSearch] = useState("");
@@ -117,9 +27,31 @@ const TableDashboard = () => {
   const [sortOrder, setSortOrder] = useState("asc");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const [data, setData] = useState([]);
+  const [cookies, setCookie] = useCookies(["name"]);
 
-  const filteredData = data.filter((item) =>
-    item.nama.toLowerCase().includes(search.toLowerCase())
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios
+          .get("http://127.0.0.1:8000/api/user/data/alluser", {
+            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+          })
+          .then((response) => {
+            const updatedData = response.data;
+            setData(updatedData);
+            console.log(updatedData);
+          });
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const filteredData = data.filter(
+    (item) => item.name?.toLowerCase() || "".includes(search.toLowerCase())
   );
 
   const sortedData = filteredData.sort((a, b) => {
@@ -195,7 +127,7 @@ const TableDashboard = () => {
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("nama");
+                  setSortKey("name");
                   toggleSortOrder();
                 }}
               >
@@ -259,9 +191,9 @@ const TableDashboard = () => {
               bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
               color="black"
             >
-              <Td>{row.no}</Td>
-              <Td>{row.nama}</Td>
-              <Td>{row.nim}</Td>
+              <Td>{row.id}</Td>
+              <Td>{row.name}</Td>
+              <Td>{row.nip}</Td>
               <Td>{row.dosenPembimbing}</Td>
               <Td>{row.dosenPembimbingLapangan}</Td>
               <Td>{row.tempat}</Td>
