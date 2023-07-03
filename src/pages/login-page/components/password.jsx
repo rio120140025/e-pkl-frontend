@@ -15,22 +15,18 @@ function PasswordInput(props) {
   const [show, setShow] = React.useState(false);
   const handleClick = () => setShow(!show);
 
-  const [input, setInput] = useState("");
   const [isTouched, setIsTouched] = useState(false);
 
-  const handleInputChange = (e) => setInput(e.target.value);
   const handleInputBlur = () => setIsTouched(true);
 
-  const isError = isTouched && input === "";
+  const isError = isTouched && props.password === "";
 
   return (
     <InputGroup size="md">
       <FormControl isInvalid={isError}>
         <Input
-          value={input}
-          onChange={handleInputChange}
-          // value={props.password}
-          // onChange={(e) => props.handleSetPassword(e)}
+          value={props.password}
+          onChange={(e) => props.handleSetPassword(e)}
           onBlur={handleInputBlur}
           borderRadius="5"
           bgColor={"#fff"}

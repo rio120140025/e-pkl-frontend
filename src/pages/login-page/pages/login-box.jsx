@@ -9,6 +9,7 @@ import {
   ModalCloseButton,
   ModalContent,
   ModalBody,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 
@@ -21,35 +22,48 @@ import { useNavigate } from "react-router";
 import { useCookies } from "react-cookie";
 
 function LoginBox() {
+  const toast = useToast();
+  function callToast(title, status) {
+    toast({
+      title: title,
+      status: status,
+      duration: 3000,
+      isClosable: true,
+    });
+  }
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorLogin, setErrorLogin] = useState(null);
-  const [cookies, setCookies] = useCookies(["name"]);
+  const [cookies, setCookie] = useCookies(["name"]);
 
+  const navigate = useNavigate();
+  if (cookies.jwt_token != null) {
+    window.location.href = "/dashboard";
+  } else {
+  }
   const handleSignIn = () => {
     const loginData = {
       email: email,
       password: password,
     };
+
     axios
-      .post("http://127.0.0.1:8000/api/user/login", loginData, {
-        headers: { Authorization: "Bearer " + cookies.token },
-      })
+      .post("http://127.0.0.1:8000/api/user/login", loginData)
       .then((response) => {
-        console.log("response", response);
-        setCookies("token", response);
+        setCookie("jwt_token", response);
         if (response != null) {
+          callToast("Berhasil Login", "success");
           navigate("/dashboard");
+        } else {
+          console.log("Token tidak digenerated");
         }
       })
       .catch((error) => {
-        console.log("error", error);
-        setErrorLogin(error.response.data.reason);
-      })
-      .finally(() => {});
+        console.error(error.response);
+        callToast(error.response.data.reason, "error");
+      });
   };
 
   return (
@@ -60,18 +74,18 @@ function LoginBox() {
             <Box>
               Email
               <InputBox
-                value={email}
-                handleSetEmail={(e) => setEmail(e.target.value)}
+                input={email}
+                handleSet={(e) => setEmail(e.target.value)}
               />
             </Box>
             <Box>
               Password
               <PasswordInput
-                value={password}
+                password={password}
                 handleSetPassword={(e) => setPassword(e.target.value)}
               />
             </Box>
-            <ButtonBoxSignIn cek="cek" handleSignIn={() => handleSignIn()} />
+            <ButtonBoxSignIn handle={() => handleSignIn()} buttonType="Sign In"/>
             <Text className="button-text" onClick={onOpen} cursor="pointer">
               Forgot password?
             </Text>

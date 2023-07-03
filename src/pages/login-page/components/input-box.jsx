@@ -8,22 +8,18 @@ import {
 import { Flex } from "@chakra-ui/layout";
 
 function InputBox(props) {
-  const [input, setInput] = useState("");
   const [isTouched, setIsTouched] = useState(false);
 
-  const handleInputChange = (e) => setInput(e.target.value);
   const handleInputBlur = () => setIsTouched(true);
 
-  const isError = isTouched && input === "";
+  const isError = isTouched && props.input === "";
 
   return (
     <Flex>
       <FormControl isInvalid={isError}>
         <Input
-          value={input}
-          onChange={handleInputChange}
-          // value={props.email}
-          // onChange={(e) => props.handleSetEmail(e)}
+          value={props.input}
+          onChange={(e) => props.handleSet(e)}
           onBlur={handleInputBlur}
           borderRadius="5"
           bgColor={"#fff"}
