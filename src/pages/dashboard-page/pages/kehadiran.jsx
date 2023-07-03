@@ -96,7 +96,7 @@ function KehadiranDPL() {
       width="1375px"
       fontSize="15px"
     >
-      <TableKehadiranMahasiswa />
+      <TableKehadiranDPL />
     </Box>
   );
 }

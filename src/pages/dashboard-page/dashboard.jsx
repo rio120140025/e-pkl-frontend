@@ -229,7 +229,7 @@ function Kehadiran() {
         <Spacer />
         <BreadcrumbKehadiran />
       </Flex>
-      <KehadiranDPL />
+      <KehadiranMahasiswa />
     </Box>
   );
 }
@@ -251,7 +251,7 @@ function Penilaian() {
         <Spacer />
         <BreadcrumbPenilaian />
       </Flex>
-      <PenilaianMahasiswaDosen />
+      <PenilaianDPL />
     </Box>
   );
 }
