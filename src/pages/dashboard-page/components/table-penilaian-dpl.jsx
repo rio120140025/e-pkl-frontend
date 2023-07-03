@@ -219,9 +219,6 @@ const TablePenilaianDPL = () => {
                 <SortButton />
               </Button>
             </Th>
-            <Th colSpan={2} textAlign={"center"}>
-              Aksi
-            </Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -253,12 +250,6 @@ const TablePenilaianDPL = () => {
                     Beri Nilai
                   </Button>
                 </Flex>
-              </Td>
-              <Td>
-                <EditButton onClick={onOpenEdit} />
-              </Td>
-              <Td>
-                <DeleteButton onClick={() => handleDeleteRow(index)} />
               </Td>
             </Tr>
           ))}

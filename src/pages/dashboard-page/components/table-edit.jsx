@@ -64,7 +64,9 @@ const TableEditKehadiran = () => {
           <Tr>
             <Th>No</Th>
             <Th>Tanggal </Th>
-            <Th>Waktu </Th>
+            <Th colSpan={3} textAlign={"center"}>
+              Waktu{" "}
+            </Th>
             <Th>Kehadiran </Th>
             <Th>Keterangan</Th>
           </Tr>
@@ -80,11 +82,16 @@ const TableEditKehadiran = () => {
             <Td>
               <Input type="time" />
             </Td>
+            <Td>-</Td>
+            <Td>
+              <Input type="time" />
+            </Td>
             <Td>
               <Select variant="unstyled" border="none" marginBlock={1}>
                 <option value={1}>Hadir</option>
                 <option value={2}>Sakit</option>
                 <option value={3}>Izin</option>
+                <option value={4}>Tanpa Kehadiran</option>
               </Select>
             </Td>
             <Td>
@@ -121,9 +128,6 @@ const TableEditPenilaian = () => {
         </Thead>
         <Tbody>
           <Tr color="black">
-            <Td>
-              <Input />
-            </Td>
             <Td>
               <Input />
             </Td>
