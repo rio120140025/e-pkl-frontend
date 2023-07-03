@@ -51,7 +51,7 @@ const TableDashboard = () => {
   }, []);
 
   const filteredData = data.filter(
-    (item) => item.name?.toLowerCase() || "".includes(search.toLowerCase())
+    (item) => item.name.toLowerCase().includes(search.toLowerCase())
   );
 
   const sortedData = filteredData.sort((a, b) => {
