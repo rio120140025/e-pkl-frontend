@@ -1,43 +1,73 @@
 import React from "react";
-import Header from "./header";
-import RoleBox from "./register-role";
-import RegisterBoxMahasiswa from "./register-mahasiswa-box";
-import RegisterBoxDosen from "./register-dosen-box";
-import RegisterBoxDPL from "./register-dpl-box";
-
+import Header from "./components/header";
+import RoleBox from "./components/register-role";
+import RegisterBoxMahasiswa from "./components/register-mahasiswa-box";
+import RegisterBoxDosen from "./components/register-dosen-box";
+import RegisterBoxDPL from "./components/register-dpl-box";
+import { Box } from "@chakra-ui/react";
+import backgroud from "../../assets/background.jpg"
 function RoleRegister() {
     return (
-        <div>
+        <Box
+            backgroundImage={backgroud}
+            height={"100vh"}
+            width={"100vw"}
+            w="100%"
+            bgRepeat="no-repeat"
+            backgroundPosition="center"
+            backgroundSize="cover"
+        >
             <Header />
             <RoleBox />
-        </div>
+        </Box>
     );
 }
 
 function RoleRegisterMahasiswa() {
     return (
-        <div>
+        <Box
+            backgroundImage={backgroud}
+            height={"100vh"}
+            width={"100vw"}
+            w="100%"
+            bgRepeat="no-repeat"
+            backgroundPosition="center"
+            backgroundSize="cover">
             <Header />
             <RegisterBoxMahasiswa />
-        </div>
+        </Box>
     );
 }
 
 function RoleRegisterDosen() {
     return (
-        <div>
+        <Box
+            backgroundImage={backgroud}
+            height={"100vh"}
+            width={"100vw"}
+            w="100%"
+            bgRepeat="no-repeat"
+            backgroundPosition="center"
+            backgroundSize="cover">
             <Header />
             <RegisterBoxDosen />
-        </div>
+        </Box>
     );
 }
 
 function RoleRegisterDPL() {
     return (
-        <div>
+        <Box
+            backgroundImage={backgroud}
+            height={"100vh"}
+            width={"100vw"}
+            w="100%"
+            bgRepeat="no-repeat"
+            backgroundPosition="center"
+            backgroundSize="cover">
             <Header />
             <RegisterBoxDPL />
-        </div>
+        </Box>
     );
 }
 

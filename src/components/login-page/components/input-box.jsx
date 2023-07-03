@@ -8,7 +8,6 @@ import {
 import { Flex } from "@chakra-ui/layout";
 
 function InputBox(props) {
-  const [input, setInput] = useState("");
   const [isTouched, setIsTouched] = useState(false);
   const handleInputBlur = () => setIsTouched(true);
 

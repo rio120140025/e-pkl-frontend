@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { AbsoluteCenter, Center, SimpleGrid } from "@chakra-ui/layout";
 import { Box, useToast } from "@chakra-ui/react";
 import axios from "axios";
-import "../login-page/box.css";
+import "../../../components/login-page/components/box.css";
 
-import InputBox from "../login-page/input-box";
-import PasswordInput from "../login-page/password";
-import ButtonBoxSign from "../login-page/button-box";
+import InputBox from "../../login-page/components/input-box";
+import PasswordInput from "../../login-page/components/password";
+import ButtonBoxSign from "../../login-page/components/button-box";
 import { useNavigate } from "react-router-dom";
 
 
@@ -46,8 +46,17 @@ function RegisterBoxDosen() {
         console.log(loginData)
       })
       .catch(error => {
-        console.error(error.response.data.errors.email);
-        callToast(error.response.data.reason.email, 'error')
+        console.error(error.response);
+        if (error.response.data.errors.email !== null) {
+          callToast(error.response.data.errors.email, "error");
+        }
+        if (error.response.data.errors.nip !== null) {
+          callToast(error.response.data.errors.nip, "error");
+        }
+        if (error.response.data.errors.email !== null) {
+          callToast(error.response.data.errors.password, "error");
+        }
+
       });
   };
   return (
@@ -75,7 +84,7 @@ function RegisterBoxDosen() {
           </SimpleGrid>
         </Box>
       </AbsoluteCenter>
-    </Center>
+    </Center >
   );
 }
 export default RegisterBoxDosen;

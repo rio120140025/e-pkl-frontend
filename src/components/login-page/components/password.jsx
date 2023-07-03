@@ -9,7 +9,7 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 
-import { ReactComponent as Logo } from "../../assets/icon-showpass.svg";
+import { ReactComponent as Logo } from "../../../assets/icon-showpass.svg";
 
 function PasswordInput(props) {
   const [show, setShow] = React.useState(false);

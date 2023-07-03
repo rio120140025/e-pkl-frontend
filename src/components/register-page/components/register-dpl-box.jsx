@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { AbsoluteCenter, Center, SimpleGrid } from "@chakra-ui/layout";
-import { Box } from "@chakra-ui/react";
+import { Box, useToast } from "@chakra-ui/react";
 
-import "../login-page/box.css";
+import "../../login-page/components/box.css";
 
-import InputBox from "../login-page/input-box";
-import PasswordInput from "../login-page/password";
-import ButtonBoxSign from "../login-page/button-box";
+import InputBox from "../../login-page/components/input-box";
+import PasswordInput from "../../login-page/components/password";
+import ButtonBoxSign from "../../login-page/components/button-box";
 
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -21,6 +21,16 @@ function RegisterBoxDPL() {
 
   const navigate = useNavigate();
 
+  const toast = useToast()
+  function callToast(title, status) {
+    toast({
+      title: title,
+      status: status,
+      duration: 3000,
+      isClosable: true,
+    })
+  }
+
   const handleRegister = () => {
     const loginData = {
       name: nama,
@@ -31,16 +41,26 @@ function RegisterBoxDPL() {
       jabatan: jabatan,
       instansi: instansi
     };
-    console.log(loginData)
 
     axios
       .post("http://127.0.0.1:8000/api/user/register", loginData)
       .then(response => {
+        callToast("Berhasil Membuat Akun", 'success')
         navigate("/");
-        console.log(loginData)
       })
       .catch(error => {
-        console.error(error.response.data);
+        console.error(error.response.data.errors);
+        callToast(error.response.data.errors, "error")
+        if (error.response.data.errors.email !== null) {
+          callToast(error.response.data.errors.email, "error");
+        }
+        if (error.response.data.errors.nip !== null) {
+          callToast(error.response.data.errors.nip, "error");
+        }
+        if (error.response.data.errors.password !== null) {
+          callToast(error.response.data.errors.password, "error");
+        }
+
       });
   };
 
@@ -73,7 +93,7 @@ function RegisterBoxDPL() {
               Password
               <PasswordInput password={password} handleSetPassword={(e) => setPassword(e.target.value)} />
             </Box>
-            <ButtonBoxSign buttonType='Sign In' />
+            <ButtonBoxSign handle={() => handleRegister()} buttonType='Sign In' />
           </SimpleGrid>
         </Box>
       </AbsoluteCenter>

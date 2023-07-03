@@ -11,20 +11,22 @@ import {
   RoleRegisterMahasiswa,
 } from "./components/register-page/register";
 
-import Dashboard from "./components/dashboard-page/dashboard";
+import Dashboard from "./components/main-page/dashboard-page/dashboard";
+import Profil from "./components/main-page/profil-page/profil";
+import Logout from "./components/main-page/logout"
+import ProfilUbah from "./components/main-page/profil-page/profile-ubah";
 
 
 function App() {
   return (
     <BrowserRouter>
       <Box
-        bgImage={"background.jpg"}
-        height={"100vh"}
-        width={"100vw"}
-        w="100%"
-        bgRepeat="no-repeat"
-        backgroundPosition="center"
-        backgroundSize="cover"
+      // height={"100vh"}
+      // width={"100vw"}
+      // w="100%"
+      // bgRepeat="no-repeat"
+      // backgroundPosition="center"
+      // backgroundSize="cover"
       >
         <Routes>
           <Route exact path="/" Component={Login} />
@@ -45,7 +47,30 @@ function App() {
             path="/dashboard"
             Component={Dashboard}
           />
+          <Route
+            exact
+            path="/profile"
+            Component={Profil}
+          />
+          <Route
+            exact
+            path="/profile"
+            Component={Profil}
+          />
+          <Route
+            exact
+            path="/profile-ubah"
+            Component={ProfilUbah}
+          />
+          <Route
+            exact
+            path="/logout"
+            Component={Logout}
+          />
+
         </Routes>
+
+
       </Box>
     </BrowserRouter>
   );

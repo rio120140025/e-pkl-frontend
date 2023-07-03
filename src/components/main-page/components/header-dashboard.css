@@ -1,17 +1,15 @@
 .button-nonclick-dashboard {
   height: 25px;
   text-align: center;
+  font-weight: 700;
 }
 
 .button-click-dashboard {
   border-radius: 16px;
   background-color: #fff;
   padding: 4px 12px;
+  gap: 4px;
   color: #6096b4;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  position: relative;
   text-transform: capitalize;
+  font-weight: 700;
 }

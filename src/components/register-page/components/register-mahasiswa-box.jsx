@@ -4,11 +4,11 @@ import { Box, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import "../login-page/box.css";
+import "../../login-page/components/box.css";
 
-import InputBox from "../login-page/input-box";
-import PasswordInput from "../login-page/password";
-import ButtonBoxSign from "../login-page/button-box";
+import InputBox from "../../login-page/components/input-box";
+import PasswordInput from "../../login-page/components/password";
+import ButtonBoxSign from "../../login-page/components/button-box";
 
 
 
@@ -47,11 +47,25 @@ function RegisterBoxMahasiswa() {
       .then(response => {
         callToast("Berhasil Membuat Akun", 'success')
         navigate("/");
-        console.log(loginData)
       })
       .catch(error => {
-        console.error(error.response.data.errors.email);
-        callToast(error.response.data.reason.email, 'error')
+        console.error(error.response.data.errors);
+        if (error.response.data.errors.email !== null) {
+          callToast(error.response.data.errors.email, "error");
+        }
+        if (error.response.data.errors.nim !== null) {
+          callToast(error.response.data.errors.nim, "error");
+        }
+        if (error.response.data.errors.password !== null) {
+          callToast(error.response.data.errors.password, "error");
+        }
+        if (error.response.data.errors.lokasi !== null) {
+          callToast(error.response.data.errors.lokasi, "error");
+        }
+        if (error.response.data.errors.name !== null) {
+          callToast(error.response.data.errors.name, "error");
+        }
+
       });
   };
 

@@ -68,7 +68,8 @@ function LoginBox() {
   };
 
   return (
-    <Center>
+    <Center
+    >
       <AbsoluteCenter>
         <Box className="box" maxW="sm" maxH="sm" p="25px">
           <SimpleGrid spacingY="20px">
