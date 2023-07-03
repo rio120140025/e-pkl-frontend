@@ -3,7 +3,7 @@ import Header from "../components/header-dashboard";
 import TitlePage from "../components/title-page"
 import BreadcrumbProfile from "./components/breadcrumb-profile";
 import img from "../../../assets/icon-profile.svg"
-import Ubah from "./components/ubah";
+import { role, cookie } from "../condition";
 import Lihat from "./components/lihat";
 import {
     Box,
@@ -13,6 +13,7 @@ import {
     from '@chakra-ui/react'
 
 function Profil() {
+
     return (
         <Box
             height={"100vh"}
@@ -32,7 +33,7 @@ function Profil() {
                     <Spacer></Spacer>
                     <BreadcrumbProfile />
                 </Flex>
-                <Lihat userCode="1" />
+                <Lihat userCode={role} />
             </Box>
         </Box >
     );

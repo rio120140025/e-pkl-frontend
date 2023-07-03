@@ -42,7 +42,7 @@ function Ubah(props) {
             >
                 Identitas Diri
             </Text>
-            {/* {props.userCode === "1" && (
+            {props.userCode === "1" && (
                 <Flex direction="row" gap="120px">
                     <Flex direction="column" w='max-content' gap="13.15px">
                         <OnlyDisplay name="Nama" />
@@ -93,24 +93,7 @@ function Ubah(props) {
 
                     </Flex>
                 )
-            } */}
-
-            <Flex direction="row" gap="120px">
-                <Flex direction="column" w='max-content' gap="13.15px">
-                    <OnlyDisplay name="Nama" />
-                    <OnlyDisplay name="Email" />
-                    <OnlyDisplay name="NIM" />
-                    <PasswordInput name='Password' password={password} handleSetPassword={(e) => setPassword(e.target.value)} />
-                </Flex>
-
-                <Flex direction="column" w='max-content' gap="13.15px">
-                    <InputBox name="Nomor Telpon" value={notelp} handleSet={(e) => setNotelp(e.target.value)} />
-                    <InputBox name="Tempat PKL" value={lokasi} handleSet={(e) => setLokasi(e.target.value)} />
-                    <OnlyDisplay name="Dosen Pembimbing" option="yes" dosbim={dosbim} handleSet={(e) => setDosbim(e.target.value)} />
-                    <InputBox name="Dosen Pembimbing Lapangan" value={dpl} handleSet={(e) => setdpl(e.target.value)} />
-                </Flex>
-
-            </Flex>
+            }
 
 
             <ButtonBox name='Simpan' />

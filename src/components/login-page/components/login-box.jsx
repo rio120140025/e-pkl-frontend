@@ -19,6 +19,7 @@ import "./box.css";
 import InputBox from "./input-box";
 import PasswordInput from "./password";
 import ButtonBoxSign from "./button-box";
+import { cookie } from "../../main-page/condition";
 
 function LoginBox() {
   const toast = useToast()
@@ -36,6 +37,7 @@ function LoginBox() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cookies, setCookie] = useCookies(['name']);
+
 
   const navigate = useNavigate();
   if (cookies.jwt_token != null) {
@@ -62,7 +64,6 @@ function LoginBox() {
         }
       })
       .catch(error => {
-        console.error(error.response);
         callToast(error.response.data.reason, 'error')
       });
   };

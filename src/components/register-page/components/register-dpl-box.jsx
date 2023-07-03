@@ -1,26 +1,16 @@
 import React, { useState } from "react";
 import { AbsoluteCenter, Center, SimpleGrid } from "@chakra-ui/layout";
 import { Box, useToast } from "@chakra-ui/react";
-
-import "../../login-page/components/box.css";
+import axios from "axios";
+import "../../../components/login-page/components/box.css";
 
 import InputBox from "../../login-page/components/input-box";
 import PasswordInput from "../../login-page/components/password";
 import ButtonBoxSign from "../../login-page/components/button-box";
-
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
-function RegisterBoxDPL() {
-  const [nama, setNama] = useState("");
-  const [email, setEmail] = useState("");
-  const [nip, setNip] = useState("");
-  const [password, setPassword] = useState("");
-  const [jabatan, setJabatan] = useState("");
-  const [instansi, setInstansi] = useState("");
 
-  const navigate = useNavigate();
-
+function RegisterBoxDosen() {
   const toast = useToast()
   function callToast(title, status) {
     toast({
@@ -31,6 +21,16 @@ function RegisterBoxDPL() {
     })
   }
 
+  const [nama, setNama] = useState("");
+  const [email, setEmail] = useState("");
+  const [nip, setNip] = useState("");
+  const [password, setPassword] = useState("");
+  const [jabatan, setJabatan] = useState("");
+  const [instansi, setInstansi] = useState("");
+
+
+  const navigate = useNavigate();
+
   const handleRegister = () => {
     const loginData = {
       name: nama,
@@ -40,17 +40,19 @@ function RegisterBoxDPL() {
       password: password,
       jabatan: jabatan,
       instansi: instansi
+
     };
+    console.log(loginData)
 
     axios
       .post("http://127.0.0.1:8000/api/user/register", loginData)
       .then(response => {
         callToast("Berhasil Membuat Akun", 'success')
         navigate("/");
+        console.log(loginData)
       })
       .catch(error => {
-        console.error(error.response.data.errors);
-        callToast(error.response.data.errors, "error")
+        console.error(error.response);
         if (error.response.data.errors.email !== null) {
           callToast(error.response.data.errors.email, "error");
         }
@@ -60,10 +62,11 @@ function RegisterBoxDPL() {
         if (error.response.data.errors.password !== null) {
           callToast(error.response.data.errors.password, "error");
         }
-
+        if (error.response.data.errors.jabatan !== null) {
+          callToast(error.response.data.errors.jabatan, "error");
+        }
       });
   };
-
   return (
     <Center>
       <AbsoluteCenter>
@@ -93,11 +96,11 @@ function RegisterBoxDPL() {
               Password
               <PasswordInput password={password} handleSetPassword={(e) => setPassword(e.target.value)} />
             </Box>
-            <ButtonBoxSign handle={() => handleRegister()} buttonType='Sign In' />
+            <ButtonBoxSign handle={() => handleRegister()} buttonType='Sign Up' />
           </SimpleGrid>
         </Box>
       </AbsoluteCenter>
-    </Center>
+    </Center >
   );
 }
-export default RegisterBoxDPL;
+export default RegisterBoxDosen;

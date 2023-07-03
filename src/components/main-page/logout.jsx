@@ -1,5 +1,6 @@
 import React from "react";
 import Header from "./components/header-dashboard";
+import { cookie } from "./condition";
 import {
     Box,
     Flex,
@@ -11,7 +12,7 @@ import {
     from '@chakra-ui/react'
 
 import axios from "axios";
-import { useCookies } from 'react-cookie';
+
 
 import { useNavigate } from "react-router-dom";
 function Logout() {
@@ -28,9 +29,8 @@ function Logout() {
     const navigate = useNavigate();
 
     const handleLogout = () => {
-        let token = "72|qAqzKHtdDEqkPxR8I2gqWkMogde5wWI9HVidMWds"
         axios
-            .post("http://127.0.0.1:8000/api/user/logout", token)
+            .post("http://127.0.0.1:8000/api/user/logout", cookie)
             .then(response => {
                 callToast("Logout Berhasil", 'success')
                 navigate('/')

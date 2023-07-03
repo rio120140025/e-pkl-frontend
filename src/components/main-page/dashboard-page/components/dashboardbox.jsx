@@ -11,8 +11,8 @@ function DashboardBox() {
       borderRadius="5px"
       background="#FFF"
       boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-      width="1375px"
-      height="md"
+      width="max-content"
+      height="max-content"
       fontSize="15px"
     >
       <Flex direction="column " mx="30px" my="10px" gap="19" >
@@ -32,7 +32,9 @@ function DashboardBox() {
           >
             Mahasiswa Bimbingan PKL
           </Text>
-          <TableComponent />
+          <Box paddingBottom="2.5%">
+            <TableComponent />
+          </Box>
         </Box>
       </Flex>
     </Box>

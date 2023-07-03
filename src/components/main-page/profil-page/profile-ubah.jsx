@@ -4,13 +4,15 @@ import TitlePage from "../components/title-page"
 import BreadcrumbProfileUbah from "./components/breadcrumb-profile-ubah";
 import img from "../../../assets/icon-profile.svg"
 import Ubah from "./components/ubah";
-import Lihat from "./components/lihat";
 import {
     Box,
     Flex,
     Spacer,
 }
     from '@chakra-ui/react'
+import { role } from "../condition";
+
+
 
 function ProfilUbah(props) {
     const mahasiswas = ['Nama', 'Email', 'NIM', 'Password', 'Nomor Telepon', 'Tempat PKL', 'Dosen Pembimbing', 'Dosen Pembimbing Lapangan']
@@ -33,7 +35,7 @@ function ProfilUbah(props) {
                     <Spacer></Spacer>
                     <BreadcrumbProfileUbah />
                 </Flex>
-                <Ubah userCode={props.userCode} />
+                <Ubah userCode={role} />
             </Box>
         </Box >
     );

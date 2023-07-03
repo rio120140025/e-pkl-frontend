@@ -14,7 +14,7 @@ function BreadcrumbProfileUbah() {
             <Flex direction="row">
                 <Breadcrumb>
                     <BreadcrumbItem>
-                        <BreadcrumbLink href='/' color="#6096B4">Dashboard</BreadcrumbLink>
+                        <BreadcrumbLink href='/dashboard' color="#6096B4">Dashboard</BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbItem >
                         <BreadcrumbLink href='/profile' color="#6096B4">Profile</BreadcrumbLink>

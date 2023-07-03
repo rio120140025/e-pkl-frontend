@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Box,
     Input,
@@ -15,48 +15,53 @@ import {
     Flex,
     Spacer,
 } from "@chakra-ui/react";
+import axios from "axios";
+import { useCookies } from 'react-cookie';
 
 import { ReactComponent as SortButton } from "../../../../assets/button-sort.svg";
 import { ReactComponent as SearchIcon } from "../../../../assets/icon-search.svg";
 
-const data = [
-    {
-        no: "1",
-        nama: "John",
-        nim: "12345",
-        dosenPembimbing: "Dr. Smith",
-        dosenPembimbingLapangan: "Prof. Johnson",
-        tempat: "Lab A",
-    },
-    {
-        no: "2",
-        nama: "Jane",
-        nim: "67890",
-        dosenPembimbing: "Dr. Brown",
-        dosenPembimbingLapangan: "Prof. Davis",
-        tempat: "Lab B",
-    },
-];
+
+
 
 const TableComponent = () => {
+    const [data, setData] = useState([]);
     const [search, setSearch] = useState("");
-    const [sortKey, setSortKey] = useState("");
+    const [sortKey, setSortKey] = useState("id");
     const [sortOrder, setSortOrder] = useState("asc");
-    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [cookies, setCookie] = useCookies(['name']);
+    // Fetch data from the API
+    useEffect(() => {
+        // Replace the fetch() call with your API call to fetch the data
+        axios
+            .get("http://127.0.0.1:8000/api/user/data/alluser", {
+                headers: { Authorization: "Bearer " + cookies.jwt_token.data }
+            })
+            .then(response => {
+                setData(response.data)
+                console.log(response.data)
 
-    const filteredData = data.filter((item) =>
-        item.nama.toLowerCase().includes(search.toLowerCase())
+            })
+            .catch(error => {
+                console.log(error.response.data)
+            });
+    }, []);
+
+    const sortedData = data.sort((a, b) => {
+        if (sortOrder === "asc") {
+            return a[sortKey] - b[sortKey];
+        } else {
+            return b[sortKey] - a[sortKey];
+        }
+    });
+
+    const filteredData = sortedData.filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase())
     );
 
-    const sortedData = filteredData.sort((a, b) => {
-        if (sortKey === "") return 0;
-        const valA = a[sortKey].toUpperCase();
-        const valB = b[sortKey].toUpperCase();
-        if (valA < valB) return sortOrder === "asc" ? -1 : 1;
-        if (valA > valB) return sortOrder === "asc" ? 1 : -1;
-        return 0;
-    });
+
 
     const indexOfLastRow = currentPage * rowsPerPage;
     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
@@ -178,18 +183,14 @@ const TableComponent = () => {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {currentRows.map((row, index) => (
-                        <Tr
-                            key={index}
-                            bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
-                            color="black"
-                        >
-                            <Td>{row.no}</Td>
-                            <Td>{row.nama}</Td>
+                    {currentRows.map((row) => (
+                        <Tr key={row.id}>
+                            <Td>{row.id}</Td>
+                            <Td>{row.name}</Td>
+                            <Td>{row.email}</Td>
                             <Td>{row.nim}</Td>
-                            <Td>{row.dosenPembimbing}</Td>
-                            <Td>{row.dosenPembimbingLapangan}</Td>
-                            <Td>{row.tempat}</Td>
+                            <Td>{row.dosbim}</Td>
+                            <Td>{row.dpl}</Td>
                         </Tr>
                     ))}
                 </Tbody>
