@@ -50,14 +50,14 @@ const TableDashboard = () => {
     fetchData();
   }, []);
 
-  const filteredData = data.filter(
-    (item) => item.name.toLowerCase().includes(search.toLowerCase())
+  const filteredData = data.filter((item) =>
+    item.name.toLowerCase().includes(search.toLowerCase())
   );
 
   const sortedData = filteredData.sort((a, b) => {
     if (sortKey === "") return 0;
-    const valA = a[sortKey].toUpperCase();
-    const valB = b[sortKey].toUpperCase();
+    const valA = a[sortKey];
+    const valB = b[sortKey];
     if (valA < valB) return sortOrder === "asc" ? -1 : 1;
     if (valA > valB) return sortOrder === "asc" ? 1 : -1;
     return 0;
@@ -79,10 +79,13 @@ const TableDashboard = () => {
   const firstRow = indexOfFirstRow + 1;
   const lastRow = Math.min(indexOfLastRow, totalRows);
 
+  let no = 0;
+
   return (
     <Box
       marginTop="95px"
       marginLeft="30.5px"
+      marginBottom={15}
       w={1314}
       borderRadius="5"
       bgColor="#F9FAFC"
@@ -112,15 +115,6 @@ const TableDashboard = () => {
           <Tr>
             <Th>
               No
-              <Button
-                variant="link"
-                onClick={() => {
-                  setSortKey("no");
-                  toggleSortOrder();
-                }}
-              >
-                <SortButton />
-              </Button>
             </Th>
             <Th>
               Nama{" "}
@@ -175,7 +169,7 @@ const TableDashboard = () => {
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("tempat");
+                  setSortKey("lokasi");
                   toggleSortOrder();
                 }}
               >
@@ -185,20 +179,25 @@ const TableDashboard = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {currentRows.map((row, index) => (
-            <Tr
-              key={index}
-              bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
-              color="black"
-            >
-              <Td>{row.id}</Td>
-              <Td>{row.name}</Td>
-              <Td>{row.nip}</Td>
-              <Td>{row.dosenPembimbing}</Td>
-              <Td>{row.dosenPembimbingLapangan}</Td>
-              <Td>{row.tempat}</Td>
-            </Tr>
-          ))}
+          {currentRows.map((row, index) => {
+            if (row.roles_id === 1) {
+              return (
+                <Tr
+                  key={index}
+                  bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                  color="black"
+                >
+                  <Td>{no += 1}</Td>
+                  <Td>{row.name}</Td>
+                  <Td>{row.nim}</Td>
+                  <Td>{row.dosenPembimbing}</Td>
+                  <Td>{row.dosenPembimbingLapangan}</Td>
+                  <Td>{row.lokasi}</Td>
+                </Tr>
+              );
+            }
+            return null;
+          })}
         </Tbody>
       </Table>
       <Box>

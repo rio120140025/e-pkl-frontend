@@ -1,29 +1,12 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Box, SimpleGrid, Text } from "@chakra-ui/react";
 
 import { ButtonBoxDownload } from "../components/button-box";
 import TableDashboard from "../components/table-dashboard";
 
 function DashboardBox() {
-  const boxRef = useRef(null);
-
-  useEffect(() => {
-    const updateBoxHeight = () => {
-      const { height } = boxRef.current.getBoundingClientRect();
-      boxRef.current.style.height = `${height + 25}px`;
-    };
-
-    window.addEventListener("resize", updateBoxHeight);
-    updateBoxHeight();
-
-    return () => {
-      window.removeEventListener("resize", updateBoxHeight);
-    };
-  }, []);
-
   return (
     <Box
-      ref={boxRef}
       position="absolute"
       marginTop="175px"
       left="78px"

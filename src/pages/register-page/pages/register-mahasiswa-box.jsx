@@ -32,7 +32,7 @@ function RegisterBoxMahasiswa() {
 
   const handleRegister = () => {
     const loginData = {
-      nama: nama,
+      name: nama,
       email: email,
       password: password,
       roles_id: "1",

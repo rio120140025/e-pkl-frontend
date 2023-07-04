@@ -25,7 +25,6 @@ function RegisterBoxDosen() {
   const [email, setEmail] = useState("");
   const [nip, setNip] = useState("");
   const [password, setPassword] = useState("");
-
   const navigate = useNavigate();
 
   const handleRegister = () => {
@@ -36,14 +35,12 @@ function RegisterBoxDosen() {
       nip: nip,
       password: password
     };
-    console.log(loginData)
 
     axios
       .post("http://127.0.0.1:8000/api/user/register", loginData)
       .then(response => {
         callToast("Berhasil Membuat Akun", 'success')
         navigate("/");
-        console.log(loginData)
       })
       .catch(error => {
         console.error(error.response);
