@@ -3,12 +3,27 @@ import { ButtonGroup, Center, Button } from "@chakra-ui/react";
 import { Box, Flex, Spacer, Heading } from "@chakra-ui/layout";
 import { Link } from "react-router-dom";
 import "./header-dashboard.css"
+import { dataServer, token } from "../../../App";
+import { emailLogin } from "../../login-page/components/login-box";
 
 import { useCookies } from 'react-cookie';
 
 function Header(props) {
-  const [cookies, setCookie] = useCookies(['name']);
 
+  // let getDataUser = {};
+
+  // function dataUser() {
+  //   Object.keys(dataServer).forEach(function (key) {
+  //     const userData = dataServer[key];
+  //     if (typeof userData === "object" && userData.email === emailLogin) {
+  //       getDataUser = userData;
+  //     }
+  //   });
+  //   console.log(getDataUser.email);
+  // }
+
+
+  const [cookies, setCookie] = useCookies(['name']);
   if (cookies.jwt_token != null) {
     if (window.location.pathname == '/') {
       window.location.href = "/dashboard";
@@ -32,6 +47,10 @@ function Header(props) {
     { id: "8", label: "Logout", to: "/logout" },
   ];
   console.log(valueNavbar)
+
+
+
+
   return (
     <Flex bgColor="#BDCDD6"
       Width="1280px"

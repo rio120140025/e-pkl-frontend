@@ -10,7 +10,7 @@ import {
     Spacer,
 }
     from '@chakra-ui/react'
-import { role } from "../condition";
+// role
 
 
 
@@ -35,7 +35,7 @@ function ProfilUbah(props) {
                     <Spacer></Spacer>
                     <BreadcrumbProfileUbah />
                 </Flex>
-                <Ubah userCode={role} />
+                <Ubah userCode={'1'} />
             </Box>
         </Box >
     );

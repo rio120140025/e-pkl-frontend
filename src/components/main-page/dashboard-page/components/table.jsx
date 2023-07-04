@@ -28,7 +28,7 @@ const TableComponent = () => {
     const [sortOrder, setSortOrder] = useState("asc");
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [cookies, setCookie] = useCookies(['name']);
+    const [cookies, setCookie] = useCookies(['jwt_token']);
     let no = 0;
 
     let sortedData = [];
@@ -52,7 +52,7 @@ const TableComponent = () => {
             })
             .then(response => {
                 setData(response.data)
-                console.log(response.data)
+                // console.log(response.data)
             })
             .catch(error => {
                 console.log(error.response.data)

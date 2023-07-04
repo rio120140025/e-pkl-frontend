@@ -3,7 +3,7 @@ import Header from "../components/header-dashboard";
 import TitlePage from "../components/title-page"
 import BreadcrumbProfile from "./components/breadcrumb-profile";
 import img from "../../../assets/icon-profile.svg"
-import { role, cookie } from "../condition";
+//role
 import Lihat from "./components/lihat";
 import {
     Box,
@@ -33,7 +33,7 @@ function Profil() {
                     <Spacer></Spacer>
                     <BreadcrumbProfile />
                 </Flex>
-                <Lihat userCode={role} />
+                <Lihat userCode={1} />
             </Box>
         </Box >
     );
