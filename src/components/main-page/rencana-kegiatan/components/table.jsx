@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
     Box,
     Input,
@@ -15,27 +15,106 @@ import {
     Flex,
     Spacer,
 } from "@chakra-ui/react";
-import axios from "axios";
-import { useCookies } from 'react-cookie';
 
 import { ReactComponent as SortButton } from "../../../../assets/button-sort.svg";
 import { ReactComponent as SearchIcon } from "../../../../assets/icon-search.svg";
+import ButtonBox from "../../components/button";
 
-const TableComponent = () => {
-    const [data, setData] = useState([]);
+const data = [
+    {
+        no: "1",
+        nama: "John",
+        nim: "12345",
+        dosenPembimbing: "Dr. Smith",
+    },
+
+    {
+        no: "2",
+        nama: "Jane",
+        nim: "67890",
+        dosenPembimbing: "Dr. Brown",
+    },
+
+    {
+        no: "3",
+        nama: "Michael",
+        nim: "54321",
+        dosenPembimbing: "Dr. Wilson",
+    },
+
+    {
+        no: "4",
+        nama: "Sarah",
+        nim: "98765",
+        dosenPembimbing: "Dr. Martinez",
+    },
+
+    {
+        no: "5",
+        nama: "David",
+        nim: "13579",
+        dosenPembimbing: "Dr. Anderson",
+    },
+
+    {
+        no: "6",
+        nama: "Emily",
+        nim: "02468",
+        dosenPembimbing: "Dr. Clark",
+    },
+
+    {
+        no: "7",
+        nama: "Daniel",
+        nim: "24680",
+        dosenPembimbing: "Dr. Walker",
+    },
+
+    {
+        no: "8",
+        nama: "Olivia",
+        nim: "97531",
+        dosenPembimbing: "Dr. Garcia",
+    },
+
+    {
+        no: "9",
+        nama: "Jacob",
+        nim: "80246",
+        dosenPembimbing: "Dr. Hernandez",
+    },
+
+    {
+        no: "10",
+        nama: "Sophia",
+        nim: "46802",
+        dosenPembimbing: "Dr. Patel",
+    },
+];
+
+const TableComponenet = () => {
     const [search, setSearch] = useState("");
-    const [sortKey, setSortKey] = useState("id");
+    const [sortKey, setSortKey] = useState("");
     const [sortOrder, setSortOrder] = useState("asc");
-    const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [cookies, setCookie] = useCookies(['name']);
-    let no = 0;
+    const [currentPage, setCurrentPage] = useState(1);
 
-    let sortedData = [];
-    let filteredData = [];
+    const filteredData = data.filter((item) =>
+        item.nama.toLowerCase().includes(search.toLowerCase())
+    );
+
+    const sortedData = filteredData.sort((a, b) => {
+        if (sortKey === "") return 0;
+        const valA = a[sortKey].toUpperCase();
+        const valB = b[sortKey].toUpperCase();
+        if (valA < valB) return sortOrder === "asc" ? -1 : 1;
+        if (valA > valB) return sortOrder === "asc" ? 1 : -1;
+        return 0;
+    });
 
     const indexOfLastRow = currentPage * rowsPerPage;
     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+    const currentRows = sortedData.slice(indexOfFirstRow, indexOfLastRow);
 
     const toggleSortOrder = () => {
         setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
@@ -45,41 +124,6 @@ const TableComponent = () => {
         setCurrentPage(pageNumber);
     };
 
-    useEffect(() => {
-        axios
-            .get("http://127.0.0.1:8000/api/user/data/alluser", {
-                headers: { Authorization: "Bearer " + cookies.jwt_token.data }
-            })
-            .then(response => {
-                setData(response.data)
-                console.log(response.data)
-            })
-            .catch(error => {
-                console.log(error.response.data)
-            });
-    }, [cookies.jwt_token.data]);
-
-    filteredData = data.filter((item) => {
-        const nim = item.nim ? item.nim.toString() : "";
-        return (
-            item.name.toLowerCase().includes(search.toLowerCase()) ||
-            nim.includes(search)
-        );
-    });
-
-
-
-    sortedData = filteredData.sort((a, b) => {
-        if (sortKey === "") return 0;
-        const valA = a[sortKey];
-        const valB = b[sortKey];
-        if (valA < valB) return sortOrder === "asc" ? -1 : 1;
-        if (valA > valB) return sortOrder === "asc" ? 1 : -1;
-        return 0;
-    });
-
-
-    const currentRows = sortedData.slice(indexOfFirstRow, indexOfLastRow);
     const totalRows = sortedData.length;
     const firstRow = indexOfFirstRow + 1;
     const lastRow = Math.min(indexOfLastRow, totalRows);
@@ -93,10 +137,10 @@ const TableComponent = () => {
         >
             <InputGroup
                 top="12px"
-                marginLeft={875}
                 marginBottom={2}
                 backgroundColor="#fff"
-                width="418px"
+                paddingLeft="39.3%"
+                width="39.5%"
                 fontSize="14px"
                 color="#a1a9b8"
             >
@@ -110,11 +154,20 @@ const TableComponent = () => {
                     onChange={(e) => setSearch(e.target.value)}
                 />
             </InputGroup>
-            <Table variant="striped" top="1384px" left="0" width="100%">
+            <Table variant="striped" top="1384px">
                 <Thead>
                     <Tr>
                         <Th>
                             No
+                            <Button
+                                variant="link"
+                                onClick={() => {
+                                    setSortKey("no");
+                                    toggleSortOrder();
+                                }}
+                            >
+                                <SortButton />
+                            </Button>
                         </Th>
                         <Th>
                             Nama{" "}
@@ -152,44 +205,26 @@ const TableComponent = () => {
                                 <SortButton />
                             </Button>
                         </Th>
-                        <Th>
-                            Dosen Pembimbing Lapangan{" "}
-                            <Button
-                                variant="link"
-                                onClick={() => {
-                                    setSortKey("dosenPembimbingLapangan");
-                                    toggleSortOrder();
-                                }}
-                            >
-                                <SortButton />
-                            </Button>
-                        </Th>
-                        <Th>
-                            Tempat{" "}
-                            <Button
-                                variant="link"
-                                onClick={() => {
-                                    setSortKey("tempat");
-                                    toggleSortOrder();
-                                }}
-                            >
-                                <SortButton />
-                            </Button>
-                        </Th>
+                        <Th>Aksi</Th>
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {currentRows.map((row) => (
-                        row.roles_id === 1 && (
-                            <Tr key={row.id}>
-                                <Td>{no += 1}</Td>
-                                <Td>{row.name}</Td>
-                                <Td>{row.nim}</Td>
-                                <Td>{row.dosbim}</Td>
-                                <Td>{row.dpl}</Td>
-                                <Td>{row.lokasi}</Td>
-                            </Tr>
-                        )
+                    {currentRows.map((row, index) => (
+                        <Tr
+                            key={index}
+                            bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                            color="black"
+                        >
+                            <Td>{row.no}</Td>
+                            <Td>{row.nama}</Td>
+                            <Td>{row.nim}</Td>
+                            <Td>{row.dosenPembimbing}</Td>
+                            <Td>
+                                <Flex>
+                                    <ButtonBox name="Detail" />
+                                </Flex>
+                            </Td>
+                        </Tr>
                     ))}
                 </Tbody>
             </Table>
@@ -254,4 +289,4 @@ const Pagination = ({ rowsPerPage, totalRows, paginate }) => {
     );
 };
 
-export default TableComponent;
+export default TableComponenet;

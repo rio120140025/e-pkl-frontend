@@ -4,6 +4,8 @@ import { Box, SimpleGrid, Text, Flex } from "@chakra-ui/react";
 import ButtonBox from "../../components/button";
 import TableComponent from "./table";
 
+
+
 function DashboardBox() {
   return (
     <Box
@@ -11,7 +13,7 @@ function DashboardBox() {
       borderRadius="5px"
       background="#FFF"
       boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-      width="max-content"
+      width="100%"
       height="max-content"
       fontSize="15px"
     >

@@ -24,7 +24,7 @@ function Header(props) {
   const links = [
     { id: "1", label: "Dashboard", to: "/dashboard" },
     { id: "2", label: "Profile", to: "/profile" },
-    { id: "3", label: "Rencana Kegiatan", to: "/dashboard" },
+    { id: "3", label: "Rencana Kegiatan", to: "/rencana-kegiatan" },
     { id: "4", label: "Log Harian" },
     { id: "5", label: "Kehadiran" },
     { id: "6", label: "Penilaian PKL" },

@@ -46,16 +46,9 @@ function RegisterBoxDosen() {
         console.log(loginData)
       })
       .catch(error => {
-        // console.error(error.response);
-        if (error.response.data.errors.email !== '') {
-          callToast(error.response.data.errors.email, "error");
-        }
-        if (error.response.data.errors.nip !== '') {
-          callToast(error.response.data.errors.nip, "error");
-        }
-        if (error.response.data.errors.email !== '') {
-          callToast(error.response.data.errors.password, "error");
-        }
+        Object.keys(error.response.data.errors).forEach(function (key, index) {
+          callToast(error.response.data.errors[key], "error")
+        });
 
       });
   };

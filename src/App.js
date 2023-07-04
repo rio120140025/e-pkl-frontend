@@ -15,6 +15,8 @@ import Dashboard from "./components/main-page/dashboard-page/dashboard";
 import Profil from "./components/main-page/profil-page/profil";
 import Logout from "./components/main-page/logout"
 import ProfilUbah from "./components/main-page/profil-page/profile-ubah";
+import RencanaKegiatan from "./components/main-page/rencana-kegiatan/rencana-kegiatan";
+import RencanaKegiatanDetail from "./components/main-page/rencana-kegiatan/rencana-kegiatan-detail";
 
 
 function App() {
@@ -61,6 +63,16 @@ function App() {
             exact
             path="/profile-ubah"
             Component={ProfilUbah}
+          />
+          <Route
+            exact
+            path="/rencana-kegiatan"
+            Component={RencanaKegiatan}
+          />
+          <Route
+            exact
+            path="/rencana-kegiatan-detail"
+            Component={RencanaKegiatanDetail}
           />
           <Route
             exact

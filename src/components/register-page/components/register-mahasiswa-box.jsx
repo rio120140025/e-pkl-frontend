@@ -33,13 +33,13 @@ function RegisterBoxMahasiswa() {
 
   const handleRegister = () => {
     const loginData = {
-      nama: nama,
+      name: nama,
       email: email,
       password: password,
       roles_id: "1",
       lokasi: lokasi,
       nim: nim,
-      notelp: notelp,
+      no_hp: notelp,
     };
 
     axios
@@ -49,22 +49,9 @@ function RegisterBoxMahasiswa() {
         navigate("/");
       })
       .catch(error => {
-        console.error(error.response.data.errors);
-        if (error.response.data.errors.email !== null) {
-          callToast(error.response.data.errors.email, "error");
-        }
-        if (error.response.data.errors.nim !== null) {
-          callToast(error.response.data.errors.nim, "error");
-        }
-        if (error.response.data.errors.password !== null) {
-          callToast(error.response.data.errors.password, "error");
-        }
-        if (error.response.data.errors.lokasi !== null) {
-          callToast(error.response.data.errors.lokasi, "error");
-        }
-        if (error.response.data.errors.name !== null) {
-          callToast(error.response.data.errors.name, "error");
-        }
+        Object.keys(error.response.data.errors).forEach(function (key, index) {
+          callToast(error.response.data.errors[key], "error")
+        });
 
       });
   };
