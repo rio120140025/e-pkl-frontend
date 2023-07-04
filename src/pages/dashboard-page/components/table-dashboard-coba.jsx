@@ -27,21 +27,21 @@ const TableDashboard = () => {
   const [sortOrder, setSortOrder] = useState("asc");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState([]);
-  const [cookies, setCookie] = useCookies(["name"]);
+  const [data, setData] = useState(null);
+  const [cookies] = useCookies(["name"]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios
-          .get("http://127.0.0.1:8000/api/user/data/alluser", {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/user/profile",
+          {
             headers: { Authorization: "Bearer " + cookies.jwt_token.data },
-          })
-          .then((response) => {
-            const updatedData = response.data;
-            setData(updatedData);
-            console.log(updatedData);
-          });
+          }
+        );
+        const updatedData = response.data;
+        setData([updatedData]);
+        console.log(updatedData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -50,9 +50,11 @@ const TableDashboard = () => {
     fetchData();
   }, []);
 
-  const filteredData = data.filter((item) =>
-    item.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredData = Array.isArray(data)
+    ? data.filter((item) =>
+        item.name.toLowerCase().includes(search.toLowerCase())
+      )
+    : [];
 
   const sortedData = filteredData.sort((a, b) => {
     if (sortKey === "") return 0;
@@ -178,23 +180,20 @@ const TableDashboard = () => {
         </Thead>
         <Tbody>
           {currentRows.map((row, index) => {
-            if (row.roles_id === 1) {
-              return (
-                <Tr
-                  key={index}
-                  bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
-                  color="black"
-                >
-                  <Td>{(no += 1)}</Td>
-                  <Td>{row.name}</Td>
-                  <Td>{row.nim}</Td>
-                  <Td>{row.dosenPembimbing}</Td>
-                  <Td>{row.dosenPembimbingLapangan}</Td>
-                  <Td>{row.lokasi}</Td>
-                </Tr>
-              );
-            }
-            return null;
+            return (
+              <Tr
+                key={index}
+                bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                color="black"
+              >
+                <Td>{(no += 1)}</Td>
+                <Td>{row.name}</Td>
+                <Td>{row.nim}</Td>
+                <Td>{row.dosenPembimbing}</Td>
+                <Td>{row.dosenPembimbingLapangan}</Td>
+                <Td>{row.lokasi}</Td>
+              </Tr>
+            );
           })}
         </Tbody>
       </Table>

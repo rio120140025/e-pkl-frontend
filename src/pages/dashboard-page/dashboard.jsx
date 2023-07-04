@@ -1,15 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Flex, Spacer } from "@chakra-ui/layout";
 
-import {
-  HeaderDashboard,
-  HeaderKehadiran,
-  HeaderKuisioner,
-  HeaderLogHarian,
-  HeaderPenilaian,
-  HeaderProfil,
-  HeaderRencanaKegiatan,
-} from "./components/header-dashboard";
+import Header from "./components/header-dashboard";
 import {
   DashboardLogo,
   ProfileLogo,
@@ -60,8 +52,30 @@ import {
 } from "./pages/kehadiran";
 import KuisionerBox from "./pages/kuisioner";
 import { PenilaianDPL, PenilaianMahasiswaDosen } from "./pages/penilaian";
+import axios from "axios";
+import { useCookies } from "react-cookie";
 
 function Dashboard() {
+  const [data, setData] = useState([]);
+  const [cookies, setCookie] = useCookies(["name"]);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/api/user/profile", {
+          headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+        });
+        const updatedData = response.data;
+        setData(updatedData);
+        console.log(updatedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <Box
       height={"100vh"}
@@ -72,9 +86,9 @@ function Dashboard() {
       backgroundSize="cover"
       backgroundColor="#f4f8fa"
     >
-      <HeaderDashboard />
+      <Header page="1" />
       <DashboardLogo />
-      <HaloUser />
+      <HaloUser name={data.name}/>
       <DashboardBox />
     </Box>
   );
@@ -91,7 +105,7 @@ function Profile() {
       backgroundSize="cover"
       backgroundColor="#f4f8fa"
     >
-      <HeaderProfil />
+      <Header page="2" />
       <Flex>
         <ProfileLogo />
         <Spacer />
@@ -113,7 +127,7 @@ function ProfileChange() {
       backgroundSize="cover"
       backgroundColor="#f4f8fa"
     >
-      <HeaderProfil />
+      <Header page="2" />
       <Flex>
         <ProfileLogo />
         <Spacer />
@@ -135,7 +149,7 @@ function RencanaKegiatan() {
       backgroundSize="cover"
       backgroundColor="#f4f8fa"
     >
-      <HeaderRencanaKegiatan />
+      <Header page="3" />
       <Flex>
         <RencanaKegiatanLogo />
         <Spacer />
@@ -157,7 +171,7 @@ function RencanaKegiatanDetail() {
       backgroundSize="cover"
       backgroundColor="#f4f8fa"
     >
-      <HeaderRencanaKegiatan />
+      <Header page="3" />
       <Flex>
         <RencanaKegiatanLogo />
         <Spacer />
@@ -179,7 +193,7 @@ function LogHarian() {
       backgroundSize="cover"
       backgroundColor="#f4f8fa"
     >
-      <HeaderLogHarian />
+      <Header page="4" />
       <Flex>
         <LogHarianLogo />
         <Spacer />
@@ -201,7 +215,7 @@ function LogHarianDetail() {
       backgroundSize="cover"
       backgroundColor="#f4f8fa"
     >
-      <HeaderLogHarian />
+      <Header page="4" />
       <Flex>
         <LogHarianLogo />
         <Spacer />
@@ -223,7 +237,7 @@ function Kehadiran() {
       backgroundSize="cover"
       backgroundColor="#f4f8fa"
     >
-      <HeaderKehadiran />
+      <Header page="5" />
       <Flex>
         <KehadiranLogo />
         <Spacer />
@@ -245,7 +259,7 @@ function Penilaian() {
       backgroundSize="cover"
       backgroundColor="#f4f8fa"
     >
-      <HeaderPenilaian />
+      <Header page="6" />
       <Flex>
         <PenilaianLogo />
         <Spacer />
@@ -267,7 +281,7 @@ function Kuisioner() {
       backgroundSize="cover"
       backgroundColor="#f4f8fa"
     >
-      <HeaderKuisioner />
+      <Header page="7" />
       <Flex>
         <KuisionerLogo />
         <Spacer />

@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { Box, SimpleGrid, Text } from "@chakra-ui/react";
 
 import { ButtonBoxDownload } from "../components/button-box";
-import TableDashboard from "../components/table-dashboard";
+import TableDashboard from "../components/table-dashboard-coba";
 
 function DashboardBox() {
   return (

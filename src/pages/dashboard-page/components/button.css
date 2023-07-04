@@ -42,3 +42,22 @@
   color: #93bfcf;
   font-weight: bolder;
 }
+
+.button-box-download {
+  position: relative;
+  width: 121px;
+  top: 38.15px;
+  left: 30.5px;
+  background-color: #93BFCF;
+  color: white;
+  font-weight: bolder;
+  width: 121px;
+  height: 36px;
+  border-radius: 5px;
+  text-align: center;
+  padding-top: 6px;
+}
+
+.button-box-download:hover {
+  background-color: #6096B4;
+}
