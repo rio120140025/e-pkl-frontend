@@ -28,7 +28,7 @@ const TableDashboard = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
-  const [cookies, setCookie] = useCookies(["name"]);
+  const [cookies] = useCookies(["name"]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,8 +50,8 @@ const TableDashboard = () => {
     fetchData();
   }, []);
 
-  const filteredData = data.filter(
-    (item) => item.name.toLowerCase().includes(search.toLowerCase())
+  const filteredData = data.filter((item) =>
+    item.name.toLowerCase().includes(search.toLowerCase())
   );
 
   const sortedData = filteredData.sort((a, b) => {
@@ -78,6 +78,8 @@ const TableDashboard = () => {
   const totalRows = sortedData.length;
   const firstRow = indexOfFirstRow + 1;
   const lastRow = Math.min(indexOfLastRow, totalRows);
+
+  let no = 0;
 
   return (
     <Box
@@ -185,20 +187,25 @@ const TableDashboard = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {currentRows.map((row, index) => (
-            <Tr
-              key={index}
-              bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
-              color="black"
-            >
-              <Td>{row.id}</Td>
-              <Td>{row.name}</Td>
-              <Td>{row.nip}</Td>
-              <Td>{row.dosenPembimbing}</Td>
-              <Td>{row.dosenPembimbingLapangan}</Td>
-              <Td>{row.tempat}</Td>
-            </Tr>
-          ))}
+          {currentRows.map((row, index) => {
+            if (row.roles_id === 1) {
+              return (
+                <Tr
+                  key={index}
+                  bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                  color="black"
+                >
+                  <Td>{no += 1}</Td>
+                  <Td>{row.name}</Td>
+                  <Td>{row.nim}</Td>
+                  <Td>{row.dosenPembimbing}</Td>
+                  <Td>{row.dosenPembimbingLapangan}</Td>
+                  <Td>{row.lokasi}</Td>
+                </Tr>
+              );
+            }
+            return null;
+          })}
         </Tbody>
       </Table>
       <Box>
