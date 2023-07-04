@@ -28,7 +28,7 @@ const TableDashboard = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
-  const [cookies] = useCookies(["name"]);
+  const [cookies, setCookie] = useCookies(["name"]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,8 +56,8 @@ const TableDashboard = () => {
 
   const sortedData = filteredData.sort((a, b) => {
     if (sortKey === "") return 0;
-    const valA = a[sortKey].toUpperCase();
-    const valB = b[sortKey].toUpperCase();
+    const valA = a[sortKey];
+    const valB = b[sortKey];
     if (valA < valB) return sortOrder === "asc" ? -1 : 1;
     if (valA > valB) return sortOrder === "asc" ? 1 : -1;
     return 0;
@@ -85,6 +85,7 @@ const TableDashboard = () => {
     <Box
       marginTop="95px"
       marginLeft="30.5px"
+      marginBottom={15}
       w={1314}
       borderRadius="5"
       bgColor="#F9FAFC"
@@ -114,15 +115,6 @@ const TableDashboard = () => {
           <Tr>
             <Th>
               No
-              <Button
-                variant="link"
-                onClick={() => {
-                  setSortKey("no");
-                  toggleSortOrder();
-                }}
-              >
-                <SortButton />
-              </Button>
             </Th>
             <Th>
               Nama{" "}
@@ -177,7 +169,7 @@ const TableDashboard = () => {
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("tempat");
+                  setSortKey("lokasi");
                   toggleSortOrder();
                 }}
               >
