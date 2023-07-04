@@ -22,29 +22,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useCookies } from 'react-cookie';
 
-// let dataServer = null
-// let token = null
-
 function App() {
 
-  // const [cookies, setCookie] = useCookies(['jwt_token']);
-  // const [data, setData] = useState([]);
-  // useEffect(() => {
-  //   axios
-  //     .get("http://127.0.0.1:8000/api/user/data/alluser", {
-  //       headers: { Authorization: "Bearer " + cookies.jwt_token.data }
-  //     })
-  //     .then(response => {
-  //       setData(response.data)
-  //     })
-  //     .catch(error => {
-  //       console.log(error.response.data)
-  //     });
-  // }, [cookies.jwt_token.data]);
-  // dataServer = data
-  // token = cookies.jwt_token.data
-  // console.log(dataServer)
-  // console.log(token)
   return (
     <BrowserRouter>
       <Box
@@ -114,4 +93,4 @@ function App() {
 }
 
 export default App
-// export { dataServer, token };
+

@@ -10,12 +10,13 @@ import {
     Spacer,
 }
     from '@chakra-ui/react'
-// role
+import GetDataUser from "../get-data-user";
+import { emailLogin } from "../../login-page/components/login-box";
 
 
 
 function ProfilUbah(props) {
-    const mahasiswas = ['Nama', 'Email', 'NIM', 'Password', 'Nomor Telepon', 'Tempat PKL', 'Dosen Pembimbing', 'Dosen Pembimbing Lapangan']
+    const { roles_idUser } = GetDataUser(emailLogin);
     return (
         <Box
             height={"100vh"}
@@ -35,7 +36,7 @@ function ProfilUbah(props) {
                     <Spacer></Spacer>
                     <BreadcrumbProfileUbah />
                 </Flex>
-                <Ubah userCode={'1'} />
+                <Ubah userCode={roles_idUser} />
             </Box>
         </Box >
     );

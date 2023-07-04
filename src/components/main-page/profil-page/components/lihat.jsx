@@ -45,7 +45,7 @@ function Ubah(props) {
             >
                 Identitas Diri
             </Text>
-            {props.userCode === "1" && (
+            {props.userCode === 1 && (
                 <Flex direction="row" gap="120px">
                     <Flex direction="column" w='max-content' gap="13.15px">
                         <OnlyDisplay name="Nama" />
@@ -67,7 +67,7 @@ function Ubah(props) {
             }
 
             {
-                props.userCode === "2" && (
+                props.userCode === 2 && (
                     <Flex direction="column" w='max-content' gap="13.15px">
                         <OnlyDisplay name="Nama" />
                         <OnlyDisplay name="Email" />
@@ -79,7 +79,7 @@ function Ubah(props) {
             }
 
             {
-                props.userCode === "3" && (
+                props.userCode === 3 && (
                     <Flex direction="row" gap="120px">
                         <Flex direction="column" w='max-content' gap="13.15px">
                             <OnlyDisplay name="Nama" />

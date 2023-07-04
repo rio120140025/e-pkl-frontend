@@ -11,8 +11,11 @@ import {
     Spacer,
 }
     from '@chakra-ui/react'
+import GetDataUser from "../get-data-user";
+import { emailLogin } from "../../login-page/components/login-box";
 
 function Profil() {
+    const { roles_idUser } = GetDataUser(emailLogin);
 
     return (
         <Box
@@ -33,7 +36,7 @@ function Profil() {
                     <Spacer></Spacer>
                     <BreadcrumbProfile />
                 </Flex>
-                <Lihat userCode={1} />
+                <Lihat userCode={roles_idUser} />
             </Box>
         </Box >
     );

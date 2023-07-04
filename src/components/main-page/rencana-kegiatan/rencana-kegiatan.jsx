@@ -10,6 +10,7 @@ import {
 }
     from '@chakra-ui/react'
 
+
 function RencanaKegiatan() {
     return (
         <Box

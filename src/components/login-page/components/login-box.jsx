@@ -19,8 +19,9 @@ import "./box.css";
 import InputBox from "./input-box";
 import PasswordInput from "./password";
 import ButtonBoxSign from "./button-box";
+import GetDataUser from "../../main-page/get-data-user";
 
-// const emailLogin = null
+let emailLogin = null
 
 function LoginBox() {
   const toast = useToast()
@@ -58,7 +59,7 @@ function LoginBox() {
         setCookie("jwt_token", response)
         if (response != null) {
           callToast("Berhasil Login", 'success')
-          // emailLogin = email
+          emailLogin = email
           navigate('/dashboard')
         }
         else {
@@ -122,4 +123,4 @@ function LoginBox() {
 }
 
 export default LoginBox;
-// export { emailLogin }
+export { emailLogin }
