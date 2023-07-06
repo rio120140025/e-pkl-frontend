@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex, Spacer } from "@chakra-ui/layout";
+import { AbsoluteCenter, Box, Center, Flex, Spacer } from "@chakra-ui/layout";
 
 import Header from "./components/header-dashboard";
 import {
@@ -12,7 +12,10 @@ import {
   KuisionerLogo,
 } from "./components/description";
 import HaloUser from "./components/halo-user";
-import DashboardBox from "./pages/dashboard-box";
+import {
+  DashboardBoxDosenDPL,
+  DashboardBoxMahasiswa,
+} from "./pages/dashboard-box";
 import {
   ProfileBoxDPL,
   ProfileBoxDosen,
@@ -56,41 +59,82 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 
 function Dashboard() {
-  const [data, setData] = useState([]);
-  const [cookies, setCookie] = useCookies(["name"]);
-  
+  const [data1, setData1] = useState(null);
+  const [data2, setData2] = useState(null);
+  const [cookies] = useCookies(["name"]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/user/profile", {
-          headers: { Authorization: "Bearer " + cookies.jwt_token.data },
-        });
-        const updatedData = response.data;
-        setData(updatedData);
-        console.log(updatedData);
+        const response1 = await axios.get(
+          "http://127.0.0.1:8000/api/user/profile",
+          {
+            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+          }
+        );
+        const updatedData1 = response1.data;
+        setData1(updatedData1);
+        console.log(updatedData1)
+
+        const response2 = await axios.get(
+          "http://127.0.0.1:8000/api/user/pkl/data",
+          {
+            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+          }
+        );
+        const updatedData2 = response2.data.body[0];
+        setData2(updatedData2);
+        console.log(updatedData2);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [cookies.jwt_token.data]);
+
+  if (data1 === null) {
+    return (
+      <Center marginTop={100}>
+        <img src="74ed.gif" alt="loading..." />
+      </Center>
+    );
+  }
 
   return (
-    <Box
-      height={"100vh"}
-      width={"100vw"}
-      w="100%"
-      bgRepeat="no-repeat"
-      backgroundPosition="center"
-      backgroundSize="cover"
-      backgroundColor="#f4f8fa"
-    >
-      <Header page="1" />
-      <DashboardLogo />
-      <HaloUser name={data.name}/>
-      <DashboardBox />
-    </Box>
+    <>
+      {data1.roles_id === 1 ? (
+        <Box
+          height={"100vh"}
+          width={"100vw"}
+          w="100%"
+          bgRepeat="no-repeat"
+          backgroundPosition="center"
+          backgroundSize="cover"
+          backgroundColor="#f4f8fa"
+        >
+          <Header page="1" />
+          <DashboardLogo />
+          <HaloUser name={data1.name} />
+          <DashboardBoxMahasiswa />
+        </Box>
+      ) : (
+        <Box
+          height={"100vh"}
+          width={"100vw"}
+          w="100%"
+          bgRepeat="no-repeat"
+          backgroundPosition="center"
+          backgroundSize="cover"
+          backgroundColor="#f4f8fa"
+        >
+          <Header page="1" />
+          <DashboardLogo />
+          <HaloUser name={data1.name} />
+          <DashboardBoxDosenDPL id={data1.id} />
+        </Box>
+      )}
+    </>
   );
 }
 
