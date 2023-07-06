@@ -4,7 +4,7 @@ import { Text, Button } from "@chakra-ui/react";
 
 import { ReactComponent as ButtonClose } from "../../../assets/button-close.svg";
 
-function HaloUser() {
+function HaloUser({ name }) {
   const [isOpen, setIsOpen] = useState(true);
 
   const handleClose = () => {
@@ -31,7 +31,7 @@ function HaloUser() {
           <Flex gap="1" marginTop={1.5} marginLeft={5}>
             <Text display="inline-block">Halo</Text>
             <Text display="inline-block" fontWeight="bold">
-              User!.
+              {name}
             </Text>
             <Text display="inline-block">
               Selamat datang di aplikasi E-PKL.

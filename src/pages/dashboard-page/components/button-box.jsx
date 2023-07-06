@@ -20,17 +20,9 @@ import { TableView, TableViewPenilaian } from "./table-view";
 
 function ButtonBoxDownload() {
   return (
-    <Button
-      className="button-box"
-      variant="solid"
-      w="121px"
-      colorScheme="93BFCF"
-      top="38.15px"
-      left="30.5px"
-      _hover={{ background: "#6096B4" }}
-    >
+    <a className="button-box-download" href="docs.pdf" target="_blank" download>
       Download
-    </Button>
+    </a>
   );
 }
 function ButtonBoxKirim() {

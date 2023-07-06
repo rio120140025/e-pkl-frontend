@@ -1,15 +1,7 @@
-import React from "react";
-import { Box, Flex, Spacer } from "@chakra-ui/layout";
+import React, { useEffect, useState } from "react";
+import { AbsoluteCenter, Box, Center, Flex, Spacer } from "@chakra-ui/layout";
 
-import {
-  HeaderDashboard,
-  HeaderKehadiran,
-  HeaderKuisioner,
-  HeaderLogHarian,
-  HeaderPenilaian,
-  HeaderProfil,
-  HeaderRencanaKegiatan,
-} from "./components/header-dashboard";
+import Header from "./components/header-dashboard";
 import {
   DashboardLogo,
   ProfileLogo,
@@ -20,7 +12,10 @@ import {
   KuisionerLogo,
 } from "./components/description";
 import HaloUser from "./components/halo-user";
-import DashboardBox from "./pages/dashboard-box";
+import {
+  DashboardBoxDosenDPL,
+  DashboardBoxMahasiswa,
+} from "./pages/dashboard-box";
 import {
   ProfileBoxDPL,
   ProfileBoxDosen,
@@ -60,23 +55,86 @@ import {
 } from "./pages/kehadiran";
 import KuisionerBox from "./pages/kuisioner";
 import { PenilaianDPL, PenilaianMahasiswaDosen } from "./pages/penilaian";
+import axios from "axios";
+import { useCookies } from "react-cookie";
 
 function Dashboard() {
+  const [data1, setData1] = useState(null);
+  const [data2, setData2] = useState(null);
+  const [cookies] = useCookies(["name"]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response1 = await axios.get(
+          "http://127.0.0.1:8000/api/user/profile",
+          {
+            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+          }
+        );
+        const updatedData1 = response1.data;
+        setData1(updatedData1);
+        console.log(updatedData1)
+
+        const response2 = await axios.get(
+          "http://127.0.0.1:8000/api/user/pkl/data",
+          {
+            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+          }
+        );
+        const updatedData2 = response2.data.body[0];
+        setData2(updatedData2);
+        console.log(updatedData2);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [cookies.jwt_token.data]);
+
+  if (data1 === null) {
+    return (
+      <Center marginTop={100}>
+        <img src="74ed.gif" alt="loading..." />
+      </Center>
+    );
+  }
+
   return (
-    <Box
-      height={"100vh"}
-      width={"100vw"}
-      w="100%"
-      bgRepeat="no-repeat"
-      backgroundPosition="center"
-      backgroundSize="cover"
-      backgroundColor="#f4f8fa"
-    >
-      <HeaderDashboard />
-      <DashboardLogo />
-      <HaloUser />
-      <DashboardBox />
-    </Box>
+    <>
+      {data1.roles_id === 1 ? (
+        <Box
+          height={"100vh"}
+          width={"100vw"}
+          w="100%"
+          bgRepeat="no-repeat"
+          backgroundPosition="center"
+          backgroundSize="cover"
+          backgroundColor="#f4f8fa"
+        >
+          <Header page="1" />
+          <DashboardLogo />
+          <HaloUser name={data1.name} />
+          <DashboardBoxMahasiswa />
+        </Box>
+      ) : (
+        <Box
+          height={"100vh"}
+          width={"100vw"}
+          w="100%"
+          bgRepeat="no-repeat"
+          backgroundPosition="center"
+          backgroundSize="cover"
+          backgroundColor="#f4f8fa"
+        >
+          <Header page="1" />
+          <DashboardLogo />
+          <HaloUser name={data1.name} />
+          <DashboardBoxDosenDPL id={data1.id} />
+        </Box>
+      )}
+    </>
   );
 }
 
@@ -91,7 +149,7 @@ function Profile() {
       backgroundSize="cover"
       backgroundColor="#f4f8fa"
     >
-      <HeaderProfil />
+      <Header page="2" />
       <Flex>
         <ProfileLogo />
         <Spacer />
@@ -113,7 +171,7 @@ function ProfileChange() {
       backgroundSize="cover"
       backgroundColor="#f4f8fa"
     >
-      <HeaderProfil />
+      <Header page="2" />
       <Flex>
         <ProfileLogo />
         <Spacer />
@@ -135,7 +193,7 @@ function RencanaKegiatan() {
       backgroundSize="cover"
       backgroundColor="#f4f8fa"
     >
-      <HeaderRencanaKegiatan />
+      <Header page="3" />
       <Flex>
         <RencanaKegiatanLogo />
         <Spacer />
@@ -157,7 +215,7 @@ function RencanaKegiatanDetail() {
       backgroundSize="cover"
       backgroundColor="#f4f8fa"
     >
-      <HeaderRencanaKegiatan />
+      <Header page="3" />
       <Flex>
         <RencanaKegiatanLogo />
         <Spacer />
@@ -179,7 +237,7 @@ function LogHarian() {
       backgroundSize="cover"
       backgroundColor="#f4f8fa"
     >
-      <HeaderLogHarian />
+      <Header page="4" />
       <Flex>
         <LogHarianLogo />
         <Spacer />
@@ -201,7 +259,7 @@ function LogHarianDetail() {
       backgroundSize="cover"
       backgroundColor="#f4f8fa"
     >
-      <HeaderLogHarian />
+      <Header page="4" />
       <Flex>
         <LogHarianLogo />
         <Spacer />
@@ -223,7 +281,7 @@ function Kehadiran() {
       backgroundSize="cover"
       backgroundColor="#f4f8fa"
     >
-      <HeaderKehadiran />
+      <Header page="5" />
       <Flex>
         <KehadiranLogo />
         <Spacer />
@@ -245,7 +303,7 @@ function Penilaian() {
       backgroundSize="cover"
       backgroundColor="#f4f8fa"
     >
-      <HeaderPenilaian />
+      <Header page="6" />
       <Flex>
         <PenilaianLogo />
         <Spacer />
@@ -267,7 +325,7 @@ function Kuisioner() {
       backgroundSize="cover"
       backgroundColor="#f4f8fa"
     >
-      <HeaderKuisioner />
+      <Header page="7" />
       <Flex>
         <KuisionerLogo />
         <Spacer />

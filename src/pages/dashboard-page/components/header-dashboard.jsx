@@ -1,268 +1,86 @@
-import React from "react";
+import React, { useState } from "react";
 import { ButtonGroup } from "@chakra-ui/react";
-import { Box, Flex, Spacer, Heading } from "@chakra-ui/layout";
+import { Flex, Spacer, Heading } from "@chakra-ui/layout";
 import { Link } from "react-router-dom";
-
 import "./header-dashboard.css";
+import { useCookies } from "react-cookie";
 
-function HeaderDashboard() {
+function Header(props) {
+  const [cookies, , removeCookie] = useCookies(["jwt_token"]);
+
+  if (cookies.jwt_token != null) {
+    if (window.location.pathname === "/") {
+      window.location.href = "/dashboard";
+    }
+  } else {
+    window.location.href = "/";
+  }
+
+  const [valueNavbar, setValueNavbar] = useState(props.page);
+  const handleLinkClick = (e, value) => {
+    setValueNavbar(value);
+  };
+
+  const handleLogout = () => {
+    removeCookie("jwt_token");
+    window.location.href = "/";
+  };
+
+  const links = [
+    { id: "1", label: "Dashboard", to: "/dashboard" },
+    { id: "2", label: "Profile", to: "/profile" },
+    { id: "3", label: "Rencana Kegiatan", to: "/rencana-kegiatan" },
+    { id: "4", label: "Log Harian", to: "/log-harian" },
+    { id: "5", label: "Kehadiran", to: "/kehadiran" },
+    { id: "6", label: "Penilaian PKL", to: "/penilaian-pkl" },
+    { id: "7", label: "Kuisioner", to: "/kuisioner" },
+    { id: "8", label: "Logout", onClick: handleLogout },
+  ];
+
   return (
-    <Box bgColor={"#BDCDD6"}>
-      <Flex minWidth="max-content" gap="2" padding={"12px"}>
-        <Box paddingLeft={84}>
-          <Heading size="md">E-PKL</Heading>
-        </Box>
-        <Spacer />
-        <ButtonGroup gap="22px" paddingRight={84}>
-          <Link className="button-click-dashboard" to="/dashboard">
-            Dashboard
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/profile">
-            Profile
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/rencana-kegiatan">
-            Rencana Kegiatan
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/log-harian">
-            Log Harian
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/kehadiran">
-            Kehadiran
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/penilaian-pkl">
-            Penilaian PKL
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/kuisioner">
-            Kuisioner
-          </Link>
-        </ButtonGroup>
-      </Flex>
-    </Box>
+    <Flex
+      bgColor="#BDCDD6"
+      Width="1280px"
+      padding="12px 80px"
+      justifyContent="space-between"
+      alignItems="center"
+    >
+      <Heading fontSize="1.5em">E-PKL</Heading>
+      <Spacer />
+      <ButtonGroup gap="1em" marginLeft="80px">
+        {links.map((link) =>
+          link.to ? (
+            <Link
+              onClick={(e) => handleLinkClick(e, link.id)}
+              key={link.id}
+              className={
+                valueNavbar === link.id
+                  ? "button-click-dashboard"
+                  : "button-nonclick-dashboard"
+              }
+              to={link.to}
+              fontSize="14px"
+            >
+              {link.label}
+            </Link>
+          ) : (
+            <button
+              key={link.id}
+              className={
+                valueNavbar === link.id
+                  ? "button-click-dashboard"
+                  : "button-nonclick-dashboard"
+              }
+              onClick={link.onClick}
+              fontSize="14px"
+            >
+              {link.label}
+            </button>
+          )
+        )}
+      </ButtonGroup>
+    </Flex>
   );
 }
 
-function HeaderKehadiran() {
-  return (
-    <Box bgColor={"#BDCDD6"}>
-      <Flex minWidth="max-content" gap="2" padding={"12px"}>
-        <Box paddingLeft={84}>
-          <Heading size="md">E-PKL</Heading>
-        </Box>
-        <Spacer />
-        <ButtonGroup gap="22px" paddingRight={84}>
-          <Link className="button-nonclick-dashboard" to="/dashboard">
-            Dashboard
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/profile">
-            Profile
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/rencana-kegiatan">
-            Rencana Kegiatan
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/log-harian">
-            Log Harian
-          </Link>
-          <Link className="button-click-dashboard" to="/kehadiran">
-            Kehadiran
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/penilaian-pkl">
-            Penilaian PKL
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/kuisioner">
-            Kuisioner
-          </Link>
-        </ButtonGroup>
-      </Flex>
-    </Box>
-  );
-}
-
-function HeaderKuisioner() {
-  return (
-    <Box bgColor={"#BDCDD6"}>
-      <Flex minWidth="max-content" gap="2" padding={"12px"}>
-        <Box paddingLeft={84}>
-          <Heading size="md">E-PKL</Heading>
-        </Box>
-        <Spacer />
-        <ButtonGroup gap="22px" paddingRight={84}>
-          <Link className="button-nonclick-dashboard" to="/dashboard">
-            Dashboard
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/profile">
-            Profile
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/rencana-kegiatan">
-            Rencana Kegiatan
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/log-harian">
-            Log Harian
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/kehadiran">
-            Kehadiran
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/penilaian-pkl">
-            Penilaian PKL
-          </Link>
-          <Link className="button-click-dashboard" to="/kuisioner">
-            Kuisioner
-          </Link>
-        </ButtonGroup>
-      </Flex>
-    </Box>
-  );
-}
-
-function HeaderLogHarian() {
-  return (
-    <Box bgColor={"#BDCDD6"}>
-      <Flex minWidth="max-content" gap="2" padding={"12px"}>
-        <Box paddingLeft={84}>
-          <Heading size="md">E-PKL</Heading>
-        </Box>
-        <Spacer />
-        <ButtonGroup gap="22px" paddingRight={84}>
-          <Link className="button-nonclick-dashboard" to="/dashboard">
-            Dashboard
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/profile">
-            Profile
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/rencana-kegiatan">
-            Rencana Kegiatan
-          </Link>
-          <Link className="button-click-dashboard" to="/log-harian">
-            Log Harian
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/kehadiran">
-            Kehadiran
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/penilaian-pkl">
-            Penilaian PKL
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/kuisioner">
-            Kuisioner
-          </Link>
-        </ButtonGroup>
-      </Flex>
-    </Box>
-  );
-}
-
-function HeaderPenilaian() {
-  return (
-    <Box bgColor={"#BDCDD6"}>
-      <Flex minWidth="max-content" gap="2" padding={"12px"}>
-        <Box paddingLeft={84}>
-          <Heading size="md">E-PKL</Heading>
-        </Box>
-        <Spacer />
-        <ButtonGroup gap="22px" paddingRight={84}>
-          <Link className="button-nonclick-dashboard" to="/dashboard">
-            Dashboard
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/profile">
-            Profile
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/rencana-kegiatan">
-            Rencana Kegiatan
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/log-harian">
-            Log Harian
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/kehadiran">
-            Kehadiran
-          </Link>
-          <Link className="button-click-dashboard" to="/penilaian-pkl">
-            Penilaian PKL
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/kuisioner">
-            Kuisioner
-          </Link>
-        </ButtonGroup>
-      </Flex>
-    </Box>
-  );
-}
-
-function HeaderProfil() {
-  return (
-    <Box bgColor={"#BDCDD6"}>
-      <Flex minWidth="max-content" gap="2" padding={"12px"}>
-        <Box paddingLeft={84}>
-          <Heading size="md">E-PKL</Heading>
-        </Box>
-        <Spacer />
-        <ButtonGroup gap="22px" paddingRight={84}>
-          <Link className="button-nonclick-dashboard" to="/dashboard">
-            Dashboard
-          </Link>
-          <Link className="button-click-dashboard" to="/profile">
-            Profile
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/rencana-kegiatan">
-            Rencana Kegiatan
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/log-harian">
-            Log Harian
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/kehadiran">
-            Kehadiran
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/penilaian-pkl">
-            Penilaian PKL
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/kuisioner">
-            Kuisioner
-          </Link>
-        </ButtonGroup>
-      </Flex>
-    </Box>
-  );
-}
-
-function HeaderRencanaKegiatan() {
-  return (
-    <Box bgColor={"#BDCDD6"}>
-      <Flex minWidth="max-content" gap="2" padding={"12px"}>
-        <Box paddingLeft={84}>
-          <Heading size="md">E-PKL</Heading>
-        </Box>
-        <Spacer />
-        <ButtonGroup gap="22px" paddingRight={84}>
-          <Link className="button-nonclick-dashboard" to="/dashboard">
-            Dashboard
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/profile">
-            Profile
-          </Link>
-          <Link className="button-click-dashboard" to="/rencana-kegiatan">
-            Rencana Kegiatan
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/log-harian">
-            Log Harian
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/kehadiran">
-            Kehadiran
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/penilaian-pkl">
-            Penilaian PKL
-          </Link>
-          <Link className="button-nonclick-dashboard" to="/kuisioner">
-            Kuisioner
-          </Link>
-        </ButtonGroup>
-      </Flex>
-    </Box>
-  );
-}
-
-export {
-  HeaderDashboard,
-  HeaderKehadiran,
-  HeaderKuisioner,
-  HeaderLogHarian,
-  HeaderPenilaian,
-  HeaderProfil,
-  HeaderRencanaKegiatan,
-};
+export default Header;
