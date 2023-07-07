@@ -19,7 +19,7 @@ import "./box.css";
 import InputBox from "./input-box";
 import PasswordInput from "./password";
 import ButtonBoxSign from "./button-box";
-import GetDataUser from "../../main-page/get-data-user";
+import GetDataUser from "../../main-page/get-data-login";
 
 let emailLogin = null
 

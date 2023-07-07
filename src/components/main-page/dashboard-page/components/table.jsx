@@ -16,7 +16,7 @@ import {
     Spacer,
 } from "@chakra-ui/react";
 import axios from "axios";
-import { useCookies } from 'react-cookie';
+import { useCookies } from "react-cookie";
 
 import { ReactComponent as SortButton } from "../../../../assets/button-sort.svg";
 import { ReactComponent as SearchIcon } from "../../../../assets/icon-search.svg";
@@ -24,11 +24,11 @@ import { ReactComponent as SearchIcon } from "../../../../assets/icon-search.svg
 const TableComponent = () => {
     const [data, setData] = useState([]);
     const [search, setSearch] = useState("");
-    const [sortKey, setSortKey] = useState("id");
-    const [sortOrder, setSortOrder] = useState("asc");
+    const [sortKey, setSortKey] = useState("nama"); // Default sort key
+    const [sortOrder, setSortOrder] = useState("asc"); // Default sort order
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [cookies, setCookie] = useCookies(['jwt_token']);
+    const [cookies, setCookie] = useCookies(["jwt_token"]);
     let no = 0;
 
     let sortedData = [];
@@ -37,8 +37,13 @@ const TableComponent = () => {
     const indexOfLastRow = currentPage * rowsPerPage;
     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
 
-    const toggleSortOrder = () => {
-        setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    const toggleSortOrder = (key) => {
+        if (key === sortKey) {
+            setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+        } else {
+            setSortOrder("asc");
+        }
+        setSortKey(key);
     };
 
     const paginate = (pageNumber) => {
@@ -48,14 +53,14 @@ const TableComponent = () => {
     useEffect(() => {
         axios
             .get("http://127.0.0.1:8000/api/user/data/alluser", {
-                headers: { Authorization: "Bearer " + cookies.jwt_token.data }
+                headers: { Authorization: "Bearer " + cookies.jwt_token.data },
             })
-            .then(response => {
-                setData(response.data)
-                // console.log(response.data)
+            .then((response) => {
+                console.log(response.data)
+                setData(response.data);
             })
-            .catch(error => {
-                console.log(error.response.data)
+            .catch((error) => {
+                console.log(error.response.data);
             });
     }, [cookies.jwt_token.data]);
 
@@ -67,8 +72,6 @@ const TableComponent = () => {
         );
     });
 
-
-
     sortedData = filteredData.sort((a, b) => {
         if (sortKey === "") return 0;
         const valA = a[sortKey];
@@ -77,7 +80,6 @@ const TableComponent = () => {
         if (valA > valB) return sortOrder === "asc" ? 1 : -1;
         return 0;
     });
-
 
     const currentRows = sortedData.slice(indexOfFirstRow, indexOfLastRow);
     const totalRows = sortedData.length;
@@ -113,17 +115,12 @@ const TableComponent = () => {
             <Table variant="striped" top="1384px" left="0" width="100%">
                 <Thead>
                     <Tr>
-                        <Th>
-                            No
-                        </Th>
+                        <Th>No</Th>
                         <Th>
                             Nama{" "}
                             <Button
                                 variant="link"
-                                onClick={() => {
-                                    setSortKey("nama");
-                                    toggleSortOrder();
-                                }}
+                                onClick={() => toggleSortOrder("name")}
                             >
                                 <SortButton />
                             </Button>
@@ -132,10 +129,7 @@ const TableComponent = () => {
                             NIM{" "}
                             <Button
                                 variant="link"
-                                onClick={() => {
-                                    setSortKey("nim");
-                                    toggleSortOrder();
-                                }}
+                                onClick={() => toggleSortOrder("nim")}
                             >
                                 <SortButton />
                             </Button>
@@ -144,10 +138,7 @@ const TableComponent = () => {
                             Dosen Pembimbing{" "}
                             <Button
                                 variant="link"
-                                onClick={() => {
-                                    setSortKey("dosenPembimbing");
-                                    toggleSortOrder();
-                                }}
+                                onClick={() => toggleSortOrder("dosbim")}
                             >
                                 <SortButton />
                             </Button>
@@ -156,10 +147,7 @@ const TableComponent = () => {
                             Dosen Pembimbing Lapangan{" "}
                             <Button
                                 variant="link"
-                                onClick={() => {
-                                    setSortKey("dosenPembimbingLapangan");
-                                    toggleSortOrder();
-                                }}
+                                onClick={() => toggleSortOrder("dpl")}
                             >
                                 <SortButton />
                             </Button>
@@ -168,10 +156,7 @@ const TableComponent = () => {
                             Tempat{" "}
                             <Button
                                 variant="link"
-                                onClick={() => {
-                                    setSortKey("tempat");
-                                    toggleSortOrder();
-                                }}
+                                onClick={() => toggleSortOrder("lokasi")}
                             >
                                 <SortButton />
                             </Button>
@@ -179,18 +164,18 @@ const TableComponent = () => {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {currentRows.map((row) => (
-                        row.roles_id === 1 && (
+                    {currentRows.map((row) =>
+                        row.roles_id === 1 ? (
                             <Tr key={row.id}>
-                                <Td>{no += 1}</Td>
+                                <Td>{(no += 1)}</Td>
                                 <Td>{row.name}</Td>
                                 <Td>{row.nim}</Td>
                                 <Td>{row.dosbim}</Td>
                                 <Td>{row.dpl}</Td>
                                 <Td>{row.lokasi}</Td>
                             </Tr>
-                        )
-                    ))}
+                        ) : null
+                    )}
                 </Tbody>
             </Table>
             <Box>
@@ -226,11 +211,7 @@ const TableComponent = () => {
 
             <Box>
                 {totalRows > rowsPerPage && (
-                    <Pagination
-                        rowsPerPage={rowsPerPage}
-                        totalRows={totalRows}
-                        paginate={paginate}
-                    />
+                    <Pagination rowsPerPage={rowsPerPage} totalRows={totalRows} paginate={paginate} />
                 )}
             </Box>
         </Box>

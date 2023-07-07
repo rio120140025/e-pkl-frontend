@@ -48,7 +48,7 @@ function OnlyDisplay(props) {
                         fontWeight='400'
                         lineHeight='normal'
                     >
-                        Haikal
+                        {props.value}
                     </Text>
                 </Box>
             )}

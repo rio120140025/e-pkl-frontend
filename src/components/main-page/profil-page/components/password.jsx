@@ -23,14 +23,16 @@ function PasswordInput(props) {
 
   const isError = isTouched && props.password === "";
 
+  const readOnly = props.lihat === "yes";
+
   return (
-    <Box width="max-content" >
+    <Box width="max-content">
       <Text>Password</Text>
       <InputGroup>
         <FormControl isInvalid={isError}>
           <Input
             value={props.password}
-            onChange={e => props.handleSetPassword(e)}
+            onChange={(e) => props.handleSetPassword(e)}
             onBlur={handleInputBlur}
             borderRadius="5"
             bgColor={"#fff"}
@@ -40,10 +42,9 @@ function PasswordInput(props) {
             color={"black"}
             type={show ? "text" : "password"}
             width='373.913px'
+            readOnly={readOnly ? true : undefined}
           />
-          {!isError ? (
-            null
-          ) : (
+          {!isError ? null : (
             <FormErrorMessage>*this field must be filled</FormErrorMessage>
           )}
         </FormControl>

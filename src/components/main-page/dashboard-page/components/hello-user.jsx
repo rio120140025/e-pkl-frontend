@@ -10,14 +10,14 @@ import {
 }
     from '@chakra-ui/react'
 import close from "../../../../assets/close vector.svg"
-import GetDataUser from "../../get-data-user";
-import { emailLogin } from "../../../login-page/components/login-box";
+import GetDataLogin from "../../get-data-login";
+
 
 
 
 function HelloUser(props) {
     const [isOpen, setIsOpen] = useState(true);
-    const { namaUser } = GetDataUser(emailLogin);
+    const { name } = GetDataLogin();
     const handleClose = () => {
         setIsOpen(false);
     };
@@ -35,7 +35,7 @@ function HelloUser(props) {
                     <Flex gap="1" marginTop={1.5} marginLeft={5}>
                         <Text display="inline-block">Halo</Text>
                         <Text display="inline-block" fontWeight="bold">
-                            {namaUser} !.
+                            {name} !.
                         </Text>
                         <Text display="inline-block">
                             Selamat datang di aplikasi E-PKL.

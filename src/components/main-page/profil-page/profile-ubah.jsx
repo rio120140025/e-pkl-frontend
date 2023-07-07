@@ -10,13 +10,10 @@ import {
     Spacer,
 }
     from '@chakra-ui/react'
-import GetDataUser from "../get-data-user";
-import { emailLogin } from "../../login-page/components/login-box";
-
 
 
 function ProfilUbah(props) {
-    const { roles_idUser } = GetDataUser(emailLogin);
+    const roles_id = localStorage.getItem('roles_id');
     return (
         <Box
             height={"100vh"}
@@ -36,7 +33,7 @@ function ProfilUbah(props) {
                     <Spacer></Spacer>
                     <BreadcrumbProfileUbah />
                 </Flex>
-                <Ubah userCode={roles_idUser} />
+                <Ubah roles_id={roles_id} />
             </Box>
         </Box >
     );

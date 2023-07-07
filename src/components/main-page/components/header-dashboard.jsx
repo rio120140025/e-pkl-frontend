@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ButtonGroup, Center, Button } from "@chakra-ui/react";
-import { Flex, Spacer, Heading } from "@chakra-ui/layout";
+import { Box, Flex, Spacer, Heading } from "@chakra-ui/layout";
 import { Link } from "react-router-dom";
 import "./header-dashboard.css"
+import axios from "axios";
 import { useCookies } from 'react-cookie';
-
-
 
 
 function Header(props) {
   const [cookies, setCookie] = useCookies(['jwt_token']);
+
 
   if (cookies.jwt_token != null) {
     if (window.location.pathname == '/') {
@@ -67,3 +67,4 @@ function Header(props) {
 }
 
 export default Header;
+

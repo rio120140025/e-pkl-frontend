@@ -10,11 +10,9 @@ import {
 
 }
   from '@chakra-ui/react'
-import GetDataUser from "../get-data-user";
-import { emailLogin } from "../../login-page/components/login-box";
+
 
 function Dashboard() {
-  const { namaUser } = GetDataUser(emailLogin);
   return (
     <Box
       height={"100vh"}
