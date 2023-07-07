@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Input,
@@ -24,17 +24,20 @@ import {
   ModalFooter,
   Center,
 } from "@chakra-ui/react";
+import axios from "axios";
 
 import { ReactComponent as SortButton } from "../../../assets/button-sort.svg";
 import { ReactComponent as SearchIcon } from "../../../assets/icon-search.svg";
 import { ReactComponent as BackButton } from "../../../assets/button-back.svg";
 import { ReactComponent as EditButton } from "../../../assets/button-edit.svg";
 import { ReactComponent as DeleteButton } from "../../../assets/button-delete.svg";
+import { useCookies } from "react-cookie";
+import { Link } from "react-router-dom";
+
 import {
   ButtonBoxTambahRencana,
   ButtonBoxSimpanRencanaKegiatan,
 } from "./button-box";
-import { Link } from "react-router-dom";
 import {TableEdit} from "./table-edit";
 
 const TableRencanaKegiatanDetailMahasiswa = () => {
@@ -43,87 +46,43 @@ const TableRencanaKegiatanDetailMahasiswa = () => {
   const [sortOrder, setSortOrder] = useState("asc");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState([
-    {
-      no: "1",
-      capaian: "Capaian 1",
-      subCapaian: "subCapaian 1",
-      jumlahJam: "10",
-      status: "Diverifikasi",
-    },
-    {
-      no: "2",
-      capaian: "Capaian 2",
-      subCapaian: "subCapaian 2",
-      jumlahJam: "8",
-      status: "Belum Diverifikasi",
-    },
-    {
-      no: "3",
-      capaian: "Capaian 3",
-      subCapaian: "subCapaian 3",
-      jumlahJam: "12",
-      status: "Ditolak",
-    },
-    {
-      no: "4",
-      capaian: "Capaian 4",
-      subCapaian: "subCapaian 4",
-      jumlahJam: "6",
-      status: "Diverifikasi",
-    },
-    {
-      no: "5",
-      capaian: "Capaian 5",
-      subCapaian: "subCapaian 5",
-      jumlahJam: "9",
-      status: "Diverifikasi",
-    },
-    {
-      no: "6",
-      capaian: "Capaian 6",
-      subCapaian: "subCapaian 6",
-      jumlahJam: "7",
-      status: "Belum Diverifikasi",
-    },
-    {
-      no: "7",
-      capaian: "Capaian 7",
-      subCapaian: "subCapaian 7",
-      jumlahJam: "11",
-      status: "Diverifikasi",
-    },
-    {
-      no: "8",
-      capaian: "Capaian 8",
-      subCapaian: "subCapaian 8",
-      jumlahJam: "5",
-      status: "Ditolak",
-    },
-    {
-      no: "9",
-      capaian: "Capaian 9",
-      subCapaian: "subCapaian 9",
-      jumlahJam: "14",
-      status: "Belum Diverifikasi",
-    },
-    {
-      no: "10",
-      capaian: "Capaian 10",
-      subCapaian: "subCapaian 10",
-      jumlahJam: "3",
-      status: "Diverifikasi",
-    },
-  ]);
+  const [data, setData] = useState([]);
+  const [cookies] = useCookies(["name"]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/user/kegiatan",
+          {
+            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+          }
+        );
+        const updatedData = response.data.body;
+        setData(updatedData);
+        console.log(updatedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const filteredData = data.filter((item) =>
     item.capaian.toLowerCase().includes(search.toLowerCase())
   );
 
-  const sortedData = filteredData.sort((a, b) => {
+  const sortedData = filteredData.slice().sort((a, b) => {
     if (sortKey === "") return 0;
-    const valA = a[sortKey].toUpperCase();
-    const valB = b[sortKey].toUpperCase();
+    const valA = a[sortKey] ? a[sortKey].toUpperCase() : "";
+    const valB = b[sortKey] ? b[sortKey].toUpperCase() : "";
+
+    if (valA === "" || valB === "") {
+      if (valA === "") return sortOrder === "asc" ? 1 : -1;
+      if (valB === "") return sortOrder === "asc" ? -1 : 1;
+    }
+
     if (valA < valB) return sortOrder === "asc" ? -1 : 1;
     if (valA > valB) return sortOrder === "asc" ? 1 : -1;
     return 0;
@@ -144,6 +103,11 @@ const TableRencanaKegiatanDetailMahasiswa = () => {
   const totalRows = sortedData.length;
   const firstRow = indexOfFirstRow + 1;
   const lastRow = Math.min(indexOfLastRow, totalRows);
+  let no = 0;
+
+  useEffect(() => {
+    setSortKey("");
+  }, []);
 
   const {
     isOpen: isOpenDelete,
@@ -174,6 +138,7 @@ const TableRencanaKegiatanDetailMahasiswa = () => {
     <Box
       marginTop="28.86px"
       marginLeft="30.5px"
+      marginBottom={15}
       w={1314}
       borderRadius="5"
       bgColor="#F9FAFC"
@@ -208,15 +173,6 @@ const TableRencanaKegiatanDetailMahasiswa = () => {
           <Tr>
             <Th>
               No
-              <Button
-                variant="link"
-                onClick={() => {
-                  setSortKey("no");
-                  toggleSortOrder();
-                }}
-              >
-                <SortButton />
-              </Button>
             </Th>
             <Th>
               Capaian{" "}
@@ -235,7 +191,7 @@ const TableRencanaKegiatanDetailMahasiswa = () => {
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("subCapaian");
+                  setSortKey("sub_capaian");
                   toggleSortOrder();
                 }}
               >
@@ -247,7 +203,7 @@ const TableRencanaKegiatanDetailMahasiswa = () => {
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("jumlahJam");
+                  setSortKey("jam");
                   toggleSortOrder();
                 }}
               >
@@ -278,10 +234,10 @@ const TableRencanaKegiatanDetailMahasiswa = () => {
               bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
               color="black"
             >
-              <Td>{row.no}</Td>
+              <Td>{(no =+ 1)}</Td>
               <Td>{row.capaian}</Td>
-              <Td>{row.subCapaian}</Td>
-              <Td>{row.jumlahJam}</Td>
+              <Td>{row.sub_capaian}</Td>
+              <Td>{row.jam}</Td>
               <Td>{row.status}</Td>
               <Td>
                 <EditButton onClick={onOpenEdit} />

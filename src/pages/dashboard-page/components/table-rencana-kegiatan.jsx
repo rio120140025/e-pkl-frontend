@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Input,
@@ -15,98 +15,56 @@ import {
   Flex,
   Spacer,
 } from "@chakra-ui/react";
+import axios from "axios";
 
 import { ReactComponent as SortButton } from "../../../assets/button-sort.svg";
 import { ReactComponent as SearchIcon } from "../../../assets/icon-search.svg";
+import { useCookies } from "react-cookie";
 import { ButtonBoxDetailRencanaKegiatan } from "./button-box";
 
-const data = [
-  {
-    no: "1",
-    nama: "John",
-    nim: "12345",
-    dosenPembimbing: "Dr. Smith",
-  },
-
-  {
-    no: "2",
-    nama: "Jane",
-    nim: "67890",
-    dosenPembimbing: "Dr. Brown",
-  },
-
-  {
-    no: "3",
-    nama: "Michael",
-    nim: "54321",
-    dosenPembimbing: "Dr. Wilson",
-  },
-
-  {
-    no: "4",
-    nama: "Sarah",
-    nim: "98765",
-    dosenPembimbing: "Dr. Martinez",
-  },
-
-  {
-    no: "5",
-    nama: "David",
-    nim: "13579",
-    dosenPembimbing: "Dr. Anderson",
-  },
-
-  {
-    no: "6",
-    nama: "Emily",
-    nim: "02468",
-    dosenPembimbing: "Dr. Clark",
-  },
-
-  {
-    no: "7",
-    nama: "Daniel",
-    nim: "24680",
-    dosenPembimbing: "Dr. Walker",
-  },
-
-  {
-    no: "8",
-    nama: "Olivia",
-    nim: "97531",
-    dosenPembimbing: "Dr. Garcia",
-  },
-
-  {
-    no: "9",
-    nama: "Jacob",
-    nim: "80246",
-    dosenPembimbing: "Dr. Hernandez",
-  },
-
-  {
-    no: "10",
-    nama: "Sophia",
-    nim: "46802",
-    dosenPembimbing: "Dr. Patel",
-  },
-];
-
-const TableRencanaKegiatan = () => {
+const TableRencanaKegiatan = ({ roles_id, id }) => {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const [data, setData] = useState([]);
+  const [cookies] = useCookies(["name"]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/user/pkl/data",
+          {
+            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+          }
+        );
+        const updatedData = response.data.body;
+        setData(updatedData);
+        console.log(updatedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const filteredData = data.filter((item) =>
-    item.nama.toLowerCase().includes(search.toLowerCase())
+    item.mahasiswa.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  const sortedData = filteredData.sort((a, b) => {
+  const sortedData = filteredData.slice().sort((a, b) => {
     if (sortKey === "") return 0;
-    const valA = a[sortKey].toUpperCase();
-    const valB = b[sortKey].toUpperCase();
+    const valA = a[sortKey] ? a[sortKey].toUpperCase() : "";
+    const valB = b[sortKey] ? b[sortKey].toUpperCase() : "";
+
+    if (valA === "" || valB === "") {
+      if (valA === "") return sortOrder === "asc" ? 1 : -1;
+      if (valB === "") return sortOrder === "asc" ? -1 : 1;
+    }
+
     if (valA < valB) return sortOrder === "asc" ? -1 : 1;
     if (valA > valB) return sortOrder === "asc" ? 1 : -1;
     return 0;
@@ -127,11 +85,17 @@ const TableRencanaKegiatan = () => {
   const totalRows = sortedData.length;
   const firstRow = indexOfFirstRow + 1;
   const lastRow = Math.min(indexOfLastRow, totalRows);
+  let no = 0;
+
+  useEffect(() => {
+    setSortKey("");
+  }, []);
 
   return (
     <Box
       marginTop="28.86px"
       marginLeft="30.5px"
+      marginBottom={15}
       w={1314}
       borderRadius="5"
       bgColor="#F9FAFC"
@@ -159,24 +123,13 @@ const TableRencanaKegiatan = () => {
       <Table variant="striped" top="1384px">
         <Thead>
           <Tr>
-            <Th>
-              No
-              <Button
-                variant="link"
-                onClick={() => {
-                  setSortKey("no");
-                  toggleSortOrder();
-                }}
-              >
-                <SortButton />
-              </Button>
-            </Th>
+            <Th>No</Th>
             <Th>
               Nama{" "}
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("nama");
+                  setSortKey("mahasiswa.name");
                   toggleSortOrder();
                 }}
               >
@@ -188,7 +141,7 @@ const TableRencanaKegiatan = () => {
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("nim");
+                  setSortKey("mahasiswa.nim");
                   toggleSortOrder();
                 }}
               >
@@ -200,7 +153,7 @@ const TableRencanaKegiatan = () => {
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("dosenPembimbing");
+                  setSortKey("dospem.name");
                   toggleSortOrder();
                 }}
               >
@@ -211,23 +164,50 @@ const TableRencanaKegiatan = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {currentRows.map((row, index) => (
-            <Tr
-              key={index}
-              bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
-              color="black"
-            >
-              <Td>{row.no}</Td>
-              <Td>{row.nama}</Td>
-              <Td>{row.nim}</Td>
-              <Td>{row.dosenPembimbing}</Td>
-              <Td>
-                <Flex>
-                  <ButtonBoxDetailRencanaKegiatan />
-                </Flex>
-              </Td>
-            </Tr>
-          ))}
+          {currentRows.map((row, index) => {
+            if (roles_id === 1) {
+              if (row.mahasiswa_id == id) {
+                return (
+                  <Tr
+                    key={index}
+                    bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                    color="black"
+                  >
+                    <Td>{(no += 1)}</Td>
+                    <Td>{row.mahasiswa.name}</Td>
+                    <Td>{row.mahasiswa.nim}</Td>
+                    <Td>{row.dospem.name}</Td>
+                    <Td>
+                      <Flex>
+                        <ButtonBoxDetailRencanaKegiatan />
+                      </Flex>
+                    </Td>
+                  </Tr>
+                );
+              }
+            } else {
+              if (row.dospem_id === id || row.dpl_id === id) {
+                return (
+                  <Tr
+                    key={index}
+                    bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                    color="black"
+                  >
+                    <Td>{(no += 1)}</Td>
+                    <Td>{row.mahasiswa.name}</Td>
+                    <Td>{row.mahasiswa.nim}</Td>
+                    <Td>{row.dospem.name}</Td>
+                    <Td>
+                      <Flex>
+                        <ButtonBoxDetailRencanaKegiatan />
+                      </Flex>
+                    </Td>
+                  </Tr>
+                );
+              }
+            }
+            return null;
+          })}
         </Tbody>
       </Table>
       <Box>

@@ -60,7 +60,6 @@ import { useCookies } from "react-cookie";
 
 function Dashboard() {
   const [data1, setData1] = useState(null);
-  const [data2, setData2] = useState(null);
   const [cookies] = useCookies(["name"]);
 
   useEffect(() => {
@@ -74,17 +73,7 @@ function Dashboard() {
         );
         const updatedData1 = response1.data;
         setData1(updatedData1);
-        console.log(updatedData1)
-
-        const response2 = await axios.get(
-          "http://127.0.0.1:8000/api/user/pkl/data",
-          {
-            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
-          }
-        );
-        const updatedData2 = response2.data.body[0];
-        setData2(updatedData2);
-        console.log(updatedData2);
+        console.log(updatedData1);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -183,6 +172,36 @@ function ProfileChange() {
 }
 
 function RencanaKegiatan() {
+  const [data1, setData1] = useState(null);
+  const [cookies] = useCookies(["name"]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response1 = await axios.get(
+          "http://127.0.0.1:8000/api/user/profile",
+          {
+            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+          }
+        );
+        const updatedData1 = response1.data;
+        setData1(updatedData1);
+        console.log(updatedData1);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [cookies.jwt_token.data]);
+
+  if (data1 === null) {
+    return (
+      <Center marginTop={100}>
+        <img src="74ed.gif" alt="loading..." />
+      </Center>
+    );
+  }
   return (
     <Box
       height={"100vh"}
@@ -199,7 +218,7 @@ function RencanaKegiatan() {
         <Spacer />
         <BreadcrumbRencanaKegiatan />
       </Flex>
-      <RencanaKegiatanBox />
+      <RencanaKegiatanBox roles_id={data1.roles_id} id={data1.id}/>
     </Box>
   );
 }

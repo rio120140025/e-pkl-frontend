@@ -6,25 +6,9 @@ import TableRencanaKegiatanDetailMahasiswa from "../components/table-rencana-keg
 import TableRencanaKegiatanDetailDosen from "../components/table-rencana-kegiatan-detail-dosen";
 import TableRencanaKegiatanDetailDPL from "../components/table-rencana-kegiatan-detail-dpl";
 
-function RencanaKegiatanBox() {
-  const boxRef = useRef(null);
-
-  useEffect(() => {
-    const updateBoxHeight = () => {
-      const { height } = boxRef.current.getBoundingClientRect();
-      boxRef.current.style.height = `${height + 25}px`;
-    };
-
-    window.addEventListener("resize", updateBoxHeight);
-    updateBoxHeight();
-
-    return () => {
-      window.removeEventListener("resize", updateBoxHeight);
-    };
-  }, []);
+function RencanaKegiatanBox({roles_id, id}) {
   return (
     <Box
-      ref={boxRef}
       position="absolute"
       marginTop="46px"
       left="78px"
@@ -34,30 +18,14 @@ function RencanaKegiatanBox() {
       width="1375px"
       fontSize="15px"
     >
-      <TableRencanaKegiatan />
+      <TableRencanaKegiatan roles_id={roles_id} id={id}/>
     </Box>
   );
 }
 
 function RencanaKegiatanBoxDetailMahasiswa() {
-  const boxRef = useRef(null);
-
-  useEffect(() => {
-    const updateBoxHeight = () => {
-      const { height } = boxRef.current.getBoundingClientRect();
-      boxRef.current.style.height = `${height + 25}px`;
-    };
-
-    window.addEventListener("resize", updateBoxHeight);
-    updateBoxHeight();
-
-    return () => {
-      window.removeEventListener("resize", updateBoxHeight);
-    };
-  }, []);
   return (
     <Box
-      ref={boxRef}
       position="absolute"
       marginTop="46px"
       left="78px"
