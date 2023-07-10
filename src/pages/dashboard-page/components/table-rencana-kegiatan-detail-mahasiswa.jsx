@@ -32,22 +32,25 @@ import { ReactComponent as BackButton } from "../../../assets/button-back.svg";
 import { ReactComponent as EditButton } from "../../../assets/button-edit.svg";
 import { ReactComponent as DeleteButton } from "../../../assets/button-delete.svg";
 import { useCookies } from "react-cookie";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import {
   ButtonBoxTambahRencana,
   ButtonBoxSimpanRencanaKegiatan,
+  EditFunction,
+  ButtonBoxVerifikasi,
+  ButtonBoxTolak,
 } from "./button-box";
-import {TableEdit} from "./table-edit";
+import { TableEdit } from "./table-edit";
 
-const TableRencanaKegiatanDetailMahasiswa = () => {
+const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
-  const [cookies] = useCookies(["name"]);
+  const [cookies] = useCookies(["jwt_token"]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -127,11 +130,60 @@ const TableRencanaKegiatanDetailMahasiswa = () => {
     onOpenDelete();
   };
 
-  const handleConfirmDelete = () => {
-    const updatedData = [...data];
-    updatedData.splice(indexOfFirstRow + deleteIndex, 1);
-    setData(updatedData);
-    onCloseDelete();
+  const handleConfirmDelete = (e) => {
+    e.preventDefault();
+    axios
+      .post(
+        `http://127.0.0.1:8000/api/user/kegiatan/hapus/${deleteIndex}`,
+        null,
+        {
+          headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+        }
+      )
+      .then(() => {
+        onCloseDelete();
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const valueId = params.get("valueid");
+  const valueRolesId = params.get("valuerolesid");
+
+  const getStatusTextAndColor = (value) => {
+    let statusText = "";
+    let statusColor = "";
+
+    switch (value) {
+      case 1:
+        statusText = "Belum Diverifikasi";
+        statusColor = "#93BFCF";
+        break;
+      case 2:
+        statusText = "Diverifikasi";
+        statusColor = "#20B95D";
+        break;
+      case 3:
+        statusText = "Ditolak";
+        statusColor = "#FF0000";
+        break;
+    }
+
+    return { statusText, statusColor };
+  };
+
+  const renderStatus = (value) => {
+    const { statusText, statusColor } = getStatusTextAndColor(value);
+
+    const statusStyle = {
+      color: statusColor,
+    };
+
+    return <div style={statusStyle}>{statusText}</div>;
   };
 
   return (
@@ -147,106 +199,282 @@ const TableRencanaKegiatanDetailMahasiswa = () => {
       <Link position="relative" marginTop={3} to="/rencana-kegiatan">
         <BackButton />
       </Link>
-      <HStack marginLeft={665} spacing={19}>
-        <InputGroup
-          top="12px"
-          marginBottom={2}
-          backgroundColor="#fff"
-          width="418px"
-          fontSize="14px"
-          color="#a1a9b8"
-        >
-          <InputLeftElement>
-            <SearchIcon />
-          </InputLeftElement>
-          <Input
-            type="text"
-            placeholder="Search..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </InputGroup>
-        <ButtonBoxTambahRencana />
-      </HStack>
+      {parseInt(valueRolesId) === 1 && (
+        <HStack marginLeft={665} spacing={19}>
+          <InputGroup
+            top="12px"
+            marginBottom={2}
+            backgroundColor="#fff"
+            width="418px"
+            fontSize="14px"
+            color="#a1a9b8"
+          >
+            <InputLeftElement>
+              <SearchIcon />
+            </InputLeftElement>
+            <Input
+              type="text"
+              placeholder="Search..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </InputGroup>
+
+          <ButtonBoxTambahRencana id={parseInt(valueId)} />
+        </HStack>
+      )}
+      {parseInt(valueRolesId) === 2 || parseInt(valueRolesId) === 3 && (
+      <InputGroup
+        top="12px"
+        marginLeft={875}
+        marginBottom={2}
+        backgroundColor="#fff"
+        width="418px"
+        fontSize="14px"
+        color="#a1a9b8"
+      >
+        <InputLeftElement>
+          <SearchIcon />
+        </InputLeftElement>
+        <Input
+          type="text"
+          placeholder="Search..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </InputGroup>
+      )}
       <Table variant="striped" top="1384px" left="0" width="1314px">
         <Thead>
-          <Tr>
-            <Th>
-              No
-            </Th>
-            <Th>
-              Capaian{" "}
-              <Button
-                variant="link"
-                onClick={() => {
-                  setSortKey("capaian");
-                  toggleSortOrder();
-                }}
-              >
-                <SortButton />
-              </Button>
-            </Th>
-            <Th>
-              Sub Capaian{" "}
-              <Button
-                variant="link"
-                onClick={() => {
-                  setSortKey("sub_capaian");
-                  toggleSortOrder();
-                }}
-              >
-                <SortButton />
-              </Button>
-            </Th>
-            <Th>
-              Jumlah Jam{" "}
-              <Button
-                variant="link"
-                onClick={() => {
-                  setSortKey("jam");
-                  toggleSortOrder();
-                }}
-              >
-                <SortButton />
-              </Button>
-            </Th>
-            <Th>
-              Status{" "}
-              <Button
-                variant="link"
-                onClick={() => {
-                  setSortKey("status");
-                  toggleSortOrder();
-                }}
-              >
-                <SortButton />
-              </Button>
-            </Th>
-            <Th colSpan={2} textAlign={"center"}>
-              Aksi
-            </Th>
-          </Tr>
+          {parseInt(valueRolesId) === 1 && (
+            <Tr>
+              <Th>No</Th>
+              <Th>
+                Capaian{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("capaian");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th>
+                Sub Capaian{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("sub_capaian");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th>
+                Jumlah Jam{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("jam");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th>
+                Status{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("status");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th colSpan={2} textAlign={"center"}>
+                Aksi
+              </Th>
+            </Tr>
+          )}
+          {parseInt(valueRolesId) === 2 && (
+            <Tr>
+              <Th>No</Th>
+              <Th>
+                Capaian{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("capaian");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th>
+                Sub Capaian{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("sub_capaian");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th>
+                Jumlah Jam{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("jam");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th colSpan={2} textAlign={"center"}>
+                Aksi
+              </Th>
+            </Tr>
+          )}
+          {parseInt(valueRolesId) === 3 && (
+            <Tr>
+              <Th>No</Th>
+              <Th>
+                Capaian{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("capaian");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th>
+                Sub Capaian{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("sub_capaian");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th>
+                Jumlah Jam{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("jam");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th>
+                Status{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("status");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+            </Tr>
+          )}
         </Thead>
         <Tbody>
-          {currentRows.map((row, index) => (
-            <Tr
-              key={index}
-              bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
-              color="black"
-            >
-              <Td>{(no =+ 1)}</Td>
-              <Td>{row.capaian}</Td>
-              <Td>{row.sub_capaian}</Td>
-              <Td>{row.jam}</Td>
-              <Td>{row.status}</Td>
-              <Td>
-                <EditButton onClick={onOpenEdit} />
-              </Td>
-              <Td>
-                <DeleteButton onClick={() => handleDeleteRow(index)} />
-              </Td>
-            </Tr>
-          ))}
+          {currentRows.map((row, index) => {
+            if (parseInt(valueRolesId) === 1) {
+              if (row.pkl_id === parseInt(valueId)) {
+                return (
+                  <Tr
+                    key={index}
+                    bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                    color="black"
+                  >
+                    <Td>{(no += 1)}</Td>
+                    <Td>{row.capaian}</Td>
+                    <Td>{row.sub_capaian}</Td>
+                    <Td>{row.jam}</Td>
+                    <Td>{renderStatus(parseInt(row.status))}</Td>
+                    <Td>
+                      <EditFunction id={row.id} pkl_id={row.pkl_id} />
+                    </Td>
+                    <Td>
+                      <DeleteButton onClick={() => handleDeleteRow(row.id)} />
+                    </Td>
+                  </Tr>
+                );
+              }
+            } else if (parseInt(valueRolesId) === 2) {
+              if (row.pkl_id === parseInt(valueId)) {
+                return (
+                  <Tr
+                    key={index}
+                    bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                    color="black"
+                  >
+                    <Td>{(no += 1)}</Td>
+                    <Td>{row.capaian}</Td>
+                    <Td>{row.sub_capaian}</Td>
+                    <Td>{row.jam}</Td>
+                    <Td>
+                      <ButtonBoxVerifikasi
+                        id={row.id}
+                        capaian={row.capaian}
+                        sub_capaian={row.sub_capaian}
+                        jam={row.jam}
+                        pkl_id={row.jam}
+                      />
+                    </Td>
+                    <Td>
+                      <ButtonBoxTolak
+                        id={row.id}
+                        capaian={row.capaian}
+                        sub_capaian={row.sub_capaian}
+                        jam={row.jam}
+                        pkl_id={row.jam}
+                      />
+                    </Td>
+                  </Tr>
+                );
+              }
+            } else if (parseInt(valueRolesId) === 3) {
+              if (row.pkl_id === parseInt(valueId)) {
+                return (
+                  <Tr
+                    key={index}
+                    bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                    color="black"
+                  >
+                    <Td>{(no += 1)}</Td>
+                    <Td>{row.capaian}</Td>
+                    <Td>{row.sub_capaian}</Td>
+                    <Td>{row.jam}</Td>
+                    <Td>{renderStatus(parseInt(row.status))}</Td>
+                  </Tr>
+                );
+              }
+            }
+          })}
         </Tbody>
       </Table>
       <Modal isOpen={isOpenDelete} onClose={onCloseDelete}>
@@ -278,18 +506,6 @@ const TableRencanaKegiatanDetailMahasiswa = () => {
               </HStack>
             </ModalFooter>
           </Center>
-        </ModalContent>
-      </Modal>
-      <Modal isOpen={isOpenEdit} onClose={onCloseEdit} size={"1"}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalBody>
-            <ModalCloseButton color={"#BDCDD6"} />
-            <TableEdit />
-          </ModalBody>
-          <ModalFooter>
-            <ButtonBoxSimpanRencanaKegiatan />
-          </ModalFooter>
         </ModalContent>
       </Modal>
       <Box>

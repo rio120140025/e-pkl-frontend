@@ -2,10 +2,9 @@ import React from "react";
 import { Box, SimpleGrid, Text } from "@chakra-ui/react";
 
 import { ButtonBoxDownload } from "../components/button-box";
-import TableDashboardMahasiswa from "../components/table-dashboard-mahasiswa";
 import TableDashboard from "../components/table-dashboard";
 
-function DashboardBoxMahasiswa() {
+function DashboardBoxMahasiswa({id}) {
   return (
     <Box
       position="absolute"
@@ -35,7 +34,7 @@ function DashboardBoxMahasiswa() {
         >
           Mahasiswa Bimbingan PKL
         </Text>
-        <TableDashboardMahasiswa />
+        <TableDashboard user_id={id}/>
       </SimpleGrid>
     </Box>
   );

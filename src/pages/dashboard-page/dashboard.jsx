@@ -105,7 +105,7 @@ function Dashboard() {
           <Header page="1" />
           <DashboardLogo />
           <HaloUser name={data1.name} />
-          <DashboardBoxMahasiswa />
+          <DashboardBoxMahasiswa id={data1.id} />
         </Box>
       ) : (
         <Box
@@ -218,7 +218,7 @@ function RencanaKegiatan() {
         <Spacer />
         <BreadcrumbRencanaKegiatan />
       </Flex>
-      <RencanaKegiatanBox roles_id={data1.roles_id} id={data1.id}/>
+      <RencanaKegiatanBox roles_id={data1.roles_id} id={data1.id} />
     </Box>
   );
 }
@@ -240,7 +240,7 @@ function RencanaKegiatanDetail() {
         <Spacer />
         <BreadcrumbRencanaKegiatanDetail />
       </Flex>
-      <RencanaKegiatanBoxDetailMahasiswa />
+      <RencanaKegiatanBoxDetailMahasiswa/>
     </Box>
   );
 }

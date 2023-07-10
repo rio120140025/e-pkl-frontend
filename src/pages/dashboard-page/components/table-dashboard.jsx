@@ -187,7 +187,7 @@ const TableDashboard = ({ user_id }) => {
         </Thead>
         <Tbody>
           {currentRows.map((row, index) => {
-            if (row.dospem_id === user_id || row.dpl_id === user_id) {
+            if (row.mahasiswa_id == user_id) {
               return (
                 <Tr
                   key={index}
@@ -202,6 +202,23 @@ const TableDashboard = ({ user_id }) => {
                   <Td>{row.mahasiswa.lokasi}</Td>
                 </Tr>
               );
+            } else {
+              if (row.dospem_id === user_id || row.dpl_id === user_id) {
+                return (
+                  <Tr
+                    key={index}
+                    bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                    color="black"
+                  >
+                    <Td>{(no += 1)}</Td>
+                    <Td>{row.mahasiswa.name}</Td>
+                    <Td>{row.mahasiswa.nim}</Td>
+                    <Td>{row.dospem.name}</Td>
+                    <Td>{row.dpl.name}</Td>
+                    <Td>{row.mahasiswa.lokasi}</Td>
+                  </Tr>
+                );
+              }
             }
             return null;
           })}

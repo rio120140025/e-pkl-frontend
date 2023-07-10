@@ -21,26 +21,26 @@ import { ReactComponent as SortButton } from "../../../assets/button-sort.svg";
 import { ReactComponent as SearchIcon } from "../../../assets/icon-search.svg";
 import { useCookies } from "react-cookie";
 
-const TableDashboardMahasiswa = () => {
+const TableDashboardMahasiswa = ({id}) => {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [cookies] = useCookies(["name"]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/user/profile",
+          "http://127.0.0.1:8000/api/user/pkl/data",
           {
             headers: { Authorization: "Bearer " + cookies.jwt_token.data },
           }
         );
-        const updatedData = response.data;
-        setData([updatedData]);
+        const updatedData = response.data.body;
+        setData(updatedData);
         console.log(updatedData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -50,16 +50,20 @@ const TableDashboardMahasiswa = () => {
     fetchData();
   }, []);
 
-  const filteredData = Array.isArray(data)
-    ? data.filter((item) =>
-        item.name.toLowerCase().includes(search.toLowerCase())
-      )
-    : [];
+  const filteredData = data.filter((item) =>
+    item.mahasiswa.name.toLowerCase().includes(search.toLowerCase())
+  );
 
-  const sortedData = filteredData.sort((a, b) => {
+  const sortedData = filteredData.slice().sort((a, b) => {
     if (sortKey === "") return 0;
-    const valA = a[sortKey];
-    const valB = b[sortKey];
+    const valA = a[sortKey] ? a[sortKey].toUpperCase() : "";
+    const valB = b[sortKey] ? b[sortKey].toUpperCase() : "";
+
+    if (valA === "" || valB === "") {
+      if (valA === "") return sortOrder === "asc" ? 1 : -1;
+      if (valB === "") return sortOrder === "asc" ? -1 : 1;
+    }
+
     if (valA < valB) return sortOrder === "asc" ? -1 : 1;
     if (valA > valB) return sortOrder === "asc" ? 1 : -1;
     return 0;
@@ -180,20 +184,22 @@ const TableDashboardMahasiswa = () => {
         </Thead>
         <Tbody>
           {currentRows.map((row, index) => {
-            return (
-              <Tr
-                key={index}
-                bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
-                color="black"
-              >
-                <Td>{(no += 1)}</Td>
-                <Td>{row.name}</Td>
-                <Td>{row.nim}</Td>
-                <Td>{row.dosenPembimbing}</Td>
-                <Td>{row.dosenPembimbingLapangan}</Td>
-                <Td>{row.lokasi}</Td>
-              </Tr>
-            );
+            if (row.mahasiswa_id == id) {
+              return (
+                <Tr
+                  key={index}
+                  bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                  color="black"
+                >
+                  <Td>{(no += 1)}</Td>
+                  <Td>{row.name}</Td>
+                  <Td>{row.nim}</Td>
+                  <Td>{row.dosenPembimbing}</Td>
+                  <Td>{row.dosenPembimbingLapangan}</Td>
+                  <Td>{row.lokasi}</Td>
+                </Tr>
+              );
+            }
           })}
         </Tbody>
       </Table>

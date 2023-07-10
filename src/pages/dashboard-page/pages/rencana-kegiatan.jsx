@@ -6,7 +6,7 @@ import TableRencanaKegiatanDetailMahasiswa from "../components/table-rencana-keg
 import TableRencanaKegiatanDetailDosen from "../components/table-rencana-kegiatan-detail-dosen";
 import TableRencanaKegiatanDetailDPL from "../components/table-rencana-kegiatan-detail-dpl";
 
-function RencanaKegiatanBox({roles_id, id}) {
+function RencanaKegiatanBox({ roles_id, id }) {
   return (
     <Box
       position="absolute"
@@ -18,7 +18,7 @@ function RencanaKegiatanBox({roles_id, id}) {
       width="1375px"
       fontSize="15px"
     >
-      <TableRencanaKegiatan roles_id={roles_id} id={id}/>
+      <TableRencanaKegiatan roles_id={roles_id} id={id} />
     </Box>
   );
 }
@@ -35,7 +35,7 @@ function RencanaKegiatanBoxDetailMahasiswa() {
       width="1375px"
       fontSize="15px"
     >
-      <TableRencanaKegiatanDetailMahasiswa />
+      <TableRencanaKegiatanDetailMahasiswa/>
     </Box>
   );
 }
@@ -106,4 +106,9 @@ function RencanaKegiatanBoxDetailDPL() {
   );
 }
 
-export {RencanaKegiatanBox, RencanaKegiatanBoxDetailMahasiswa, RencanaKegiatanBoxDetailDosen, RencanaKegiatanBoxDetailDPL};
+export {
+  RencanaKegiatanBox,
+  RencanaKegiatanBoxDetailMahasiswa,
+  RencanaKegiatanBoxDetailDosen,
+  RencanaKegiatanBoxDetailDPL,
+};

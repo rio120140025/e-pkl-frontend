@@ -42,7 +42,6 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
         );
         const updatedData = response.data.body;
         setData(updatedData);
-        console.log(updatedData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -179,7 +178,7 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
                     <Td>{row.dospem.name}</Td>
                     <Td>
                       <Flex>
-                        <ButtonBoxDetailRencanaKegiatan />
+                        <ButtonBoxDetailRencanaKegiatan id={row.id} roles_id={roles_id}/>
                       </Flex>
                     </Td>
                   </Tr>
@@ -199,7 +198,7 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
                     <Td>{row.dospem.name}</Td>
                     <Td>
                       <Flex>
-                        <ButtonBoxDetailRencanaKegiatan />
+                        <ButtonBoxDetailRencanaKegiatan id={row.id} roles_id={roles_id}/>
                       </Flex>
                     </Td>
                   </Tr>
