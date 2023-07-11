@@ -143,6 +143,30 @@ function BreadcrumbKehadiran() {
     </Flex>
   );
 }
+
+function BreadcrumbKehadiranDetail() {
+  return (
+    <Flex marginRight={84} marginTop={65}>
+      <Breadcrumb>
+        <BreadcrumbItem>
+          <BreadcrumbLink color={"#6096B4"} href="/dashboard">
+            Dashboard
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+
+        <BreadcrumbItem>
+          <BreadcrumbLink color={"#6096B4"} href="/kehadiran">
+            Kehadiran
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+
+        <BreadcrumbItem isCurrentPage>
+          <BreadcrumbLink href="/kehadiran">Detail</BreadcrumbLink>
+        </BreadcrumbItem>
+      </Breadcrumb>
+    </Flex>
+  );
+}
 function BreadcrumbPenilaian() {
   return (
     <Flex marginRight={84} marginTop={65}>
@@ -186,6 +210,7 @@ export {
   BreadcrumbLogHarian,
   BreadcrumbLogHarianDetail,
   BreadcrumbKehadiran,
+  BreadcrumbKehadiranDetail,
   BreadcrumbPenilaian,
   BreadcrumbKuisioner,
 };

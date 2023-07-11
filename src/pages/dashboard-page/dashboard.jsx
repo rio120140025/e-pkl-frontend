@@ -26,6 +26,7 @@ import {
 } from "./pages/profile-box";
 import {
   BreadcrumbKehadiran,
+  BreadcrumbKehadiranDetail,
   BreadcrumbKuisioner,
   BreadcrumbLogHarian,
   BreadcrumbLogHarianDetail,
@@ -52,6 +53,7 @@ import {
   KehadiranDPL,
   KehadiranDosen,
   KehadiranMahasiswa,
+  DetailKehadiran,
 } from "./pages/kehadiran";
 import KuisionerBox from "./pages/kuisioner";
 import { PenilaianDPL, PenilaianMahasiswaDosen } from "./pages/penilaian";
@@ -240,7 +242,7 @@ function RencanaKegiatanDetail() {
         <Spacer />
         <BreadcrumbRencanaKegiatanDetail />
       </Flex>
-      <RencanaKegiatanBoxDetailMahasiswa/>
+      <RencanaKegiatanBoxDetailMahasiswa />
     </Box>
   );
 }
@@ -290,6 +292,36 @@ function LogHarianDetail() {
 }
 
 function Kehadiran() {
+  const [data1, setData1] = useState(null);
+  const [cookies] = useCookies(["name"]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response1 = await axios.get(
+          "http://127.0.0.1:8000/api/user/profile",
+          {
+            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+          }
+        );
+        const updatedData1 = response1.data;
+        setData1(updatedData1);
+        console.log(updatedData1);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [cookies.jwt_token.data]);
+
+  if (data1 === null) {
+    return (
+      <Center marginTop={100}>
+        <img src="74ed.gif" alt="loading..." />
+      </Center>
+    );
+  }
   return (
     <Box
       height={"100vh"}
@@ -306,7 +338,28 @@ function Kehadiran() {
         <Spacer />
         <BreadcrumbKehadiran />
       </Flex>
-      <KehadiranMahasiswa />
+      <KehadiranMahasiswa roles_id={data1.roles_id} id={data1.id} />
+    </Box>
+  );
+}
+function KehadiranDetail() {
+  return (
+    <Box
+      height={"100vh"}
+      width={"100vw"}
+      w="100%"
+      bgRepeat="no-repeat"
+      backgroundPosition="center"
+      backgroundSize="cover"
+      backgroundColor="#f4f8fa"
+    >
+      <Header page="5" />
+      <Flex>
+        <KehadiranLogo />
+        <Spacer />
+        <BreadcrumbKehadiranDetail />
+      </Flex>
+      <DetailKehadiran />
     </Box>
   );
 }
@@ -364,6 +417,7 @@ export {
   LogHarian,
   LogHarianDetail,
   Kehadiran,
+  KehadiranDetail,
   Penilaian,
   Kuisioner,
 };

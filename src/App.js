@@ -13,6 +13,7 @@ import {
 import {
   Dashboard,
   Kehadiran,
+  KehadiranDetail,
   Kuisioner,
   LogHarian,
   LogHarianDetail,
@@ -58,6 +59,7 @@ function App() {
           <Route exact path="/log-harian/detail" Component={LogHarianDetail} />
 
           <Route exact path="/kehadiran" Component={Kehadiran} />
+          <Route exact path="/kehadiran/detail" Component={KehadiranDetail} />
 
           <Route exact path="/penilaian-pkl" Component={Penilaian} />
 

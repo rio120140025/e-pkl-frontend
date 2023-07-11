@@ -113,6 +113,16 @@ function ButtonBoxDetailRencanaKegiatan({ id, roles_id }) {
     </Link>
   );
 }
+function ButtonBoxDetailKehadiran({ id, roles_id }) {
+  return (
+    <Link
+      className="button-box-table"
+      to={`/kehadiran/detail?valueid=${id}&valuerolesid=${roles_id}`}
+    >
+      Detail
+    </Link>
+  );
+}
 function ButtonBoxDetailLogHarianMahasiswa() {
   return (
     <Link className="button-box-table" to="/log-harian/detail">
@@ -499,6 +509,184 @@ const EditFunction = ({ id, pkl_id }) => {
     </>
   );
 };
+const EditFunctionKehadiran = ({ id, pkl_id }) => {
+  const [kehadiran, setkehadiran] = useState("");
+  const [keterangan, setketerangan] = useState("");
+  const [tanggal, setTanggal] = useState("");
+  const [waktu, setWaktu] = useState("");
+  const [cookies] = useCookies(["jwt_token"]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const tanggalwaktu = `${tanggal} ${waktu}:00`;
+    const data = {
+      kehadiran: kehadiran,
+      keterangan: keterangan,
+      tanggalwaktu: tanggalwaktu,
+      status: 1,
+      pkl_id: pkl_id,
+    };
+    axios
+      .post(`http://127.0.0.1:8000/api/user/kehadiran/update/${id}`, data, {
+        headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+      })
+      .then((response) => {
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/user/kehadiran",
+          {
+            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+          }
+        );
+        const updatedData = response.data.body;
+        setData(updatedData);
+        console.log(updatedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenCancel,
+    onOpen: onOpenCancel,
+    onClose: onCloseCancel,
+  } = useDisclosure();
+  return (
+    <>
+      <EditButton onClick={onOpen}>Tambah Rencana</EditButton>
+      <Modal isOpen={isOpen} onClose={onClose} size={"1"}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader marginLeft={"1450px"}>
+            <CloseButton color={"#BDCDD6"} onClick={onOpenCancel} />
+          </ModalHeader>
+          <ModalBody>
+            <Box
+              marginTop="75px"
+              w={"450"}
+              borderRadius="5"
+              bgColor="#F9FAFC"
+              boxShadow="0 0 0 1px rgba(152, 161, 178, 0.1), 0 1px 4px rgba(69, 75, 87, 0.12), 0 0 2px rgba(0, 0, 0, 0.08)"
+            >
+              <Table variant="striped">
+                <Thead>
+                  <Tr>
+                    <Th>No</Th>
+                    <Th>Tanggal </Th>
+                    <Th>Waktu</Th>
+                    <Th>Kehadiran </Th>
+                    <Th>Keterangan</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {data.map((item) => {
+                    if (item.id === parseInt(id)) {
+                      return (
+                        <Tr color="black">
+                          <Td>
+                            <Input value={1} />
+                          </Td>
+                          <Td>
+                            <Input
+                              type="date"
+                              value={tanggal}
+                              onChange={(e) => setTanggal(e.target.value)}
+                            />
+                          </Td>
+                          <Td>
+                            <Input
+                              type="time"
+                              value={waktu}
+                              onChange={(e) => setWaktu(e.target.value)}
+                            />
+                          </Td>
+                          <Td>
+                            <Select
+                              variant="unstyled"
+                              border="none"
+                              marginBlock={1}
+                              onChange={(e) => setkehadiran(e.target.value)}
+                            >
+                              <option value={1}>Hadir</option>
+                              <option value={2}>Sakit</option>
+                              <option value={3}>Izin</option>
+                              <option value={4}>Tanpa Kehadiran</option>
+                            </Select>
+                          </Td>
+                          <Td>
+                            <Input
+                              type="text"
+                              value={keterangan}
+                              onChange={(e) => setketerangan(e.target.value)}
+                            />
+                          </Td>
+                        </Tr>
+                      );
+                    }
+                  })}
+                </Tbody>
+              </Table>
+            </Box>
+          </ModalBody>
+          <ModalFooter>
+            <button className="button-box-2" onClick={handleSubmit}>
+              Simpan
+            </button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Modal isOpen={isOpenCancel} onClose={onCloseCancel}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalBody mt={10} textAlign={"center"} fontWeight={"bolder"}>
+            <ModalCloseButton color={"#FF0000"} />
+            Apakah yakin menghapus Perubahan?
+          </ModalBody>
+          <Center>
+            <ModalFooter>
+              <HStack spacing={20}>
+                <Button
+                  bgColor={"#20B95D"}
+                  color={"white"}
+                  onClick={() => {
+                    onCloseCancel();
+                    onClose();
+                  }}
+                  w={70}
+                >
+                  Ya
+                </Button>
+                <Button
+                  bgColor={"#FF0000"}
+                  color={"white"}
+                  onClick={onCloseCancel}
+                  w={70}
+                >
+                  Tidak
+                </Button>
+              </HStack>
+            </ModalFooter>
+          </Center>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+};
 function ButtonBoxTambahRencanaLogHarian() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -530,7 +718,37 @@ function ButtonBoxTambahRencanaLogHarian() {
     </>
   );
 }
-function ButtonBoxTambahRencanaKehadiran() {
+function ButtonBoxTambahRencanaKehadiran({ id }) {
+  const [kehadiran, setkehadiran] = useState("");
+  const [keterangan, setketerangan] = useState("");
+  const [tanggal, setTanggal] = useState("");
+  const [waktu, setWaktu] = useState("");
+  const [cookies] = useCookies(["jwt_token"]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const tanggalwaktu = `${tanggal} ${waktu}:00`;
+    const data = {
+      kehadiran: kehadiran,
+      keterangan: keterangan,
+      tanggalwaktu: tanggalwaktu,
+      status: 1,
+      pkl_id: id,
+    };
+    axios
+      .post("http://127.0.0.1:8000/api/user/kehadiran/tambah", data, {
+        headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+      })
+      .then((response) => {
+        window.location.reload();
+        setkehadiran("");
+        setketerangan("");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -544,17 +762,78 @@ function ButtonBoxTambahRencanaKehadiran() {
         marginTop={4}
         onClick={onOpen}
       >
-        Tambah Kehadiran
+        Tambah Rencana
       </Button>
       <Modal isOpen={isOpen} onClose={onClose} size={"1"}>
         <ModalOverlay />
         <ModalContent>
           <ModalBody>
             <ModalCloseButton color={"#BDCDD6"} />
-            <TableEditKehadiran />
+            <Box
+              marginTop="75px"
+              w={"450"}
+              borderRadius="5"
+              bgColor="#F9FAFC"
+              boxShadow="0 0 0 1px rgba(152, 161, 178, 0.1), 0 1px 4px rgba(69, 75, 87, 0.12), 0 0 2px rgba(0, 0, 0, 0.08)"
+            >
+              <Table variant="striped">
+                <Thead>
+                  <Tr>
+                    <Th>No</Th>
+                    <Th>Tanggal </Th>
+                    <Th>Waktu</Th>
+                    <Th>Kehadiran </Th>
+                    <Th>Keterangan</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  <Tr color="black">
+                    <Td>
+                      <Input />
+                    </Td>
+                    <Td>
+                      <Input
+                        type="date"
+                        value={tanggal}
+                        onChange={(e) => setTanggal(e.target.value)}
+                      />
+                    </Td>
+                    <Td>
+                      <Input
+                        type="time"
+                        value={waktu}
+                        onChange={(e) => setWaktu(e.target.value)}
+                      />
+                    </Td>
+                    <Td>
+                      <Select
+                        variant="unstyled"
+                        border="none"
+                        marginBlock={1}
+                        onChange={(e) => setkehadiran(e.target.value)}
+                      >
+                        <option value={1}>Hadir</option>
+                        <option value={2}>Sakit</option>
+                        <option value={3}>Izin</option>
+                        <option value={4}>Tanpa Kehadiran</option>
+                      </Select>
+                    </Td>
+                    <Td>
+                      <Input
+                        type="text"
+                        value={keterangan}
+                        onChange={(e) => setketerangan(e.target.value)}
+                      />
+                    </Td>
+                  </Tr>
+                </Tbody>
+              </Table>
+            </Box>
           </ModalBody>
           <ModalFooter>
-            <ButtonBoxSimpanLogHarian />
+            <button className="button-box-2" onClick={handleSubmit}>
+              Simpan
+            </button>
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -636,6 +915,86 @@ function ButtonBoxTolak({ id, capaian, sub_capaian, jam, pkl_id }) {
   );
 }
 
+function ButtonBoxVerifikasi2({
+  id,
+  pkl_id,
+  tanggalwaktu,
+  kehadiran,
+  keterangan,
+}) {
+  const [cookies] = useCookies(["jwt_token"]);
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    const data = {
+      pkl_id: pkl_id,
+      tanggalwaktu: tanggalwaktu,
+      kehadiran: kehadiran,
+      status: "2",
+      keterangan: keterangan,
+    };
+    axios
+      .post(`http://127.0.0.1:8000/api/user/kehadiran/update/${id}`, data, {
+        headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  return (
+    <Button
+      variant="solid"
+      w="81px"
+      height="26px"
+      bgColor="#C7F1D8"
+      color="#20B95D"
+      fontWeight={"bold"}
+      _hover={{ background: "#20B95D", color: "#18753D" }}
+      onClick={handleClick}
+    >
+      Verifikasi
+    </Button>
+  );
+}
+
+function ButtonBoxTolak2({ id, pkl_id, tanggalwaktu, kehadiran, keterangan }) {
+  const [cookies] = useCookies(["jwt_token"]);
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    const data = {
+      pkl_id: pkl_id,
+      tanggalwaktu: tanggalwaktu,
+      kehadiran: kehadiran,
+      status: "3",
+      keterangan: keterangan,
+    };
+    axios
+      .post(`http://127.0.0.1:8000/api/user/kehadiran/update/${id}`, data, {
+        headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  return (
+    <Button
+      variant="solid"
+      w="81px"
+      h="26px"
+      bgColor="#FFECEC"
+      color="#FF0000"
+      fontWeight={"bold"}
+      _hover={{ background: "#FF5B5B", color: "#7B2121" }}
+      onClick={handleClick}
+    >
+      Tolak
+    </Button>
+  );
+}
+
 export {
   ButtonBoxDownload,
   ButtonBoxKirim,
@@ -644,6 +1003,7 @@ export {
   ButtonBoxSimpanRencanaKegiatan,
   ButtonBoxSimpanLogHarian,
   ButtonBoxDetailRencanaKegiatan,
+  ButtonBoxDetailKehadiran,
   ButtonBoxDetailLogHarianMahasiswa,
   ButtonBoxDetailLogHarianMahasiswaDosenDetail,
   ButtonBoxDetailLogHarianDPLDetail,
@@ -653,6 +1013,9 @@ export {
   ButtonBoxTambahRencanaKehadiran,
   ButtonBoxVerifikasi,
   ButtonBoxTolak,
+  ButtonBoxVerifikasi2,
+  ButtonBoxTolak2,
   ButtonBoxExport,
   EditFunction,
+  EditFunctionKehadiran,
 };

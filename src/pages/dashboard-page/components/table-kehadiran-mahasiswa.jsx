@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Input,
@@ -32,106 +32,59 @@ import { ReactComponent as DeleteButton } from "../../../assets/button-delete.sv
 import {
   ButtonBoxSimpanLogHarian,
   ButtonBoxTambahRencanaKehadiran,
+  ButtonBoxTolak2,
+  ButtonBoxVerifikasi2,
+  EditFunctionKehadiran,
 } from "./button-box";
 import { TableEditKehadiran } from "./table-edit";
+import { useCookies } from "react-cookie";
 
-const TableKehadiranMahasiswa = () => {
+import axios from "axios";
+import { useLocation } from "react-router";
+
+const TableKehadiranMahasiswa = ({ id, roles_id }) => {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState([
-      {
-        no: "1",
-        tanggal: "2023-07-01",
-        waktu: "09:00",
-        kehadiran: "Hadir",
-        keterangan: "Meeting",
-        status: "Selesai",
-      },
-      {
-        no: "2",
-        tanggal: "2023-07-02",
-        waktu: "14:30",
-        kehadiran: "Hadir",
-        keterangan: "Presentasi",
-        status: "Belum Selesai",
-      },
-      {
-        no: "3",
-        tanggal: "2023-07-03",
-        waktu: "10:15",
-        kehadiran: "Tidak Hadir",
-        keterangan: "Cuti",
-        status: "Batal",
-      },
-      {
-        no: "4",
-        tanggal: "2023-07-04",
-        waktu: "11:45",
-        kehadiran: "Hadir",
-        keterangan: "Diskusi",
-        status: "Selesai",
-      },
-      {
-        no: "5",
-        tanggal: "2023-07-05",
-        waktu: "08:30",
-        kehadiran: "Hadir",
-        keterangan: "Pelatihan",
-        status: "Selesai",
-      },
-      {
-        no: "6",
-        tanggal: "2023-07-06",
-        waktu: "13:00",
-        kehadiran: "Hadir",
-        keterangan: "Rapat Proyek",
-        status: "Belum Selesai",
-      },
-      {
-        no: "7",
-        tanggal: "2023-07-07",
-        waktu: "16:45",
-        kehadiran: "Tidak Hadir",
-        keterangan: "Sakit",
-        status: "Batal",
-      },
-      {
-        no: "8",
-        tanggal: "2023-07-08",
-        waktu: "10:30",
-        kehadiran: "Hadir",
-        keterangan: "Presentasi",
-        status: "Selesai",
-      },
-      {
-        no: "9",
-        tanggal: "2023-07-09",
-        waktu: "09:15",
-        kehadiran: "Hadir",
-        keterangan: "Diskusi",
-        status: "Selesai",
-      },
-      {
-        no: "10",
-        tanggal: "2023-07-10",
-        waktu: "14:00",
-        kehadiran: "Hadir",
-        keterangan: "Rapat Tim",
-        status: "Belum Selesai",
-      },    
-  ]);
+  const [data, setData] = useState([]);
+  const [cookies] = useCookies(["jwt_token"]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/user/kehadiran",
+          {
+            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+          }
+        );
+        const updatedData = response.data.body;
+        setData(updatedData);
+        console.log(updatedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const filteredData = data.filter((item) =>
-    item.waktu.toLowerCase().includes(search.toLowerCase())
+    item.keterangan.toLowerCase().includes(search.toLowerCase())
   );
 
-  const sortedData = filteredData.sort((a, b) => {
+  const sortedData = filteredData.slice().sort((a, b) => {
     if (sortKey === "") return 0;
-    const valA = a[sortKey].toUpperCase();
-    const valB = b[sortKey].toUpperCase();
+    const valA = a[sortKey] ? a[sortKey].toUpperCase() : "";
+    const valB = b[sortKey] ? b[sortKey].toUpperCase() : "";
+
+    if (valA === "" || valB === "") {
+      if (valA === "") return sortOrder === "asc" ? 1 : -1;
+      if (valB === "") return sortOrder === "asc" ? -1 : 1;
+    }
+
     if (valA < valB) return sortOrder === "asc" ? -1 : 1;
     if (valA > valB) return sortOrder === "asc" ? 1 : -1;
     return 0;
@@ -152,6 +105,7 @@ const TableKehadiranMahasiswa = () => {
   const totalRows = sortedData.length;
   const firstRow = indexOfFirstRow + 1;
   const lastRow = Math.min(indexOfLastRow, totalRows);
+  let no = 0;
 
   const {
     isOpen: isOpenDelete,
@@ -171,144 +125,428 @@ const TableKehadiranMahasiswa = () => {
     onOpenDelete();
   };
 
-  const handleConfirmDelete = () => {
-    const updatedData = [...data];
-    updatedData.splice(indexOfFirstRow + deleteIndex, 1);
-    setData(updatedData);
-    onCloseDelete();
+  const handleConfirmDelete = (e) => {
+    e.preventDefault();
+    axios
+      .post(
+        `http://127.0.0.1:8000/api/user/kehadiran/delete/${deleteIndex}`,
+        null,
+        {
+          headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+        }
+      )
+      .then(() => {
+        onCloseDelete();
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+
+  const getStatusTextAndColor = (value) => {
+    let statusText = "";
+    let statusColor = "";
+
+    switch (value) {
+      case 1:
+        statusText = "Belum Diverifikasi";
+        statusColor = "#93BFCF";
+        break;
+      case 2:
+        statusText = "Diverifikasi";
+        statusColor = "#20B95D";
+        break;
+      case 3:
+        statusText = "Ditolak";
+        statusColor = "#FF0000";
+        break;
+    }
+
+    return { statusText, statusColor };
+  };
+
+  const renderStatus = (value) => {
+    const { statusText, statusColor } = getStatusTextAndColor(value);
+
+    const statusStyle = {
+      color: statusColor,
+    };
+
+    return <div style={statusStyle}>{statusText}</div>;
+  };
+
+  const getStatusText = (value) => {
+    let statusText = "";
+
+    switch (value) {
+      case 1:
+        statusText = "Hadir";
+        break;
+      case 2:
+        statusText = "Sakit";
+        break;
+      case 3:
+        statusText = "Izin";
+        break;
+      case 4:
+        statusText = "Tanpa Kehadiran";
+        break;
+    }
+
+    return { statusText };
+  };
+
+  const renderStatusKehadiran = (value) => {
+    const { statusText } = getStatusText(value);
+
+    return <div>{statusText}</div>;
+  };
+
+  const getTimeAndDate = (datetime) => {
+    const [date, time] = datetime.split(" ");
+  };
+
+  useEffect(() => {
+    if (data.length > 0) {
+      data.forEach((entry) => {
+        if (entry.tanggalwaktu) {
+          getTimeAndDate(entry.tanggalwaktu);
+        }
+      });
+    }
+  }, [data]);
+
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const valueId = params.get("valueid");
+  const valueRolesId = params.get("valuerolesid");
 
   return (
     <Box
       marginTop="28.86px"
       marginLeft="30.5px"
+      marginBottom={15}
       w={1314}
       borderRadius="5"
       bgColor="#F9FAFC"
       boxShadow="0 0 0 1px rgba(152, 161, 178, 0.1), 0 1px 4px rgba(69, 75, 87, 0.12), 0 0 2px rgba(0, 0, 0, 0.08)"
     >
-      <HStack marginLeft={665} spacing={19}>
-        <InputGroup
-          top="12px"
-          marginBottom={2}
-          backgroundColor="#fff"
-          width="418px"
-          fontSize="14px"
-          color="#a1a9b8"
-        >
-          <InputLeftElement>
-            <SearchIcon />
-          </InputLeftElement>
-          <Input
-            type="text"
-            placeholder="Search..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </InputGroup>
-        <ButtonBoxTambahRencanaKehadiran />
-      </HStack>
+      {parseInt(roles_id) === 1 && (
+        <HStack marginLeft={665} spacing={19}>
+          <InputGroup
+            top="12px"
+            marginBottom={2}
+            backgroundColor="#fff"
+            width="418px"
+            fontSize="14px"
+            color="#a1a9b8"
+          >
+            <InputLeftElement>
+              <SearchIcon />
+            </InputLeftElement>
+            <Input
+              type="text"
+              placeholder="Search..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </InputGroup>
+          <ButtonBoxTambahRencanaKehadiran id={parseInt(id)} />
+        </HStack>
+      )}
+      {parseInt(valueRolesId) === 2 ||
+        (parseInt(valueRolesId) === 3 && (
+          <InputGroup
+            top="12px"
+            marginLeft={875}
+            marginBottom={2}
+            backgroundColor="#fff"
+            width="418px"
+            fontSize="14px"
+            color="#a1a9b8"
+          >
+            <InputLeftElement>
+              <SearchIcon />
+            </InputLeftElement>
+            <Input
+              type="text"
+              placeholder="Search..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </InputGroup>
+        ))}
       <Table variant="striped" top="1384px" left="0" width="1314px">
         <Thead>
-          <Tr>
-            <Th>
-              No
-              <Button
-                variant="link"
-                onClick={() => {
-                  setSortKey("no");
-                  toggleSortOrder();
-                }}
-              >
-                <SortButton />
-              </Button>
-            </Th>
-            <Th>
-              Tanggal{" "}
-              <Button
-                variant="link"
-                onClick={() => {
-                  setSortKey("tanggal");
-                  toggleSortOrder();
-                }}
-              >
-                <SortButton />
-              </Button>
-            </Th>
-            <Th>
-              Waktu{" "}
-              <Button
-                variant="link"
-                onClick={() => {
-                  setSortKey("waktu");
-                  toggleSortOrder();
-                }}
-              >
-                <SortButton />
-              </Button>
-            </Th>
-            <Th>
-              Kehadiran{" "}
-              <Button
-                variant="link"
-                onClick={() => {
-                  setSortKey("kehadiran");
-                  toggleSortOrder();
-                }}
-              >
-                <SortButton />
-              </Button>
-            </Th>
-            <Th>
-              Keterangan{" "}
-              <Button
-                variant="link"
-                onClick={() => {
-                  setSortKey("Keterangan");
-                  toggleSortOrder();
-                }}
-              >
-                <SortButton />
-              </Button>
-            </Th>
-            <Th>
-              Status{" "}
-              <Button
-                variant="link"
-                onClick={() => {
-                  setSortKey("status");
-                  toggleSortOrder();
-                }}
-              >
-                <SortButton />
-              </Button>
-            </Th>
-            <Th colSpan={4} textAlign={"center"}>
-              Aksi
-            </Th>
-          </Tr>
+          {parseInt(roles_id) === 1 && (
+            <Tr>
+              <Th>No</Th>
+              <Th>
+                Tanggal{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("tanggalwaktu");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th>
+                Waktu{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("tanggalwaktu");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th>
+                Kehadiran{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("kehadiran");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th>
+                Keterangan{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("Keterangan");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th>
+                Status{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("status");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th colSpan={4} textAlign={"center"}>
+                Aksi
+              </Th>
+            </Tr>
+          )}
+          {parseInt(valueRolesId) === 2 && (
+            <Tr>
+              <Th>No</Th>
+              <Th>
+                Tanggal{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("tanggalwaktu");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th>
+                Waktu{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("tanggalwaktu");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th>
+                Kehadiran{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("kehadiran");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th>
+                Keterangan{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("Keterangan");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th>
+                Status{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("status");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+            </Tr>
+          )}
+          {parseInt(valueRolesId) === 3 && (
+            <Tr>
+              <Th>No</Th>
+              <Th>
+                Tanggal{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("tanggalwaktu");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th>
+                Waktu{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("tanggalwaktu");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th>
+                Kehadiran{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("kehadiran");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th>
+                Keterangan{" "}
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSortKey("Keterangan");
+                    toggleSortOrder();
+                  }}
+                >
+                  <SortButton />
+                </Button>
+              </Th>
+              <Th colSpan={2} textAlign={"center"}>
+                Aksi
+              </Th>
+            </Tr>
+          )}
         </Thead>
         <Tbody>
-          {currentRows.map((row, index) => (
-            <Tr
-              key={index}
-              bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
-              color="black"
-            >
-              <Td>{row.no}</Td>
-              <Td>{row.tanggal}</Td>
-              <Td>{row.waktu}</Td>
-              <Td>{row.kehadiran}</Td>
-              <Td>{row.keterangan}</Td>
-              <Td>{row.status}</Td>
-              <Td>
-                <EditButton onClick={onOpenEdit} />
-              </Td>
-              <Td>
-                <DeleteButton onClick={() => handleDeleteRow(index)} />
-              </Td>
-            </Tr>
-          ))}
+          {currentRows.map((row, index) => {
+            if (roles_id === 1) {
+              if (row.pkl_id === parseInt(id)) {
+                return (
+                  <Tr
+                    key={index}
+                    bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                    color="black"
+                  >
+                    <Td>{(no += 1)}</Td>
+                    <Td>{row.tanggalwaktu.split(" ")[0]}</Td>
+                    <Td>{row.tanggalwaktu.split(" ")[1]}</Td>
+                    <Td>{renderStatusKehadiran(parseInt(row.kehadiran))}</Td>
+                    <Td>{row.keterangan}</Td>
+                    <Td>{renderStatus(parseInt(row.status))}</Td>
+                    <Td>
+                      <EditFunctionKehadiran id={row.id} pkl_id={row.pkl_id} />
+                    </Td>
+                    <Td>
+                      <DeleteButton onClick={() => handleDeleteRow(row.id)} />
+                    </Td>
+                  </Tr>
+                );
+              }
+            } else if (parseInt(valueRolesId) === 2) {
+              if (row.pkl_id === parseInt(valueId)) {
+                return (
+                  <Tr
+                    key={index}
+                    bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                    color="black"
+                  >
+                    <Td>{(no += 1)}</Td>
+                    <Td>{row.tanggalwaktu.split(" ")[0]}</Td>
+                    <Td>{row.tanggalwaktu.split(" ")[1]}</Td>
+                    <Td>{renderStatusKehadiran(parseInt(row.kehadiran))}</Td>
+                    <Td>{row.keterangan}</Td>
+                    <Td>{renderStatus(parseInt(row.status))}</Td>
+                  </Tr>
+                );
+              }
+            } else if (parseInt(valueRolesId) === 3) {
+              if (row.pkl_id === parseInt(valueId)) {
+                return (
+                  <Tr
+                    key={index}
+                    bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                    color="black"
+                  >
+                    <Td>{(no += 1)}</Td>
+                    <Td>{row.tanggalwaktu.split(" ")[0]}</Td>
+                    <Td>{row.tanggalwaktu.split(" ")[1]}</Td>
+                    <Td>{renderStatusKehadiran(parseInt(row.kehadiran))}</Td>
+                    <Td>{row.keterangan}</Td>
+                    <Td>
+                      <ButtonBoxVerifikasi2
+                        id={row.id}
+                        pkl_id={row.pkl_id}
+                        tanggalwaktu={row.tanggalwaktu}
+                        kehadiran={row.kehadiran}
+                        keterangan={row.keterangan}
+                      />
+                    </Td>
+                    <Td>
+                      <ButtonBoxTolak2
+                        id={row.id}
+                        pkl_id={row.pkl_id}
+                        tanggalwaktu={row.tanggalwaktu}
+                        kehadiran={row.kehadiran}
+                        keterangan={row.keterangan}
+                      />
+                    </Td>
+                  </Tr>
+                );
+              }
+            }
+          })}
         </Tbody>
       </Table>
       <Modal isOpen={isOpenDelete} onClose={onCloseDelete}>
@@ -340,18 +578,6 @@ const TableKehadiranMahasiswa = () => {
               </HStack>
             </ModalFooter>
           </Center>
-        </ModalContent>
-      </Modal>
-      <Modal isOpen={isOpenEdit} onClose={onCloseEdit} size={"1"}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalBody>
-            <ModalCloseButton color={"#BDCDD6"} />
-            <TableEditKehadiran />
-          </ModalBody>
-          <ModalFooter>
-            <ButtonBoxSimpanLogHarian />
-          </ModalFooter>
         </ModalContent>
       </Modal>
       <Box>
