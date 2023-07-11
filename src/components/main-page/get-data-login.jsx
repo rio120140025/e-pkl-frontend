@@ -45,6 +45,7 @@ function GetDataLogin() {
             .catch(error => {
                 console.log(error.response.data);
             });
+        // }, []);
     }, [cookies.jwt_token.data]);
 
     return { email, password, id, name, nim, nip, no_hp, roles_id, cookies };

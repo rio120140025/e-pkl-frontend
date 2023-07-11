@@ -24,8 +24,8 @@ import { ReactComponent as SearchIcon } from "../../../../assets/icon-search.svg
 const TableComponent = () => {
     const [data, setData] = useState([]);
     const [search, setSearch] = useState("");
-    const [sortKey, setSortKey] = useState("nama"); // Default sort key
-    const [sortOrder, setSortOrder] = useState("asc"); // Default sort order
+    const [sortKey, setSortKey] = useState("nama");
+    const [sortOrder, setSortOrder] = useState("asc");
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [cookies, setCookie] = useCookies(["jwt_token"]);

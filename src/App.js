@@ -17,10 +17,10 @@ import Logout from "./components/main-page/logout"
 import ProfilUbah from "./components/main-page/profil-page/profile-ubah";
 import RencanaKegiatan from "./components/main-page/rencana-kegiatan/rencana-kegiatan";
 import RencanaKegiatanDetail from "./components/main-page/rencana-kegiatan/rencana-kegiatan-detail";
+import LogHarian from "./components/main-page/log-harian/log-harian";
+import Penilaian from "./components/main-page/penilaian/penilaian"
 
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useCookies } from 'react-cookie';
 
 function App() {
 
@@ -60,11 +60,6 @@ function App() {
           />
           <Route
             exact
-            path="/profile"
-            Component={Profil}
-          />
-          <Route
-            exact
             path="/profile-ubah"
             Component={ProfilUbah}
           />
@@ -80,8 +75,13 @@ function App() {
           />
           <Route
             exact
-            path="/logout"
-            Component={Logout}
+            path="/log-harian"
+            Component={LogHarian}
+          />
+          <Route
+            exact
+            path="/penilaian-pkl"
+            Component={Penilaian}
           />
 
         </Routes>
