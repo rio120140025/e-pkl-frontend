@@ -230,7 +230,6 @@ const TableComponentDPL = () => {
                                 </Td>
                                 <Td>
                                     <ButtonEditandDelete
-                                        
                                         pkl_id={row && row.id}
                                         penilaian_id={row && row.penilaian && row.penilaian.id}
                                         no={index + 1}

@@ -135,7 +135,7 @@ function ButtonBoxDetailPenilaian() {
     </>
   );
 }
-function ButtonBoxDetailLogHarianMahasiswaDosenDetail() {
+function ButtonBoxDetailLogHarianMahasiswaDosenDetail(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -158,7 +158,7 @@ function ButtonBoxDetailLogHarianMahasiswaDosenDetail() {
         <ModalContent>
           <ModalBody>
             <ModalCloseButton color={"#BDCDD6"} />
-            <TableView />
+            <TableView logHarian_data={props.logHarian_data} />
           </ModalBody>
           <ModalFooter>
             <button className="button-box-2" onClick={onClose}>
@@ -241,7 +241,7 @@ function ButtonBoxTambahRencana() {
     </>
   );
 }
-function ButtonBoxTambahRencanaLogHarian() {
+function ButtonBoxTambahRencanaLogHarian(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -262,10 +262,9 @@ function ButtonBoxTambahRencanaLogHarian() {
         <ModalContent>
           <ModalBody>
             <ModalCloseButton color={"#BDCDD6"} />
-            <TableEdit />
+            <TableEdit pkl_id={props.pkl_id} />
           </ModalBody>
           <ModalFooter>
-            <ButtonBoxSimpanLogHarian />
           </ModalFooter>
         </ModalContent>
       </Modal>

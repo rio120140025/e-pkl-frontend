@@ -24,62 +24,99 @@ import {
   ModalFooter,
   Center,
 } from "@chakra-ui/react";
+import { useCookies } from "react-cookie";
+
 
 import { ReactComponent as SortButton } from "../../../../assets/button-sort.svg";
 import { ReactComponent as SearchIcon } from "../../../../assets/icon-search.svg";
-import { ReactComponent as EditButton } from "../../../../assets/button-edit.svg";
-import { ReactComponent as DeleteButton } from "../../../../assets/button-delete.svg";
+
 import {
-  ButtonBoxDetailLogHarianMahasiswa,
   ButtonBoxExport,
-  ButtonBoxSimpanLogHarian,
   ButtonBoxTambahRencanaLogHarian,
 } from "./button-box";
-import { TableEdit } from "./table-edit";
+import { DetailMahasiswaDosen } from "./button-detail";
 import axios from "axios";
-import { useCookies } from "react-cookie";
 
-const TableLogHarianMahasiswa = () => {
+function TableLogHarianMahasiswa() {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
+  const [cookies, setCookie] = useCookies(['jwt_token']);
+  const [pkl_id, setPkl_id] = useState('')
+  const id = localStorage.getItem('id');
+  const roles_id = localStorage.getItem('roles_id');
+  let index = 0;
 
-  const [cookies, setCookie] = useCookies(["jwt_token"]);
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/api/user/jurnal/data", {
-        headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+      .get("http://127.0.0.1:8000/api/user/pkl/data", {
+        headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
       })
       .then((response) => {
-        console.log(response.data)
-        setData(response.data);
+        const filteredData = response.data.body.filter((dataPKL) => {
+          if (roles_id == 1) {
+            // console.log("id mahasiswa", dataPKL.mahasiswa_id);
+            // console.log("id", id);
+            if (dataPKL.mahasiswa_id == id) {
+              setPkl_id(dataPKL.id)
+              console.log("berhasil");
+              return true;
+            }
+          }
+          else if (roles_id == 2) {
+            if (dataPKL.dospem_id == id) {
+              // console.log("berhasil");
+              return true;
+            }
+          }
+          else {
+            if (dataPKL.dpl_id == id) {
+              // console.log("berhasil");
+              return true;
+
+            }
+          }
+        });
+        // console.log("test", filteredData);
+        setData(filteredData);
       })
       .catch((error) => {
         console.log(error.response.data);
       });
-  }, [cookies.jwt_token.data]);
+  }, []);
+  console.log("ini  data", data)
+  const filteredData = data.filter((item) => {
+    const mahasiswaName = item.mahasiswa?.name || "";
+    const dospemName = item.dospem?.name || "";
+    const dplName = item.dpl?.name || "";
 
-  let filteredData = [];
-  if (data.length > 0) {
-    filteredData = data.filter((item) =>
-      item.nama.toLowerCase().includes(search.toLowerCase())
-    );
-    filteredData = filteredData.sort((a, b) => {
-      if (sortKey === "") return 0;
-      const valA = a[sortKey].toUpperCase();
-      const valB = b[sortKey].toUpperCase();
-      if (valA < valB) return sortOrder === "asc" ? -1 : 1;
-      if (valA > valB) return sortOrder === "asc" ? 1 : -1;
-      return 0;
-    });
-  }
+    const isMatch =
+      mahasiswaName.toLowerCase().includes(search.toLowerCase()) ||
+      dospemName.toLowerCase().includes(search.toLowerCase()) ||
+      dplName.toLowerCase().includes(search.toLowerCase());
+
+    return isMatch;
+  });
+  // console.log("ini filter data", filteredData)
+
+  const sortedData = filteredData.sort((a, b) => {
+    if (sortKey === "") return 0;
+    const valA = a[sortKey]?.toUpperCase();
+    const valB = b[sortKey]?.toUpperCase();
+    if (valA < valB) return sortOrder === "asc" ? -1 : 1;
+    if (valA > valB) return sortOrder === "asc" ? 1 : -1;
+    return 0;
+  });
+  // console.log("ini sorted data", sortedData)
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = filteredData.slice(indexOfFirstRow, indexOfLastRow);
+  const currentRows = sortedData.slice(indexOfFirstRow, indexOfLastRow);
+  console.log("current row", currentRows)
+
 
   const toggleSortOrder = () => {
     setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
@@ -89,10 +126,9 @@ const TableLogHarianMahasiswa = () => {
     setCurrentPage(pageNumber);
   };
 
-  const totalRows = filteredData.length;
+  const totalRows = sortedData.length;
   const firstRow = indexOfFirstRow + 1;
   const lastRow = Math.min(indexOfLastRow, totalRows);
-
 
   const {
     isOpen: isOpenDelete,
@@ -121,9 +157,9 @@ const TableLogHarianMahasiswa = () => {
 
   return (
     <Box
-      marginTop="28.86px"
-      marginLeft="30.5px"
-      w={1314}
+      // marginTop="28.86px"
+      // marginLeft="30.5px"
+      w='100%'
       borderRadius="5"
       bgColor="#F9FAFC"
       boxShadow="0 0 0 1px rgba(152, 161, 178, 0.1), 0 1px 4px rgba(69, 75, 87, 0.12), 0 0 2px rgba(0, 0, 0, 0.08)"
@@ -147,22 +183,13 @@ const TableLogHarianMahasiswa = () => {
             onChange={(e) => setSearch(e.target.value)}
           />
         </InputGroup>
-        <ButtonBoxTambahRencanaLogHarian />
+        {roles_id == 1 ? <ButtonBoxTambahRencanaLogHarian pkl_id={pkl_id} /> : null}
       </HStack>
-      <Table variant="striped" top="1384px" left="0" width="1314px">
+      <Table variant="striped" top="100%" left="0" width="100%">
         <Thead>
           <Tr>
             <Th>
               No
-              <Button
-                variant="link"
-                onClick={() => {
-                  setSortKey("no");
-                  toggleSortOrder();
-                }}
-              >
-                <SortButton />
-              </Button>
             </Th>
             <Th>
               Mahasiswa{" "}
@@ -212,13 +239,14 @@ const TableLogHarianMahasiswa = () => {
               bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
               color="black"
             >
-              <Td>{row.no}</Td>
-              <Td>{row.nama}</Td>
-              <Td>{row.nim}</Td>
-              <Td>{row.dosenPembimbing}</Td>
+              <Td>{index += 1}</Td>
+              <Td>{row.mahasiswa.name}</Td>
+              <Td>{row.mahasiswa.nim}</Td>
+              <Td>{row.dospem.name}</Td>
               <Td>
                 <Flex>
-                  <ButtonBoxDetailLogHarianMahasiswa />
+                  {console.log("row id", row.id)}
+                  <DetailMahasiswaDosen pkl_id={row.id} />
                 </Flex>
               </Td>
               <Td>
@@ -226,59 +254,10 @@ const TableLogHarianMahasiswa = () => {
                   <ButtonBoxExport />
                 </Flex>
               </Td>
-              <Td>
-                <EditButton onClick={onOpenEdit} />
-              </Td>
-              <Td>
-                <DeleteButton onClick={() => handleDeleteRow(index)} />
-              </Td>
             </Tr>
           ))}
         </Tbody>
       </Table>
-      <Modal isOpen={isOpenDelete} onClose={onCloseDelete}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalBody mt={10} textAlign={"center"} fontWeight={"bolder"}>
-            <ModalCloseButton color={"#FF0000"} />
-            Apakah yakin menghapus rencana?
-          </ModalBody>
-          <Center>
-            <ModalFooter>
-              <HStack spacing={20}>
-                <Button
-                  bgColor={"#20B95D"}
-                  color={"white"}
-                  onClick={handleConfirmDelete}
-                  w={70}
-                >
-                  Ya
-                </Button>
-                <Button
-                  bgColor={"#FF0000"}
-                  color={"white"}
-                  onClick={onCloseDelete}
-                  w={70}
-                >
-                  Tidak
-                </Button>
-              </HStack>
-            </ModalFooter>
-          </Center>
-        </ModalContent>
-      </Modal>
-      <Modal isOpen={isOpenEdit} onClose={onCloseEdit} size={"1"}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalBody>
-            <ModalCloseButton color={"#BDCDD6"} />
-            <TableEdit />
-          </ModalBody>
-          <ModalFooter>
-            <ButtonBoxSimpanLogHarian />
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
       <Box>
         <Flex>
           <Box marginLeft="25px" fontSize="14px" color="#687182">

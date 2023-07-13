@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Table, Thead, Tbody, Tr, Th, Td } from "@chakra-ui/react";
 
-const TableView = () => {
+const TableView = (props) => {
   return (
     <Box
       marginTop="75px"
@@ -22,17 +22,20 @@ const TableView = () => {
         </Thead>
         <Tbody>
           <Tr color="black">
-            <Td></Td>
-            <Td></Td>
-            <Td></Td>
-            <Td></Td>
-            <Td></Td>
+            <Td>{props.logHarian_data.id}</Td>
+            <Td>{props.logHarian_data.materi}</Td>
+            <Td>{props.logHarian_data.prosedur}</Td>
+            <Td>{props.logHarian_data.hasil}</Td>
+            <Td>{props.logHarian_data.komentar}</Td>
           </Tr>
         </Tbody>
       </Table>
     </Box>
   );
 };
+
+
+
 const TableViewPenilaian = () => {
   return (
     <Box

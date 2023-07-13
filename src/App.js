@@ -19,6 +19,7 @@ import RencanaKegiatan from "./components/main-page/rencana-kegiatan/rencana-keg
 import RencanaKegiatanDetail from "./components/main-page/rencana-kegiatan/rencana-kegiatan-detail";
 import LogHarian from "./components/main-page/log-harian/log-harian";
 import Penilaian from "./components/main-page/penilaian/penilaian"
+import LogHarianDetail from "./components/main-page/log-harian/log-harian-detail";
 
 import React, { useState, useEffect } from "react";
 
@@ -80,9 +81,15 @@ function App() {
           />
           <Route
             exact
+            path="/log-harian-detail"
+            Component={LogHarianDetail}
+          />
+          <Route
+            exact
             path="/penilaian-pkl"
             Component={Penilaian}
           />
+
 
         </Routes>
 

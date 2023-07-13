@@ -6,36 +6,11 @@ import { Flex, Text, Image, Box, Center, Link, useToast } from '@chakra-ui/react
 import OnlyDisplay from "./onlyDisplay";
 import backButton from "../../../../assets/Vector.svg"
 import { Link as RouterLink } from "react-router-dom";
-import GetDataLogin from "../../get-data-login";
 import axios from "axios";
 import { useCookies } from 'react-cookie';
 import PilihDosen from "./pilih-dosen";
 
 function Ubah(props) {
-    // const [isDataLoaded, setIsDataLoaded] = useState(false);
-    // const { email, password, name, nim, nip, no_hp, cookies, id } = GetDataLogin();
-    // const { cookies, id } = GetDataLogin();
-    // const [change_Name, setChangeName] = useState(name);
-    // const [change_Email, setChangeEmail] = useState(email);
-    // const [change_Nim, setChangeNim] = useState("");
-    // const [change_Nip, setChangeNip] = useState(nip);
-    // const [change_Password, setChangePassword] = useState(password);
-    // const [change_Lokasi, setChangeLokasi] = useState("");
-    // const [change_Notelp, setChangeNotelp] = useState(no_hp);
-    // const [change_Dosbim, setChangeDosbim] = useState("");
-    // const [change_Dpl, setChangeDpl] = useState("");
-    // const [change_Jabatan, setChangeJabatan] = useState("");
-    // const [change_Instansi, setChangeInstansi] = useState("");
-    // // useEffect(() => {
-    // //     setChangeName(name);
-    // //     setChangeEmail(email);
-    // //     setChangeNim(nim);
-    // //     setChangeNip(nip);
-    // //     setChangePassword(password);
-    // //     setChangeNotelp(no_hp);
-    // //     setIsDataLoaded(true);
-    // // }, [name, email, nim, nip, password, no_hp]);
-
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [id, setId] = useState("");
@@ -45,10 +20,12 @@ function Ubah(props) {
     const [no_hp, setNoHp] = useState("");
     const [rolesId, setRolesId] = useState("");
     const [dosbim, setDosbim] = useState("");
-    const [dpl, setDpl] = useState("")
+    const [dpl, setDpl] = useState("");
     const [jabatan, setJabatan] = useState("");
     const [lokasi, setLokasi] = useState("");
-    const [cookies, setCookie] = useCookies(['jwt_token']);
+    const [pkl_id, setPkl_id] = useState("");
+    const [cookies, setCookie] = useCookies(["jwt_token"]);
+    const [existingPKLData, setExistingPKLData] = useState('');
 
     useEffect(() => {
         axios
@@ -56,65 +33,77 @@ function Ubah(props) {
                 headers: { Authorization: "Bearer " + cookies.jwt_token.data }
             })
             .then(response => {
+                // console.log("ini data yang diambil", response.data)
                 const dataServer = response.data;
                 setEmail(dataServer.email);
                 setPassword(dataServer.password);
-                // console.log(password)
                 setId(dataServer.id);
                 setName(dataServer.name);
                 setNim(dataServer.nim);
                 setNip(dataServer.nip);
                 setNoHp(dataServer.no_hp);
-                // console.log(dataServer.no_hp)
                 setJabatan(dataServer.jabatan);
-                // console.log(dataServer.jabatan)
                 setLokasi(dataServer.lokasi);
-                console.log(dataServer.lokasi)
                 setRolesId(dataServer.roles_id);
             })
             .catch(error => {
                 console.log(error.response);
             });
     }, []);
-    console.log("ini id dosen", parseInt(dosbim))
-    console.log("ini id dpl", parseInt(dpl))
     useEffect(() => {
-        if (rolesId == 1) {
+        if (rolesId === 1) {
             axios
                 .get("http://127.0.0.1:8000/api/user/pkl/data", {
                     headers: { Authorization: "Bearer " + cookies.jwt_token.data }
                 })
                 .then(response => {
-                    const dataServer = response.data;
-                    setDosbim(dataServer.dospem_id)
-                    setDpl(dataServer.dpl_id)
+                    // console.log("test", response.data.body)
+                    // const foundPKLData = dataServer.find(data => data.mahasiswa_id === id);
+                    response.data.body.map((data) => {
+                        // console.log("this", data)
+                        if (data.mahasiswa_id == id) {
+                            // console.log("this", data.mahasiswa)
+                            setPkl_id(data.id)
+                            setExistingPKLData(true)
+                            console.log("ini data pkl dan dosen", data)
+                            setDosbim(data.dospem_id);
+                            setDpl(data.dpl_id);
+                            // console.log("this", existingPKLData)
+                            return
+                        }
+                        else {
+                            setExistingPKLData(false)
+                        }
+                    })
                 })
                 .catch(error => {
                     Object.keys(error.response.data.errors).forEach(function (key, index) {
-                        callToast(error.response.data.errors[key], "error")
+                        callToast(error.response.data.errors[key], "error");
                     });
                 });
         }
+    });
+    // console.log("dosbim", dosbim)
+    // console.log("dpl", dpl)
 
-    }, []);
+    const toast = useToast();
 
-    console.log("kode dosbim", dosbim)
-    console.log("kode NIP", nip)
-    const toast = useToast()
     function callToast(title, status) {
         toast({
             title: title,
             status: status,
             duration: 3000,
-            isClosable: true,
-        })
+            isClosable: true
+        });
     }
+    console.log("existingPKLData", existingPKLData)
     const handleUpdate = () => {
+
         let updateData;
         let dataPKL;
 
-        if (rolesId == 1) {
-            const updateData = {
+        if (rolesId === 1) {
+            updateData = {
                 name: name,
                 nim: nim,
                 password: password,
@@ -122,41 +111,55 @@ function Ubah(props) {
                 lokasi: lokasi,
             };
 
-            const dataPKL = {
-                mahasiswa_id: id,
+            dataPKL = {
+                mahasiswa_id: parseInt(id),
                 dospem_id: parseInt(dosbim),
-                dpl_id: parseInt(dpl)
+                dpl_id: parseInt(dpl),
             };
-            console.log(dataPKL);
-            axios
-                .post(`http://127.0.0.1:8000/api/user/pkl`, dataPKL, {
-                    headers: { Authorization: "Bearer " + cookies.jwt_token.data }
-                })
-                .then(response => {
-                    callToast("Berhasil Mengubah Data", 'success');
-                    console.log(updateData);
-                })
-                .catch(error => {
-                    Object.keys(error.response.data.errors).forEach(function (key, index) {
-                        callToast(error.response.data.errors[key], "error")
+            if (!existingPKLData) {
+                axios
+                    .post(`http://127.0.0.1:8000/api/user/pkl`, dataPKL, {
+                        headers: { Authorization: "Bearer " + cookies.jwt_token.data }
+                    })
+                    .then(response => {
+                        callToast("Berhasil Menambah Data", "success");
+                        console.log(updateData);
+                    })
+                    .catch(error => {
+                        Object.keys(error.response.data.errors).forEach(function (key, index) {
+                            callToast(error.response.data.errors[key], "error");
+                        });
                     });
-                });
-        }
-        else if (rolesId == 2) {
+            } else {
+                axios
+                    .post(`http://127.0.0.1:8000/api/user/pkl/update/${pkl_id}`, dataPKL, {
+                        headers: { Authorization: "Bearer " + cookies.jwt_token.data }
+                    })
+                    .then(response => {
+                        callToast("Berhasil Mengubah Data", "success");
+                        console.log(updateData);
+                    })
+                    .catch(error => {
+                        Object.keys(error.response.data.errors).forEach(function (key, index) {
+                            callToast(error.response.data.errors[key], "error");
+                        });
+                    });
+            }
+        } else if (rolesId === 2) {
             updateData = {
                 name: name,
                 nip: nip,
                 password: password,
                 no_hp: no_hp,
             };
-        } else if (rolesId == 3) {
+        } else if (rolesId === 3) {
             updateData = {
                 name: name,
                 nip: nip,
                 password: password,
                 no_hp: no_hp,
                 lokasi: lokasi,
-                jabatan: jabatan
+                jabatan: jabatan,
             };
         }
 
@@ -165,12 +168,12 @@ function Ubah(props) {
                 headers: { Authorization: "Bearer " + cookies.jwt_token.data }
             })
             .then(response => {
-                callToast("Berhasil Mengubah Data", 'success')
-                console.log("data sudah terkirim", updateData)
+                callToast("Berhasil Mengubah Data", "success");
+                console.log("data sudah terkirim", updateData);
             })
             .catch(error => {
                 console.log(error.response);
-                callToast(error.response.data.reason, 'error')
+                callToast(error.response.data.reason, "error");
             });
     }
 
@@ -226,11 +229,13 @@ function Ubah(props) {
                         <PilihDosen
                             name="Dosen Pembimbing"
                             role={2}
+                            IdDosbim={dosbim}
                             handleSet={(e) => setDosbim(e.target.value)}
                         />
                         <PilihDosen
                             name="Dosen Pembimbing"
                             role={3}
+                            IdDPL={dpl}
                             handleSet={(e) => setDpl(e.target.value)}
                         />
                     </Flex>

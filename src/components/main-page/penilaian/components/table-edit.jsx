@@ -22,6 +22,7 @@ import {
   ModalContent,
   ModalBody,
   ModalFooter,
+  ModalHeader,
   Center,
   Text,
   useToast,
@@ -42,15 +43,30 @@ const TableEditPenilaian = (props) => {
   const [kedisplinan, setKedisplinan] = useState('');
   const [sikap, setSikap] = useState('');
   const [rata, setRata] = useState('');
-  const [mulai, setMulai] = useState(new Date());
-  const [selesai, setSelesai] = useState(new Date());
+  const [mulai, setMulai] = useState(null); // Set initial value to null
+  const [selesai, setSelesai] = useState(null); // Set initial value to null
   const [cookies, setCookie] = useCookies(['jwt_token']);
-  console.log('ini id pkl', props.pkl_id);
+
+  function handleDateChange(e, setter) {
+    const dateValue = e.target.value;
+    const newDate = dateValue ? new Date(dateValue) : null;
+    setter(newDate);
+  }
+
+  const formatDate = (date) => {
+    if (!date) return '';
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  };
 
   let input_nilai = {
     pkl_id: props.pkl_id,
-    tgl_mulai: mulai.toISOString().split('T')[0],
-    tgl_selesai: selesai.toISOString().split('T')[0],
+    tgl_mulai: mulai ? mulai.toISOString().split('T')[0] : null, // Check if mulai is null
+    tgl_selesai: selesai ? selesai.toISOString().split('T')[0] : null, // Check if selesai is null
     rerata: rata,
     pengetahuan: pengetahuan,
     pelaksanaan: pelaksanaan,
@@ -191,20 +207,16 @@ const TableEditPenilaian = (props) => {
               </Td>
               <Td>
                 <Input
-                  value={mulai.toISOString().split('T')[0]}
+                  value={mulai ? formatDate(mulai) : ""}
                   type="date"
-                  onChange={(e) => {
-                    setMulai(new Date(e.target.value));
-                  }}
+                  onChange={(e) => handleDateChange(e, setMulai)}
                 />
               </Td>
               <Td>
                 <Input
-                  value={selesai.toISOString().split('T')[0]}
+                  value={selesai ? formatDate(selesai) : ""}
                   type="date"
-                  onChange={(e) => {
-                    setSelesai(new Date(e.target.value));
-                  }}
+                  onChange={(e) => handleDateChange(e, setSelesai)}
                 />
               </Td>
               <Td>
@@ -270,61 +282,94 @@ function ButtonBeriNilai(props) {
   )
 }
 
-function ButtonEditandDelete(props) {
-  const [cookies, setCookie] = useCookies(["jwt_token"]);
-  const toast = useToast()
-  let blm_dibuat = false
+const ButtonEditandDelete = (props) => {
+  const [cookies, setCookie] = useCookies(['jwt_token']);
+  const toast = useToast();
+  let blm_dibuat = false;
+
   function callToast(title, status) {
     toast({
       title: title,
       status: status,
       duration: 3000,
       isClosable: true,
-    })
+    });
   }
-  const { isOpen: isOpenEdit, onOpen: onOpenEdit, onClose: onCloseEdit } =
-    useDisclosure();
+
+  const { isOpen: isOpenEdit, onOpen: onOpenEdit, onClose: onCloseEdit } = useDisclosure();
 
   const handleOpenEdit = () => {
     onOpenEdit();
   };
-  function Deteled() {
-    console.log("ini id pkl", props.pkl_id)
+
+  const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+
+  function handleDelete() {
+    console.log('ini id pkl', props.pkl_id);
+    setIsConfirmationOpen(true);
+  }
+  console.log("nilai", props.penilaian_id)
+  function handleConfirmDelete() {
     axios
       .post(`http://127.0.0.1:8000/api/user/penilaian/delete/${props.penilaian_id}`, null, {
-        headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
+        headers: { Authorization: 'Bearer ' + (cookies?.jwt_token?.data ?? '') },
       })
       .then((response) => {
-        callToast("Berhasil Menghapus Nilai", 'success');
+        callToast('Berhasil Menghapus Nilai', 'success');
         window.location.reload();
       })
       .catch((error) => {
         Object.keys(error?.response?.data?.errors).forEach(function (key, index) {
-          callToast(error.response.data.errors[key], "error");
+          callToast(error.response.data.errors[key], 'error');
         });
       });
   }
+
+  function handleCancelDelete() {
+    setIsConfirmationOpen(false);
+  }
+
   return (
     <Box>
       <Button onClick={handleOpenEdit} variant="ghost">
         <Image src={edit} alt="Edit" boxSize="24px" boxShadow="none" opacity={0.5} />
       </Button>
 
-      <Button onClick={Deteled} variant="ghost">
+      <Button onClick={handleDelete} variant="ghost">
         <Image src={trash} alt="Trash" boxSize="24px" boxShadow="none" opacity={0.5} />
       </Button>
 
-      <Modal isOpen={isOpenEdit} onClose={onCloseEdit} size={"1"}>
+      <Modal isOpen={isOpenEdit} onClose={onCloseEdit} size="1">
         <ModalOverlay />
         <ModalContent>
           <ModalBody>
-            <ModalCloseButton color={"#BDCDD6"} />
+            <ModalCloseButton color="#BDCDD6" />
             <TableEditPenilaian no={props.no} pkl_id={props.pkl_id} status={blm_dibuat} penilaian_id={props.penilaian_id} />
           </ModalBody>
           <ModalFooter>{/* Add additional content or buttons here */}</ModalFooter>
         </ModalContent>
       </Modal>
+
+      <Modal isOpen={isConfirmationOpen} onClose={handleCancelDelete} size="sm">
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Confirmation</ModalHeader>
+          <ModalBody>
+            <Text>Apakah anda yakin menghapus penilaian ?</Text>
+          </ModalBody>
+          <ModalFooter>
+            <HStack spacing={4}>
+              <Button colorScheme="green" onClick={handleConfirmDelete}>
+                Ya
+              </Button>
+              <Button colorScheme="red" onClick={handleCancelDelete}>
+                Tidak
+              </Button>
+            </HStack>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
-}
+};
 export { TableEditPenilaian, ButtonBeriNilai, ButtonEditandDelete };

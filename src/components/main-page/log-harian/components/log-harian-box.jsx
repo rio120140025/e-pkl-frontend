@@ -2,12 +2,12 @@ import React from "react";
 import { Box, SimpleGrid, Text, Flex } from "@chakra-ui/react";
 
 import ButtonBox from "../../components/button";
-import TableLogHarianDosen from "./table-log-harian-dosen";
 import TableLogHarianMahasiswa from "./table-log-harian-mahasiswa";
+import TableDetail from "./table-detail";
 
 
 
-function LogHarianBox() {
+function LogHarianBox(props) {
     const roles_id = localStorage.getItem('roles_id');
     const id = localStorage.getItem('id');
     console.log(id)
@@ -23,8 +23,7 @@ function LogHarianBox() {
             <Flex direction="column" mx="30px" my="10px" gap="19">
                 <Box>
                     <Box paddingBottom="2.5%">
-                        {roles_id == "1" && <TableLogHarianMahasiswa />}
-                        {(roles_id == "2" || roles_id == "3") && <TableLogHarianDosen />}
+                        {props.detail == "yes" ? <TableDetail /> : <TableLogHarianMahasiswa />}
                     </Box>
                 </Box>
             </Flex>
