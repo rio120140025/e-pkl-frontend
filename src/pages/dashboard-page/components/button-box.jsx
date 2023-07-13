@@ -371,9 +371,9 @@ const EditFunction = ({ id, pkl_id }) => {
         response?.data?.body?.map((data) => {
           if (data.pkl_id == pkl_id) {
             if (data.id == id) {
-            setCapaian(data.capaian);
-            setSubCapaian(data.sub_capaian);
-            setJam(data.jam);
+              setCapaian(data.capaian);
+              setSubCapaian(data.sub_capaian);
+              setJam(data.jam);
             }
           }
         });
@@ -864,6 +864,9 @@ function ButtonBoxVerifikasi({ id, capaian, sub_capaian, jam, pkl_id }) {
       .post(`http://127.0.0.1:8000/api/user/kegiatan/update/${id}`, data, {
         headers: { Authorization: "Bearer " + cookies.jwt_token.data },
       })
+      .then((response) => {
+        window.location.reload();
+      })
       .catch((error) => {
         console.log(error);
       });
@@ -900,6 +903,9 @@ function ButtonBoxTolak({ id, capaian, sub_capaian, jam, pkl_id }) {
     axios
       .post(`http://127.0.0.1:8000/api/user/kegiatan/update/${id}`, data, {
         headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+      })
+      .then((response) => {
+        window.location.reload();
       })
       .catch((error) => {
         console.log(error);
@@ -944,6 +950,9 @@ function ButtonBoxVerifikasi2({
       .post(`http://127.0.0.1:8000/api/user/kehadiran/update/${id}`, data, {
         headers: { Authorization: "Bearer " + cookies.jwt_token.data },
       })
+      .then((response) => {
+        window.location.reload();
+      })
       .catch((error) => {
         console.log(error);
       });
@@ -980,6 +989,9 @@ function ButtonBoxTolak2({ id, pkl_id, tanggalwaktu, kehadiran, keterangan }) {
     axios
       .post(`http://127.0.0.1:8000/api/user/kehadiran/update/${id}`, data, {
         headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+      })
+      .then((response) => {
+        window.location.reload();
       })
       .catch((error) => {
         console.log(error);
