@@ -182,6 +182,7 @@ function TableEditDPL(props) {
   const [cookies, setCookie] = useCookies(["jwt_token"]);
   const toast = useToast();
 
+
   function callToast(title, status) {
     toast({
       title: title,
@@ -204,46 +205,24 @@ function TableEditDPL(props) {
 
     }
     console.log(updateData)
-    if (props.isEdit == "yes") {
-      axios
-        .post(`http://127.0.0.1:8000/api/user/jurnal/update/${props.logHarian_data.id}`, updateData, {
-          headers: { Authorization: "Bearer " + cookies.jwt_token.data }
-        })
-        .then(response => {
-          async function notif() {
-            await callToast("Berhasil Mengubah Log Harian", 'success')
-            setTimeout(() => {
-              window.location.reload();
-            }, 5000);
-          }
-          notif()
-        })
-        .catch(error => {
-          Object.keys(error?.response?.data?.errors).forEach(function (key, index) {
-            callToast(error.response.data.errors[key], 'error');
-          });
+    axios
+      .post(`http://127.0.0.1:8000/api/user/jurnal/update/${props.logHarian_data.id}`, updateData, {
+        headers: { Authorization: "Bearer " + cookies.jwt_token.data }
+      })
+      .then(response => {
+        async function notif() {
+          await callToast("Berhasil Mengubah Log Harian", 'success')
+          setTimeout(() => {
+            window.location.reload();
+          }, 0);
+        }
+        notif()
+      })
+      .catch(error => {
+        Object.keys(error?.response?.data?.errors).forEach(function (key, index) {
+          callToast(error.response.data.errors[key], 'error');
         });
-    }
-    else {
-      axios
-        .post(`http://127.0.0.1:8000/api/user/jurnal`, updateData, {
-          headers: { Authorization: "Bearer " + cookies.jwt_token.data }
-        })
-        .then(response => {
-          async function notif() {
-            await callToast("Berhasil Menambah Log Harian", 'success')
-            setTimeout(() => {
-              window.location.reload();
-            }, 5000);
-          }
-          notif()
-        })
-        .catch(error => {
-          Object.keys(error?.response?.data?.errors).forEach(function (key, index) {
-            callToast(error.response.data.errors[key], 'error');
-          });
-        });
-    }
+      });
   }
   return (
     <Box
@@ -270,13 +249,13 @@ function TableEditDPL(props) {
                 {no}
               </Td>
               <Td>
-                <Text value={materi} onChange={(e) => { setMateri(e.target.value) }} />
+                <Text>{materi}</Text>
               </Td>
               <Td>
-                <Text value={prosedur} onChange={(e) => { setProsedur(e.target.value) }} />
+                <Text>{prosedur}</Text>
               </Td>
               <Td>
-                <Text value={hasil} onChange={(e) => { setHasil(e.target.value) }} />
+                <Text>{hasil}</Text>
               </Td>
               <Td>
                 <Input value={komentar} onChange={(e) => { setKomentar(e.target.value) }} />
@@ -286,7 +265,7 @@ function TableEditDPL(props) {
         </Table>
         <Button onClick={simpan}>Simpan</Button>
       </Flex>
-    </Box>
+    </Box >
   )
 }
 

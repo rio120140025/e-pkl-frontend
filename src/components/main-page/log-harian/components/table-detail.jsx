@@ -236,7 +236,7 @@ const TableDetail = () => {
                             </Td>
                             <Td>
                                 <Flex>
-                                    <DetailLogHarianMahasiswaDosenDetail logHarian_data={row} />
+                                    <DetailLogHarianMahasiswaDosenDetail logHarian_data={row} roles={roles_id} />
                                     <ButtonEditLogHarianMahasiswa roles_id={roles_id} logHarian_data={row} id={row.id} />
                                 </Flex>
                             </Td>
