@@ -24,6 +24,7 @@ import {
   ModalHeader,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import { format } from "date-fns";
 import axios from "axios";
 
 import "./button.css";
@@ -353,19 +354,44 @@ const EditFunction = ({ id, pkl_id }) => {
   const [jam, setJam] = useState("");
   const [cookies] = useCookies(["jwt_token"]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const data = {
-      capaian: capaian,
-      sub_capaian: subCapaian,
-      jam: jam,
-      status: 1,
-      pkl_id: pkl_id,
-    };
+  const data_input = {
+    capaian: capaian,
+    sub_capaian: subCapaian,
+    jam: jam,
+    status: 1,
+    pkl_id: pkl_id,
+  };
+
+  useEffect(() => {
     axios
-      .post(`http://127.0.0.1:8000/api/user/kegiatan/update/${id}`, data, {
+      .get("http://127.0.0.1:8000/api/user/kegiatan", {
         headers: { Authorization: "Bearer " + cookies.jwt_token.data },
       })
+      .then((response) => {
+        response?.data?.body?.map((data) => {
+          if (data.pkl_id == pkl_id) {
+            if (data.id == id) {
+            setCapaian(data.capaian);
+            setSubCapaian(data.sub_capaian);
+            setJam(data.jam);
+            }
+          }
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+  const handleSubmit = (e) => {
+    axios
+      .post(
+        `http://127.0.0.1:8000/api/user/kegiatan/update/${id}`,
+        data_input,
+        {
+          headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+        }
+      )
       .then((response) => {
         window.location.reload();
       })
@@ -373,28 +399,6 @@ const EditFunction = ({ id, pkl_id }) => {
         console.log(error);
       });
   };
-
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/user/kegiatan",
-          {
-            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
-          }
-        );
-        const updatedData = response.data.body;
-        setData(updatedData);
-        console.log(updatedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -429,38 +433,32 @@ const EditFunction = ({ id, pkl_id }) => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data.map((item) => {
-                    if (item.id === parseInt(id)) {
-                      return (
-                        <Tr color="black">
-                          <Td>
-                            <Input value={1} />
-                          </Td>
-                          <Td>
-                            <Input
-                              type="text"
-                              value={capaian}
-                              onChange={(e) => setCapaian(e.target.value)}
-                            />
-                          </Td>
-                          <Td>
-                            <Input
-                              type="text"
-                              value={subCapaian}
-                              onChange={(e) => setSubCapaian(e.target.value)}
-                            />
-                          </Td>
-                          <Td>
-                            <Input
-                              type="text"
-                              value={jam}
-                              onChange={(e) => setJam(e.target.value)}
-                            />
-                          </Td>
-                        </Tr>
-                      );
-                    }
-                  })}
+                  <Tr color="black">
+                    <Td>
+                      <Input value={1} />
+                    </Td>
+                    <Td>
+                      <Input
+                        type="text"
+                        value={capaian}
+                        onChange={(e) => setCapaian(e.target.value)}
+                      />
+                    </Td>
+                    <Td>
+                      <Input
+                        type="text"
+                        value={subCapaian}
+                        onChange={(e) => setSubCapaian(e.target.value)}
+                      />
+                    </Td>
+                    <Td>
+                      <Input
+                        type="text"
+                        value={jam}
+                        onChange={(e) => setJam(e.target.value)}
+                      />
+                    </Td>
+                  </Tr>
                 </Tbody>
               </Table>
             </Box>
@@ -510,26 +508,61 @@ const EditFunction = ({ id, pkl_id }) => {
   );
 };
 const EditFunctionKehadiran = ({ id, pkl_id }) => {
-  const [kehadiran, setkehadiran] = useState("");
-  const [keterangan, setketerangan] = useState("");
+  const [kehadiran, setKehadiran] = useState("");
+  const [keterangan, setKeterangan] = useState("");
   const [tanggal, setTanggal] = useState("");
   const [waktu, setWaktu] = useState("");
   const [cookies] = useCookies(["jwt_token"]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const tanggalwaktu = `${tanggal} ${waktu}:00`;
-    const data = {
-      kehadiran: kehadiran,
-      keterangan: keterangan,
-      tanggalwaktu: tanggalwaktu,
-      status: 1,
-      pkl_id: pkl_id,
-    };
+  const tanggalwaktu = `${tanggal} ${waktu}:00`;
+  const data_input = {
+    kehadiran: kehadiran,
+    keterangan: keterangan,
+    tanggalwaktu: tanggalwaktu,
+    status: 1,
+    pkl_id: pkl_id,
+  };
+
+  function formatDateForInput(dateString) {
+    const [year, month, day] = dateString.split("-");
+    return `${day}/${month}/${year}`;
+  }
+
+  useEffect(() => {
     axios
-      .post(`http://127.0.0.1:8000/api/user/kehadiran/update/${id}`, data, {
+      .get("http://127.0.0.1:8000/api/user/kehadiran", {
         headers: { Authorization: "Bearer " + cookies.jwt_token.data },
       })
+      .then((response) => {
+        response?.data?.body?.map((data) => {
+          if (data.pkl_id == pkl_id) {
+            if (data.id == id) {
+              setKehadiran(data.kehadiran);
+              setKeterangan(data.keterangan);
+              const datetimeParts = data.tanggalwaktu.split(" ");
+              const tanggalPart = datetimeParts[0];
+              const waktuPart = datetimeParts[1];
+              const tanggalFormatted = formatDateForInput(tanggalPart);
+              setTanggal(tanggalFormatted);
+              setWaktu(waktuPart);
+            }
+          }
+        });
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+  const handleSubmit = (e) => {
+    axios
+      .post(
+        `http://127.0.0.1:8000/api/user/kehadiran/update/${id}`,
+        data_input,
+        {
+          headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+        }
+      )
       .then((response) => {
         window.location.reload();
       })
@@ -538,34 +571,13 @@ const EditFunctionKehadiran = ({ id, pkl_id }) => {
       });
   };
 
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/user/kehadiran",
-          {
-            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
-          }
-        );
-        const updatedData = response.data.body;
-        setData(updatedData);
-        console.log(updatedData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
     isOpen: isOpenCancel,
     onOpen: onOpenCancel,
     onClose: onCloseCancel,
   } = useDisclosure();
+
   return (
     <>
       <EditButton onClick={onOpen}>Tambah Rencana</EditButton>
@@ -594,51 +606,46 @@ const EditFunctionKehadiran = ({ id, pkl_id }) => {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data.map((item) => {
-                    if (item.id === parseInt(id)) {
-                      return (
-                        <Tr color="black">
-                          <Td>
-                            <Input value={1} />
-                          </Td>
-                          <Td>
-                            <Input
-                              type="date"
-                              value={tanggal}
-                              onChange={(e) => setTanggal(e.target.value)}
-                            />
-                          </Td>
-                          <Td>
-                            <Input
-                              type="time"
-                              value={waktu}
-                              onChange={(e) => setWaktu(e.target.value)}
-                            />
-                          </Td>
-                          <Td>
-                            <Select
-                              variant="unstyled"
-                              border="none"
-                              marginBlock={1}
-                              onChange={(e) => setkehadiran(e.target.value)}
-                            >
-                              <option value={1}>Hadir</option>
-                              <option value={2}>Sakit</option>
-                              <option value={3}>Izin</option>
-                              <option value={4}>Tanpa Kehadiran</option>
-                            </Select>
-                          </Td>
-                          <Td>
-                            <Input
-                              type="text"
-                              value={keterangan}
-                              onChange={(e) => setketerangan(e.target.value)}
-                            />
-                          </Td>
-                        </Tr>
-                      );
-                    }
-                  })}
+                  <Tr color="black">
+                    <Td>
+                      <Input value={1} />
+                    </Td>
+                    <Td>
+                      <Input
+                        type="date"
+                        value={tanggal}
+                        onChange={(e) => setTanggal(e.target.value)}
+                      />
+                    </Td>
+                    <Td>
+                      <Input
+                        type="time"
+                        value={waktu}
+                        onChange={(e) => setWaktu(e.target.value)}
+                      />
+                    </Td>
+                    <Td>
+                      <Select
+                        variant="unstyled"
+                        border="none"
+                        marginBlock={1}
+                        value={kehadiran}
+                        onChange={(e) => setKehadiran(e.target.value)}
+                      >
+                        <option value={1}>Hadir</option>
+                        <option value={2}>Sakit</option>
+                        <option value={3}>Izin</option>
+                        <option value={4}>Tanpa Kehadiran</option>
+                      </Select>
+                    </Td>
+                    <Td>
+                      <Input
+                        type="text"
+                        value={keterangan}
+                        onChange={(e) => setKeterangan(e.target.value)}
+                      />
+                    </Td>
+                  </Tr>
                 </Tbody>
               </Table>
             </Box>
