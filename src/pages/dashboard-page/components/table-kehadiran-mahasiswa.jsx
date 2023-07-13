@@ -513,37 +513,57 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
               }
             } else if (parseInt(valueRolesId) === 3) {
               if (row.pkl_id === parseInt(valueId)) {
-                return (
-                  <Tr
-                    key={index}
-                    bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
-                    color="black"
-                  >
-                    <Td>{(no += 1)}</Td>
-                    <Td>{row.tanggalwaktu.split(" ")[0]}</Td>
-                    <Td>{row.tanggalwaktu.split(" ")[1]}</Td>
-                    <Td>{renderStatusKehadiran(parseInt(row.kehadiran))}</Td>
-                    <Td>{row.keterangan}</Td>
-                    <Td>
-                      <ButtonBoxVerifikasi2
-                        id={row.id}
-                        pkl_id={row.pkl_id}
-                        tanggalwaktu={row.tanggalwaktu}
-                        kehadiran={row.kehadiran}
-                        keterangan={row.keterangan}
-                      />
-                    </Td>
-                    <Td>
-                      <ButtonBoxTolak2
-                        id={row.id}
-                        pkl_id={row.pkl_id}
-                        tanggalwaktu={row.tanggalwaktu}
-                        kehadiran={row.kehadiran}
-                        keterangan={row.keterangan}
-                      />
-                    </Td>
-                  </Tr>
-                );
+                if (parseInt(row.status) === 1) {
+                  return (
+                    <Tr
+                      key={index}
+                      bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                      color="black"
+                    >
+                      <Td>{(no += 1)}</Td>
+                      <Td>{row.tanggalwaktu.split(" ")[0]}</Td>
+                      <Td>{row.tanggalwaktu.split(" ")[1]}</Td>
+                      <Td>{renderStatusKehadiran(parseInt(row.kehadiran))}</Td>
+                      <Td>{row.keterangan}</Td>
+                      <Td>
+                        <ButtonBoxVerifikasi2
+                          id={row.id}
+                          pkl_id={row.pkl_id}
+                          tanggalwaktu={row.tanggalwaktu}
+                          kehadiran={row.kehadiran}
+                          keterangan={row.keterangan}
+                        />
+                      </Td>
+                      <Td>
+                        <ButtonBoxTolak2
+                          id={row.id}
+                          pkl_id={row.pkl_id}
+                          tanggalwaktu={row.tanggalwaktu}
+                          kehadiran={row.kehadiran}
+                          keterangan={row.keterangan}
+                        />
+                      </Td>
+                    </Tr>
+                  );
+                } else {
+                  return (
+                    <Tr
+                      key={index}
+                      bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                      color="black"
+                    >
+                      <Td>{(no += 1)}</Td>
+                      <Td>{row.tanggalwaktu.split(" ")[0]}</Td>
+                      <Td>{row.tanggalwaktu.split(" ")[1]}</Td>
+                      <Td>{renderStatusKehadiran(parseInt(row.kehadiran))}</Td>
+                      <Td>{row.keterangan}</Td>
+                      <Td>
+                        <Td>{renderStatus(parseInt(row.status))}</Td>
+                      </Td>
+                      <Td />
+                    </Tr>
+                  );
+                }
               }
             }
           })}

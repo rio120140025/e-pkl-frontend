@@ -223,27 +223,28 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
           <ButtonBoxTambahRencana id={parseInt(valueId)} />
         </HStack>
       )}
-      {parseInt(valueRolesId) === 2 || parseInt(valueRolesId) === 3 && (
-      <InputGroup
-        top="12px"
-        marginLeft={875}
-        marginBottom={2}
-        backgroundColor="#fff"
-        width="418px"
-        fontSize="14px"
-        color="#a1a9b8"
-      >
-        <InputLeftElement>
-          <SearchIcon />
-        </InputLeftElement>
-        <Input
-          type="text"
-          placeholder="Search..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </InputGroup>
-      )}
+      {parseInt(valueRolesId) === 2 ||
+        (parseInt(valueRolesId) === 3 && (
+          <InputGroup
+            top="12px"
+            marginLeft={875}
+            marginBottom={2}
+            backgroundColor="#fff"
+            width="418px"
+            fontSize="14px"
+            color="#a1a9b8"
+          >
+            <InputLeftElement>
+              <SearchIcon />
+            </InputLeftElement>
+            <Input
+              type="text"
+              placeholder="Search..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </InputGroup>
+        ))}
       <Table variant="striped" top="1384px" left="0" width="1314px">
         <Thead>
           {parseInt(valueRolesId) === 1 && (
@@ -426,36 +427,53 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
               }
             } else if (parseInt(valueRolesId) === 2) {
               if (row.pkl_id === parseInt(valueId)) {
-                return (
-                  <Tr
-                    key={index}
-                    bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
-                    color="black"
-                  >
-                    <Td>{(no += 1)}</Td>
-                    <Td>{row.capaian}</Td>
-                    <Td>{row.sub_capaian}</Td>
-                    <Td>{row.jam}</Td>
-                    <Td>
-                      <ButtonBoxVerifikasi
-                        id={row.id}
-                        capaian={row.capaian}
-                        sub_capaian={row.sub_capaian}
-                        jam={row.jam}
-                        pkl_id={row.jam}
-                      />
-                    </Td>
-                    <Td>
-                      <ButtonBoxTolak
-                        id={row.id}
-                        capaian={row.capaian}
-                        sub_capaian={row.sub_capaian}
-                        jam={row.jam}
-                        pkl_id={row.jam}
-                      />
-                    </Td>
-                  </Tr>
-                );
+                if (parseInt(row.status) === 1) {
+                  return (
+                    <Tr
+                      key={index}
+                      bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                      color="black"
+                    >
+                      <Td>{(no += 1)}</Td>
+                      <Td>{row.capaian}</Td>
+                      <Td>{row.sub_capaian}</Td>
+                      <Td>{row.jam}</Td>
+                      <Td>
+                        <ButtonBoxVerifikasi
+                          id={row.id}
+                          capaian={row.capaian}
+                          sub_capaian={row.sub_capaian}
+                          jam={row.jam}
+                          pkl_id={row.pkl_id}
+                        />
+                      </Td>
+                      <Td>
+                        <ButtonBoxTolak
+                          id={row.id}
+                          capaian={row.capaian}
+                          sub_capaian={row.sub_capaian}
+                          jam={row.jam}
+                          pkl_id={row.pkl_id}
+                        />
+                      </Td>
+                    </Tr>
+                  );
+                } else {
+                  return (
+                    <Tr
+                      key={index}
+                      bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                      color="black"
+                    >
+                      <Td>{(no += 1)}</Td>
+                      <Td>{row.capaian}</Td>
+                      <Td>{row.sub_capaian}</Td>
+                      <Td>{row.jam}</Td>
+                      <Td>{renderStatus(parseInt(row.status))}</Td>
+                      <Td />
+                    </Tr>
+                  );
+                }
               }
             } else if (parseInt(valueRolesId) === 3) {
               if (row.pkl_id === parseInt(valueId)) {
