@@ -24,6 +24,8 @@ import {
   RencanaKegiatan,
   RencanaKegiatanDetail,
 } from "./pages/dashboard-page/dashboard";
+import ExportPDF from "./pages/test";
+import ExportPDFKegiatan from "./pages/test copy";
 
 function App() {
   return (
@@ -46,7 +48,7 @@ function App() {
           <Route exact path="/dashboard" Component={Dashboard} />
 
           <Route exact path="/profile" Component={Profile} />
-          <Route exact path="/profile/ubah" Component={ProfileChange} />
+          <Route exact path="/profile-ubah" Component={ProfileChange} />
 
           <Route exact path="/rencana-kegiatan" Component={RencanaKegiatan} />
           <Route
@@ -64,6 +66,8 @@ function App() {
           <Route exact path="/penilaian-pkl" Component={Penilaian} />
 
           <Route exact path="/kuisioner" Component={Kuisioner} />
+          <Route exact path="/test" Component={ExportPDF} />
+          <Route exact path="/test2" Component={ExportPDFKegiatan} />
         </Routes>
       </Box>
     </BrowserRouter>
