@@ -24,6 +24,7 @@ function Header(props) {
 
   const handleLogout = () => {
     removeCookie("jwt_token");
+    localStorage.clear();
     window.location.href = "/";
   };
   const links = [

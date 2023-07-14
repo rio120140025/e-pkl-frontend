@@ -14,24 +14,12 @@ import {
     InputLeftElement,
     Flex,
     Spacer,
-    HStack,
-    Modal,
-    useDisclosure,
-    ModalOverlay,
-    ModalCloseButton,
-    ModalContent,
-    ModalBody,
-    ModalFooter,
-    Center,
 } from "@chakra-ui/react";
 
 import { ReactComponent as SortButton } from "../../../../assets/button-sort.svg";
 import { ReactComponent as SearchIcon } from "../../../../assets/icon-search.svg";
-import { ReactComponent as EditButton } from "../../../../assets/button-edit.svg";
-import { ReactComponent as DeleteButton } from "../../../../assets/button-delete.svg";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import { TableEdit } from "./table-edit";
 import { ButtonEditLogHarianMahasiswa, VerifikasiDPL } from "./button-edit";
 import { DetailLogHarianMahasiswaDosenDetail } from "./button-detail";
 
@@ -48,6 +36,7 @@ const TableDetail = () => {
     const roles_id = localStorage.getItem('roles_id');
     const pkl_id = localStorage.getItem('pkl_id')
     console.log("pkl_id", pkl_id)
+    console.log("roles_id", roles_id)
     useEffect(() => {
         axios
             .get("http://127.0.0.1:8000/api/user/jurnal/data", {
@@ -67,18 +56,33 @@ const TableDetail = () => {
             });
     }, []);
 
-    const filteredData = data.filter((item) =>
-        item.kegiatan.toLowerCase().includes(search.toLowerCase())
-    );
+    const filteredData = data.filter((item) => {
+        const formattedDate = new Date(item.waktu).toISOString().slice(0, 10);
+        return (
+            item.kegiatan.toLowerCase().includes(search.toLowerCase()) ||
+            formattedDate.includes(search.toLowerCase())
+        );
+    });
+
 
     const sortedData = filteredData.sort((a, b) => {
         if (sortKey === "") return 0;
-        const valA = a[sortKey].toUpperCase();
-        const valB = b[sortKey].toUpperCase();
-        if (valA < valB) return sortOrder === "asc" ? -1 : 1;
-        if (valA > valB) return sortOrder === "asc" ? 1 : -1;
-        return 0;
+        if (sortKey === "no") {
+            return sortOrder === "asc" ? a.id - b.id : b.id - a.id;
+        } else if (sortKey === "waktuPelaksanaan") {
+            const valA = new Date(a.waktu);
+            const valB = new Date(b.waktu);
+            return sortOrder === "asc" ? valA.getTime() - valB.getTime() : valB.getTime() - valA.getTime();
+        } else {
+            const valA = a[sortKey]?.toUpperCase() || "";
+            const valB = b[sortKey]?.toUpperCase() || "";
+            if (valA < valB) return sortOrder === "asc" ? -1 : 1;
+            if (valA > valB) return sortOrder === "asc" ? 1 : -1;
+            return 0;
+        }
     });
+
+
 
     const indexOfLastRow = currentPage * rowsPerPage;
     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
@@ -95,6 +99,7 @@ const TableDetail = () => {
     const totalRows = sortedData.length;
     const firstRow = indexOfFirstRow + 1;
     const lastRow = Math.min(indexOfLastRow, totalRows);
+    console.log("currentRows", currentRows)
     return (
         <Box
             // marginTop="28.86px"
@@ -125,7 +130,8 @@ const TableDetail = () => {
             </InputGroup>
             <Table variant="striped" top="1384px" left="0" width="100%">
                 <Thead>
-                    <Tr>
+                    <Tr
+                    >
                         <Th>
                             No
                             <Button
@@ -176,6 +182,15 @@ const TableDetail = () => {
                         </Th>
                         <Th>
                             Status{" "}
+                            <Button
+                                variant="link"
+                                onClick={() => {
+                                    setSortKey("status");
+                                    toggleSortOrder();
+                                }}
+                            >
+                                <SortButton />
+                            </Button>
                         </Th>
                         <Th textAlign={"center"}>Aksi</Th>
                     </Tr>
@@ -191,58 +206,66 @@ const TableDetail = () => {
                             <Td>{row.kegiatan}</Td>
                             <Td>{row.alatbahan}</Td>
                             <Td>{row.waktu}</Td>
-                            <Td>
-                                {roles_id == 1 || roles_id == 2 && (
+                            <>
+                                {(roles_id == 1 || roles_id == 2 || (roles_id == 3 && row.status != 1)) &&
                                     <>
-                                        {row.status == 1 && (
-                                            <span
-                                                color='#93BFCF'
-                                                fontFamily='Poppins'
-                                                fontSize='12px'
-                                                fontStyle='normal'
-                                                fontWeight='700'
-                                                lineHeight='20px'
+                                        {row.status == 1 &&
+                                            <Td
+                                                color="#93BFCF"
+                                                fontFamily="Poppins"
+                                                fontSize="12px"
+                                                fontStyle="normal"
+                                                fontWeight="700"
+                                                lineHeight="20px"
                                             >
                                                 Belum Diverifikasi
-                                            </span>
-                                        )}
-                                        {row.status == 2 && (
-                                            <span
-                                                color='#20B95D'
-                                                fontFamily='Poppins'
-                                                fontSize='12px'
-                                                fontStyle='normal'
-                                                fontWeight='700'
-                                                lineHeight='20px'
+                                            </Td>
+                                        }
+                                        {row.status == 2 &&
+                                            <Td
+                                                color="#20B95D"
+                                                fontFamily="Poppins"
+                                                fontSize="12px"
+                                                fontStyle="normal"
+                                                fontWeight="700"
+                                                lineHeight="20px"
                                             >
                                                 Diverifikasi
-                                            </span>
-                                        )}
-                                        {row.status == 3 && (
-                                            <span
-                                                color='#F00'
-                                                fontFamily='Poppins'
-                                                fontSize='12px'
-                                                fontStyle='normal'
-                                                fontWeight='700'
-                                                lineHeight='20px'
+                                            </Td>
+                                        }
+                                        {row.status == 3 &&
+                                            <Td
+                                                color="#F00"
+                                                fontFamily="Poppins"
+                                                fontSize="12px"
+                                                fontStyle="normal"
+                                                fontWeight="700"
+                                                lineHeight="20px"
                                             >
                                                 Ditolak
-                                            </span>
-                                        )}
+                                            </Td>
+                                        }
                                     </>
-                                )}
-                                {roles_id == 3 && <VerifikasiDPL id_penilaian={row.id} />}
-                            </Td>
+                                }
+                                {roles_id == 3 && row.status == 1 && <Td><VerifikasiDPL id_penilaian={row.id} /></Td>}
+                            </>
                             <Td>
                                 <Flex>
-                                    <DetailLogHarianMahasiswaDosenDetail logHarian_data={row} roles={roles_id} />
-                                    <ButtonEditLogHarianMahasiswa roles_id={roles_id} logHarian_data={row} id={row.id} />
+                                    <DetailLogHarianMahasiswaDosenDetail
+                                        logHarian_data={row}
+                                        roles={roles_id}
+                                    />
+                                    <ButtonEditLogHarianMahasiswa
+                                        roles_id={roles_id}
+                                        logHarian_data={row}
+                                        id={row.id}
+                                    />
                                 </Flex>
                             </Td>
                         </Tr>
                     ))}
                 </Tbody>
+
             </Table>
 
             <Box>
@@ -285,7 +308,7 @@ const TableDetail = () => {
                     />
                 )}
             </Box>
-        </Box>
+        </Box >
     );
 };
 

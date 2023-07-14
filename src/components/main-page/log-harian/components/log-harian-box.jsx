@@ -2,7 +2,7 @@ import React from "react";
 import { Box, SimpleGrid, Text, Flex } from "@chakra-ui/react";
 
 import ButtonBox from "../../components/button";
-import TableLogHarianMahasiswa from "./table-log-harian-mahasiswa";
+import TableLogHarian from "./table-log-harian";
 import TableDetail from "./table-detail";
 
 
@@ -23,7 +23,7 @@ function LogHarianBox(props) {
             <Flex direction="column" mx="30px" my="10px" gap="19">
                 <Box>
                     <Box paddingBottom="2.5%">
-                        {props.detail == "yes" ? <TableDetail /> : <TableLogHarianMahasiswa />}
+                        {props.detail == "yes" ? <TableDetail /> : <TableLogHarian />}
                     </Box>
                 </Box>
             </Flex>

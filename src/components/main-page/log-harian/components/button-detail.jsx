@@ -53,8 +53,8 @@ function DetailMahasiswaDosen(props) {
 }
 function DetailLogHarianMahasiswaDosenDetail(props) {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    console.log("ini nilai roles", props.roles)
-    console.log("ini nilai log harian", props.logHarian_data)
+    // console.log("ini nilai roles", props.roles)
+    // console.log("ini nilai log harian", props.logHarian_data)
     return (
         <>
             <Button

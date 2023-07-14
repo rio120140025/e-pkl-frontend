@@ -22,7 +22,6 @@ function PenilaianBox() {
             <Flex direction="column" mx="30px" my="10px" gap="19">
                 <Box>
                     <Box paddingBottom="2.5%">
-                        {/* {roles_id == 1 ? <TableComponentMahasiswa /> : <TableComponentDosen />} */}
                         {roles_id == 1 && <TableComponentMahasiswa />}
                         {roles_id == 2 && <TableComponentDosen />}
                         {roles_id == 3 && <TableComponentDPL />}

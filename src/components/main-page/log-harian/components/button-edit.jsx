@@ -31,10 +31,6 @@ import {
 
 import { ReactComponent as EditButton } from "../../../../assets/button-edit.svg";
 import { ReactComponent as DeleteButton } from "../../../../assets/button-delete.svg";
-import {
-    ButtonBoxDetailLogHarianMahasiswaDosenDetail,
-    ButtonBoxSimpanLogHarian
-} from "./button-box";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import { TableEdit } from "./table-edit";
@@ -196,7 +192,7 @@ function VerifikasiDPL(props) {
                             await callToast("Berhasil Mengubah Status Log Harian", "success");
                             setTimeout(() => {
                                 window.location.reload();
-                            }, 5000);
+                            }, 0);
                         }
                         notif();
                     })

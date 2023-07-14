@@ -89,63 +89,90 @@ const TableComponentDosen = () => {
             });
     }, [dataPKL]);
 
-    useEffect(() => {
-        let sorted = [...sortedData];
-        if (sortKey === "nama") {
-            sorted = sorted.sort((a, b) =>
-                sortOrder === "asc"
-                    ? a.mahasiswa.name.localeCompare(b.mahasiswa.name)
-                    : b.mahasiswa.name.localeCompare(a.mahasiswa.name)
-            );
-        } else if (sortKey === "dosen") {
-            sorted = sorted.sort((a, b) =>
-                sortOrder === "asc"
-                    ? a.dospem.name.localeCompare(b.dospem.name)
-                    : b.dospem.name.localeCompare(a.dospem.name)
-            );
-        } else if (sortKey === "lokasiPKL") {
-            sorted = sorted.sort((a, b) =>
-                sortOrder === "asc"
-                    ? a.mahasiswa.lokasi.localeCompare(b.mahasiswa.lokasi)
-                    : b.mahasiswa.lokasi.localeCompare(a.mahasiswa.lokasi)
-            );
-        } else if (sortKey === "waktu") {
-            sorted = sorted.sort((a, b) => {
-                const tglMulaiA = new Date(a.penilaian.tgl_mulai);
-                const tglMulaiB = new Date(b.penilaian.tgl_mulai);
-                return sortOrder === "asc" ? tglMulaiA - tglMulaiB : tglMulaiB - tglMulaiA;
-            });
-        } else if (sortKey === "rerata") {
-            sorted = sorted.sort((a, b) =>
-                sortOrder === "asc"
-                    ? a.penilaian.rerata - b.penilaian.rerata
-                    : b.penilaian.rerata - a.penilaian.rerata
-            );
-        }
-        setSortedData(sorted);
-    }, [sortKey, sortOrder]);
-    const filteredData = sortedData.filter((item) => {
-        const nim = item.nim ? item.nim.toString() : "";
-        const name = item.name ? item.name.toLowerCase() : "";
-        return name.includes(search.toLowerCase()) || nim.includes(search);
-    });
+    // Sorting function
+    const sortData = (data) => {
+        const sorted = [...data].sort((a, b) => {
+            const keyA = getSortValue(a, sortKey);
+            const keyB = getSortValue(b, sortKey);
 
+            if (keyA < keyB) {
+                return sortOrder === "asc" ? -1 : 1;
+            }
+            if (keyA > keyB) {
+                return sortOrder === "asc" ? 1 : -1;
+            }
+            return 0;
+        });
+
+        return sorted;
+    };
+
+    // Helper function to compare dates
+    const compareDates = (dateA, dateB) => {
+        const a = new Date(dateA);
+        const b = new Date(dateB);
+        const formattedDateA = a.toISOString().split("T")[0];
+        const formattedDateB = b.toISOString().split("T")[0];
+        if (formattedDateA < formattedDateB) {
+            return -1;
+        }
+        if (formattedDateA > formattedDateB) {
+            return 1;
+        }
+        return 0;
+    };
+
+    // Helper function to get the sort value based on the sort key
+    const getSortValue = (data, key) => {
+        if (key === "mahasiswa.name") {
+            return data?.mahasiswa?.name.toLowerCase();
+        } else if (key === "dospem.name") {
+            return data?.dospem?.name.toLowerCase();
+        } else if (key === "lokasiPKL") {
+            return data?.mahasiswa?.lokasi.toLowerCase();
+        } else if (key === "penilaian.tgl_mulai") {
+            return data?.penilaian?.tgl_mulai ? new Date(data.penilaian.tgl_mulai).toISOString().split("T")[0] : "";
+        } else if (key === "penilaian.rerata") {
+            return data?.penilaian?.rerata || 0;
+        } else {
+            return "";
+        }
+    };
+
+    // Filtering function based on the search input
+    const filterData = (data) => {
+        return data.filter((row) => {
+            const searchData = search.toLowerCase();
+            const mahasiswaName = row?.mahasiswa?.name?.toLowerCase();
+            const dospemName = row?.dospem?.name?.toLowerCase();
+            const lokasiPKL = row?.mahasiswa?.lokasi?.toLowerCase();
+            const tglMulai = row?.penilaian?.tgl_mulai?.split(" ")[0];
+            const rerata = row?.penilaian?.rerata?.toString();
+
+            return (
+                (mahasiswaName && mahasiswaName.includes(searchData)) ||
+                (dospemName && dospemName.includes(searchData)) ||
+                (lokasiPKL && lokasiPKL.includes(searchData)) ||
+                (tglMulai && tglMulai.includes(searchData)) || // Pencarian tanggal
+                (rerata && rerata.includes(searchData))
+            );
+        });
+    };
+
+    const sortedAndFilteredData = filterData(sortData(sortedData));
+    // Pagination calculations
     const indexOfLastRow = currentPage * rowsPerPage;
     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-    const currentRows = filteredData.slice(indexOfFirstRow, indexOfLastRow);
-    const totalRows = filteredData.length;
-    const firstRow = indexOfFirstRow + 1;
-    const lastRow = Math.min(indexOfLastRow, totalRows);
-    // console.log(sortedData)
+    const currentRows = sortedAndFilteredData.slice(
+        indexOfFirstRow,
+        indexOfLastRow
+    );
 
-    const { isOpen: isOpenDelete, onOpen: onOpenDelete, onClose: onCloseDelete } =
-        useDisclosure();
-    const { isOpen: isOpenEdit, onOpen: onOpenEdit, onClose: onCloseEdit } =
-        useDisclosure();
+    const totalRows = sortedAndFilteredData.length;
+    const firstRow = Math.min(totalRows, 1 + indexOfFirstRow);
+    const lastRow = Math.min(totalRows, indexOfLastRow);
+    console.log("currenrow", currentRows)
 
-    const handleDeleteRow = (index) => {
-        // Handle delete row
-    };
 
     return (
         <Box>
@@ -214,7 +241,7 @@ const TableComponentDosen = () => {
                             </Td>
                             <Td>{row && row.penilaian && row.penilaian.rerata}</Td>
                             <Td>
-                                <ButtonBoxDetailPenilaianDosen pkl_id={row && row.penilaian && row.penilaian.pkl_id} no={index + 1} />
+                                <ButtonBoxDetailPenilaianDosen pkl_id={row && row.penilaian && row.penilaian.pkl_id} no={index + 1} penilaianId={row && row.penilaian && row.penilaian.id} />
                             </Td>
                         </Tr>
                     ))}

@@ -29,9 +29,9 @@ const TableMahasiswaDetail = (props) => {
             .then((response) => {
                 console.log("ini data", response.data.body)
                 response.data.body.map((dataNilai) => {
-                    console.log("dataNilai.pkl_id", dataNilai.pkl_id)
-                    console.log("ini yang dicari", props.id)
-                    if (dataNilai.pkl_id === props.id && found === false) {
+                    // console.log("dataNilai.pkl_id", dataNilai)
+                    // console.log("ini yang dicari", props.id)
+                    if (dataNilai.id === props.id && found === false) {
                         console.log(dataNilai)
                         found = true
                         setDataPenilaian(dataNilai)

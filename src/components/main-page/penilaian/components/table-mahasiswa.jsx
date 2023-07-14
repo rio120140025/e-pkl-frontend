@@ -25,16 +25,12 @@ import { ReactComponent as SearchIcon } from "../../../../assets/icon-search.svg
 import ButtonBoxDetailPenilaian from "./table-mahasiswa-detail";
 
 const TableComponentMahasiswa = () => {
-    const [dataPenilaian, setDataPenilaian] = useState([]);
     const [dataPKL, setDataPKL] = useState([]);
-    const [search, setSearch] = useState("");
+    const [dataPenilaian, setDataPenilaian] = useState({});
     const [sortKey, setSortKey] = useState("name");
     const [sortOrder, setSortOrder] = useState("asc");
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    let index = 0
-    const id = localStorage.getItem('id');
-    console.log("id local host", id)
 
     const toggleSortOrder = (key) => {
         if (key === sortKey) {
@@ -50,72 +46,83 @@ const TableComponentMahasiswa = () => {
     };
 
     const [cookies, setCookie] = useCookies(["jwt_token"]);
+    const id = localStorage.getItem("id");
+
     useEffect(() => {
         axios
             .get("http://127.0.0.1:8000/api/user/pkl/data", {
                 headers: { Authorization: "Bearer " + cookies.jwt_token.data },
             })
             .then((response) => {
-                response.data.body.map((dataPKL) => {
-                    if (dataPKL.mahasiswa.id == id) {
-                        setDataPKL(dataPKL)
-                        return
-                    }
-                })
+                const filteredData = response.data.body.filter(
+                    (dataPKL) => dataPKL.mahasiswa.id == id
+                );
+                setDataPKL(filteredData[0]);
             })
             .catch((error) => {
                 console.log(error.response.data);
             });
     }, []);
-    console.log("data pkl", dataPKL)
+
     useEffect(() => {
-        axios
-            .get("http://127.0.0.1:8000/api/user/penilaian", {
-                headers: { Authorization: "Bearer " + cookies.jwt_token.data },
-            })
-            .then((response) => {
-                response.data.body.map((dataNilai) => {
-                    console.log("id PKL", dataPKL.id)
-                    console.log("dataNilai.pkl_id", dataNilai.pkl_id)
-                    if (dataNilai.pkl_id == dataPKL.id) {
-                        setDataPenilaian(dataNilai)
-                        return
-                    }
+        if (dataPKL.id) {
+            axios
+                .get(`http://127.0.0.1:8000/api/user/penilaian/${dataPKL.id}`, {
+                    headers: { Authorization: "Bearer " + cookies.jwt_token.data },
                 })
-            })
-            .catch((error) => {
-                console.log(error.response.data);
-            });
+                .then((response) => {
+                    setDataPenilaian(response.data.body);
+                })
+                .catch((error) => {
+                    console.log(error.response.data);
+                });
+        }
     }, [dataPKL]);
-    console.log("data penilaian", dataPenilaian)
 
+    // Sorting function
+    const sortData = (data) => {
+        const sorted = [...data].sort((a, b) => {
+            const keyA = getSortValue(a, sortKey);
+            const keyB = getSortValue(b, sortKey);
 
-    const filteredData = (typeof dataPKL === 'object')
-        ? Object.keys(dataPKL).reduce((result, key) => {
-            const item = dataPKL[key];
-            if (item && item.roles_id == 1 && item.name && item.name.toLowerCase().includes(search.toLowerCase())) {
-                result.push(item);
+            if (keyA < keyB) {
+                return sortOrder === "asc" ? -1 : 1;
             }
-            return result;
-        }, [])
-        : [];
+            if (keyA > keyB) {
+                return sortOrder === "asc" ? 1 : -1;
+            }
+            return 0;
+        });
 
-    const sortedData = filteredData.sort((a, b) => {
-        if (sortKey === "") return 0;
-        const valA = a[sortKey];
-        const valB = b[sortKey];
-        if (valA < valB) return sortOrder === "asc" ? -1 : 1;
-        if (valA > valB) return sortOrder === "asc" ? 1 : -1;
-        return 0;
-    });
+        return sorted;
+    };
 
+    // Helper function to get the sort value based on the sort key
+    const getSortValue = (data, key) => {
+        if (key === "name") {
+            return data?.mahasiswa?.name.toLowerCase();
+        } else if (key === "dosen") {
+            return data?.dospem?.name.toLowerCase();
+        } else if (key === "lokasiPKL") {
+            return data?.mahasiswa?.lokasi.toLowerCase();
+        } else if (key === "tgl_mulai") {
+            return data?.tgl_mulai ? new Date(data.tgl_mulai).toISOString().split("T")[0] : "";
+        } else if (key === "rerata") {
+            return data?.rerata || 0;
+        } else {
+            return "";
+        }
+    };
+
+    const sortedData = sortData([dataPKL]);
+    // Pagination calculations
     const indexOfLastRow = currentPage * rowsPerPage;
     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
     const currentRows = sortedData.slice(indexOfFirstRow, indexOfLastRow);
-    const totalRows = sortedData.length;
-    const firstRow = indexOfFirstRow + 1;
-    const lastRow = Math.min(indexOfLastRow, totalRows);
 
+    const totalRows = sortedData.length;
+    const firstRow = Math.min(totalRows, 1 + indexOfFirstRow);
+    const lastRow = Math.min(totalRows, indexOfLastRow);
 
     return (
         <Box>
@@ -126,8 +133,6 @@ const TableComponentMahasiswa = () => {
                 <Input
                     type="text"
                     placeholder="Search..."
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
                 />
             </InputGroup>
 
@@ -149,7 +154,10 @@ const TableComponentMahasiswa = () => {
                         </Th>
                         <Th>
                             Lokasi PKL{" "}
-                            <Button variant="link" onClick={() => toggleSortOrder("lokasiPKL")}>
+                            <Button
+                                variant="link"
+                                onClick={() => toggleSortOrder("lokasiPKL")}
+                            >
                                 <SortButton />
                             </Button>
                         </Th>
@@ -159,18 +167,23 @@ const TableComponentMahasiswa = () => {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    <Tr>
-                        <Td>{index + 1}</Td>
-                        <Td>{dataPKL && dataPKL.mahasiswa && dataPKL.mahasiswa.name}</Td>
-                        <Td>{dataPKL && dataPKL.dospem && dataPKL.dospem.name}</Td>
-                        <Td>{dataPKL && dataPKL.mahasiswa && dataPKL.mahasiswa.lokasi}</Td>
-                        <Td>{dataPenilaian && dataPenilaian.tgl_mulai && dataPenilaian.tgl_mulai.split(" ")[0]} s.d {dataPenilaian && dataPenilaian.tgl_selesai && dataPenilaian.tgl_selesai.split(" ")[0]}</Td>
-                        <Td>{dataPenilaian && dataPenilaian.rerata}</Td>
-
-                        <Td>
-                            <ButtonBoxDetailPenilaian />
-                        </Td>
-                    </Tr>
+                    {currentRows.map((row, index) => (
+                        <Tr key={row.id}>
+                            <Td>{index + 1}</Td>
+                            <Td>{row && row.mahasiswa && row.mahasiswa.name}</Td>
+                            <Td>{row && row.dospem && row.dospem.name}</Td>
+                            <Td>{row && row.mahasiswa && row.mahasiswa.lokasi}</Td>
+                            <Td>
+                                {row &&
+                                    row.penilaian &&
+                                    `${row.penilaian.tgl_mulai.split(" ")[0]} s.d ${row.penilaian.tgl_selesai.split(" ")[0]}`}
+                            </Td>
+                            <Td>{row && row.penilaian && row.penilaian.rerata}</Td>
+                            <Td>
+                                <ButtonBoxDetailPenilaian />
+                            </Td>
+                        </Tr>
+                    ))}
                 </Tbody>
             </Table>
 
