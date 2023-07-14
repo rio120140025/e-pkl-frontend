@@ -15,18 +15,14 @@ function HaloUser({ name }) {
     <>
       {isOpen && (
         <Box
-          position="absolute"
-          marginTop="100px"
-          left="78px"
+          position={"relative"}
           borderRadius="5px"
           backgroundColor="#e1e7ea"
           boxShadow="0 4px 4px rgba(0, 0, 0, 0.25)"
-          width="1375px"
+          width="100%"
           height="36px"
           fontSize="14px"
-          whiteSpace="nowrap"
-          overflow="hidden"
-          justifyContent="space-between"
+          marginBottom={"30px"}
         >
           <Flex gap="1" marginTop={1.5} marginLeft={5}>
             <Text display="inline-block">Halo</Text>

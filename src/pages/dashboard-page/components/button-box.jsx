@@ -36,6 +36,23 @@ import { useCookies } from "react-cookie";
 
 import { ReactComponent as EditButton } from "../../../assets/button-edit.svg";
 import { ReactComponent as CloseButton } from "../../../assets/button-close.svg";
+
+function ButtonBox(props) {
+  return (
+    <Button
+      onClick={() => props.handle()}
+      variant="solid"
+      w="121px"
+      colorScheme="#93BFCF"
+      bg="#93BFCF"
+    >
+      {props.name}
+    </Button>
+  );
+}
+
+export default ButtonBox;
+
 function ButtonBoxDownload() {
   return (
     <a className="button-box-download" href="docs.pdf" target="_blank" download>
@@ -515,6 +532,7 @@ const EditFunctionKehadiran = ({ id, pkl_id }) => {
   const [cookies] = useCookies(["jwt_token"]);
 
   const tanggalwaktu = `${tanggal} ${waktu}:00`;
+
   const data_input = {
     kehadiran: kehadiran,
     keterangan: keterangan,
@@ -522,11 +540,6 @@ const EditFunctionKehadiran = ({ id, pkl_id }) => {
     status: 1,
     pkl_id: pkl_id,
   };
-
-  function formatDateForInput(dateString) {
-    const [year, month, day] = dateString.split("-");
-    return `${day}/${month}/${year}`;
-  }
 
   useEffect(() => {
     axios
@@ -540,11 +553,8 @@ const EditFunctionKehadiran = ({ id, pkl_id }) => {
               setKehadiran(data.kehadiran);
               setKeterangan(data.keterangan);
               const datetimeParts = data.tanggalwaktu.split(" ");
-              const tanggalPart = datetimeParts[0];
-              const waktuPart = datetimeParts[1];
-              const tanggalFormatted = formatDateForInput(tanggalPart);
-              setTanggal(tanggalFormatted);
-              setWaktu(waktuPart);
+              setTanggal(datetimeParts[0]);
+              setWaktu(datetimeParts[1]);
             }
           }
         });
@@ -726,12 +736,13 @@ function ButtonBoxTambahRencanaLogHarian() {
   );
 }
 function ButtonBoxTambahRencanaKehadiran({ id }) {
-  const [kehadiran, setkehadiran] = useState("");
-  const [keterangan, setketerangan] = useState("");
+  const [kehadiran, setKehadiran] = useState("");
+  const [keterangan, setKeterangan] = useState("");
   const [tanggal, setTanggal] = useState("");
   const [waktu, setWaktu] = useState("");
   const [cookies] = useCookies(["jwt_token"]);
 
+  console.log(setKehadiran);
   const handleSubmit = (e) => {
     e.preventDefault();
     const tanggalwaktu = `${tanggal} ${waktu}:00`;
@@ -748,8 +759,8 @@ function ButtonBoxTambahRencanaKehadiran({ id }) {
       })
       .then((response) => {
         window.location.reload();
-        setkehadiran("");
-        setketerangan("");
+        setKehadiran("");
+        setKeterangan("");
       })
       .catch((error) => {
         console.log(error);
@@ -817,7 +828,7 @@ function ButtonBoxTambahRencanaKehadiran({ id }) {
                         variant="unstyled"
                         border="none"
                         marginBlock={1}
-                        onChange={(e) => setkehadiran(e.target.value)}
+                        onChange={(e) => setKehadiran(e.target.value)}
                       >
                         <option value={1}>Hadir</option>
                         <option value={2}>Sakit</option>
@@ -829,7 +840,7 @@ function ButtonBoxTambahRencanaKehadiran({ id }) {
                       <Input
                         type="text"
                         value={keterangan}
-                        onChange={(e) => setketerangan(e.target.value)}
+                        onChange={(e) => setKeterangan(e.target.value)}
                       />
                     </Td>
                   </Tr>
@@ -1037,4 +1048,5 @@ export {
   ButtonBoxExport,
   EditFunction,
   EditFunctionKehadiran,
+  ButtonBox,
 };

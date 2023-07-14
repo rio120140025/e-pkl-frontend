@@ -6,19 +6,19 @@ import axios from "axios";
 
 import "../../login-page/components/box.css";
 
-import InputBox from "../../login-page/components/input-box";
-import PasswordInput from "../../login-page/components/password";
+import { InputBox, InputBox2 } from "../../login-page/components/input-box";
+import { PasswordInput } from "../../login-page/components/password";
 import { ButtonBoxSignIn } from "../../login-page/components/button-box";
 
 function RegisterBoxDosen() {
-  const toast = useToast()
+  const toast = useToast();
   function callToast(title, status) {
     toast({
       title: title,
       status: status,
       duration: 3000,
       isClosable: true,
-    })
+    });
   }
 
   const [nama, setNama] = useState("");
@@ -33,27 +33,19 @@ function RegisterBoxDosen() {
       email: email,
       roles_id: "2",
       nip: nip,
-      password: password
+      password: password,
     };
 
     axios
       .post("http://127.0.0.1:8000/api/user/register", loginData)
-      .then(response => {
-        callToast("Berhasil Membuat Akun", 'success')
+      .then((response) => {
+        callToast("Berhasil Membuat Akun", "success");
         navigate("/");
       })
-      .catch(error => {
-        console.error(error.response);
-        if (error.response.data.errors.email !== null) {
-          callToast(error.response.data.errors.email, "error");
-        }
-        if (error.response.data.errors.nip !== null) {
-          callToast(error.response.data.errors.nip, "error");
-        }
-        if (error.response.data.errors.password !== null) {
-          callToast(error.response.data.errors.password, "error");
-        }
-
+      .catch((error) => {
+        Object.keys(error.response.data.errors).forEach(function (key, index) {
+          callToast(error.response.data.errors[key], "error");
+        });
       });
   };
   return (
@@ -63,7 +55,10 @@ function RegisterBoxDosen() {
           <SimpleGrid spacingY="5px">
             <Box>
               Nama
-              <InputBox input={nama} handleSet={(e) => setNama(e.target.value)} />
+              <InputBox
+                input={nama}
+                handleSet={(e) => setNama(e.target.value)}
+              />
             </Box>
             <Box>
               NRK/NIP
@@ -71,17 +66,26 @@ function RegisterBoxDosen() {
             </Box>
             <Box>
               Email
-              <InputBox input={email} handleSet={(e) => setEmail(e.target.value)} />
+              <InputBox
+                input={email}
+                handleSet={(e) => setEmail(e.target.value)}
+              />
             </Box>
             <Box>
               Password
-              <PasswordInput password={password} handleSetPassword={(e) => setPassword(e.target.value)} />
+              <PasswordInput
+                password={password}
+                handleSetPassword={(e) => setPassword(e.target.value)}
+              />
             </Box>
-            <ButtonBoxSignIn handle={() => handleRegister()} buttonType='Sign Up' />
+            <ButtonBoxSignIn
+              handle={() => handleRegister()}
+              buttonType="Sign Up"
+            />
           </SimpleGrid>
         </Box>
       </AbsoluteCenter>
-    </Center >
+    </Center>
   );
 }
 export default RegisterBoxDosen;

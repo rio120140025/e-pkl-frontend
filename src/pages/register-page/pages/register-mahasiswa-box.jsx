@@ -7,8 +7,8 @@ import axios from "axios";
 
 import "../../login-page/components/box.css";
 
-import InputBox from "../../login-page/components/input-box";
-import PasswordInput from "../../login-page/components/password";
+import { InputBox, InputBox2 } from "../../login-page/components/input-box";
+import { PasswordInput } from "../../login-page/components/password";
 import { ButtonBoxSignIn } from "../../login-page/components/button-box";
 
 function RegisterBoxMahasiswa() {
@@ -26,7 +26,7 @@ function RegisterBoxMahasiswa() {
   const [email, setEmail] = useState("");
   const [nim, setNim] = useState("");
   const [lokasi, setLokasi] = useState("");
-  const [notelp, setNotelp] = useState("");
+  const [no_hp, setno_hp] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
@@ -38,7 +38,7 @@ function RegisterBoxMahasiswa() {
       roles_id: "1",
       lokasi: lokasi,
       nim: nim,
-      notelp: notelp,
+      no_hp: no_hp,
     };
 
     axios
@@ -48,22 +48,9 @@ function RegisterBoxMahasiswa() {
         navigate("/");
       })
       .catch((error) => {
-        console.error(error.response.data.errors);
-        if (error.response.data.errors.email !== null) {
-          callToast(error.response.data.errors.email, "error");
-        }
-        if (error.response.data.errors.nim !== null) {
-          callToast(error.response.data.errors.nim, "error");
-        }
-        if (error.response.data.errors.password !== null) {
-          callToast(error.response.data.errors.password, "error");
-        }
-        if (error.response.data.errors.lokasi !== null) {
-          callToast(error.response.data.errors.lokasi, "error");
-        }
-        if (error.response.data.errors.name !== null) {
-          callToast(error.response.data.errors.name, "error");
-        }
+        Object.keys(error.response.data.errors).forEach(function (key, index) {
+          callToast(error.response.data.errors[key], "error");
+        });
       });
   };
 
@@ -100,8 +87,8 @@ function RegisterBoxMahasiswa() {
             <Box>
               Nomor Telepon
               <InputBox
-                input={notelp}
-                handleSet={(e) => setNotelp(e.target.value)}
+                input={no_hp}
+                handleSet={(e) => setno_hp(e.target.value)}
               />
             </Box>
             <Box>

@@ -94,42 +94,33 @@ function Dashboard() {
 
   return (
     <>
-      {data1.roles_id === 1 ? (
-        <Box
-          height={"100vh"}
-          width={"100vw"}
-          w="100%"
-          bgRepeat="no-repeat"
-          backgroundPosition="center"
-          backgroundSize="cover"
-          backgroundColor="#f4f8fa"
-        >
-          <Header page="1" />
-          <DashboardLogo />
+      <Box
+        height={"100vh"}
+        width={"100vw"}
+        w="100%"
+        bgRepeat="no-repeat"
+        backgroundPosition="center"
+        backgroundSize="cover"
+        backgroundColor="#f4f8fa"
+      >
+        <Header page="1" />
+
+        <DashboardLogo />
+        <Flex direction="column" gap="12px" py="24px" mx="6.3%">
+          <Box marginTop={"100px"}/>
           <HaloUser name={data1.name} />
-          <DashboardBoxMahasiswa id={data1.id} />
-        </Box>
-      ) : (
-        <Box
-          height={"100vh"}
-          width={"100vw"}
-          w="100%"
-          bgRepeat="no-repeat"
-          backgroundPosition="center"
-          backgroundSize="cover"
-          backgroundColor="#f4f8fa"
-        >
-          <Header page="1" />
-          <DashboardLogo />
-          <HaloUser name={data1.name} />
-          <DashboardBoxDosenDPL id={data1.id} />
-        </Box>
-      )}
+          <Box>
+            <DashboardBoxMahasiswa id={data1.id} />
+          </Box>
+        </Flex>
+      </Box>
     </>
   );
 }
 
 function Profile() {
+  const roles_id = parseInt(localStorage.getItem('roles_id'));
+  console.log(roles_id);
   return (
     <Box
       height={"100vh"}
@@ -146,12 +137,14 @@ function Profile() {
         <Spacer />
         <BreadcrumbProfile />
       </Flex>
-      <ProfileBoxMahasiswa />
+      <ProfileBoxMahasiswa roles_id={roles_id}/>
     </Box>
   );
 }
 
 function ProfileChange() {
+  const roles_id = parseInt(localStorage.getItem('roles_id'));
+  console.log(roles_id);
   return (
     <Box
       height={"100vh"}
@@ -168,7 +161,7 @@ function ProfileChange() {
         <Spacer />
         <BreadcrumbProfileUbah />
       </Flex>
-      <ChangeProfileBoxMahasiswa />
+      <ChangeProfileBoxMahasiswa roles_id={roles_id}/>
     </Box>
   );
 }

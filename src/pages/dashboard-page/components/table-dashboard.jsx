@@ -28,7 +28,27 @@ const TableDashboard = ({ user_id }) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
+  const [data1, setData1] = useState(null);
   const [cookies] = useCookies(["name"]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response1 = await axios.get(
+          "http://127.0.0.1:8000/api/user/profile",
+          {
+            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+          }
+        );
+        const updatedData1 = response1.data;
+        setData1(updatedData1);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [cookies.jwt_token.data]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,6 +105,7 @@ const TableDashboard = ({ user_id }) => {
   const firstRow = indexOfFirstRow + 1;
   const lastRow = Math.min(indexOfLastRow, totalRows);
   let no = 0;
+  let found = 0;
 
   useEffect(() => {
     setSortKey("");
@@ -186,24 +207,34 @@ const TableDashboard = ({ user_id }) => {
           </Tr>
         </Thead>
         <Tbody>
-          {currentRows.map((row, index) => {
-            if (row.mahasiswa_id == user_id) {
-              return (
-                <Tr
-                  key={index}
-                  bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
-                  color="black"
-                >
-                  <Td>{(no += 1)}</Td>
-                  <Td>{row.mahasiswa.name}</Td>
-                  <Td>{row.mahasiswa.nim}</Td>
-                  <Td>{row.dospem.name}</Td>
-                  <Td>{row.dpl.name}</Td>
-                  <Td>{row.mahasiswa.lokasi}</Td>
-                </Tr>
-              );
-            } else {
-              if (row.dospem_id === user_id || row.dpl_id === user_id) {
+          {data.length === 0 ? (
+            <Tr bg={"#FFFFFF"} color="black">
+              <Td>{(no += 1)}</Td>
+              <Td>{data1?.name}</Td>
+              <Td>{data1?.nim}</Td>
+              <Td></Td>
+              <Td></Td>
+              <Td>{data1?.lokasi}</Td>
+            </Tr>
+          ) : (
+            currentRows.map((row, index) => {
+              if (row.mahasiswa_id === user_id) {
+                found = 1;
+                return (
+                  <Tr
+                    key={index}
+                    bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                    color="black"
+                  >
+                    <Td>{(no += 1)}</Td>
+                    <Td>{row.mahasiswa.name}</Td>
+                    <Td>{row.mahasiswa.nim}</Td>
+                    <Td>{row.dospem.name}</Td>
+                    <Td>{row.dpl.name}</Td>
+                    <Td>{row.mahasiswa.lokasi}</Td>
+                  </Tr>
+                );
+              } else if (row.dospem_id === user_id || row.dpl_id === user_id) {
                 return (
                   <Tr
                     key={index}
@@ -219,9 +250,19 @@ const TableDashboard = ({ user_id }) => {
                   </Tr>
                 );
               }
-            }
-            return null;
-          })}
+              return null;
+            })
+          )}
+          {found === 0 && user_id === 1 && (
+            <Tr bg={"#FFFFFF"} color="black">
+              <Td>{(no += 1)}</Td>
+              <Td>{data1?.name}</Td>
+              <Td>{data1?.nim}</Td>
+              <Td></Td>
+              <Td></Td>
+              <Td>{data1?.lokasi}</Td>
+            </Tr>
+          )}
         </Tbody>
       </Table>
       <Box>

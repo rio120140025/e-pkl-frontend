@@ -15,8 +15,8 @@ import axios from "axios";
 
 import "../components/box.css";
 
-import InputBox from "../components/input-box";
-import PasswordInput from "../components/password";
+import { InputBox, InputBox2 } from "../../login-page/components/input-box";
+import { PasswordInput } from "../../login-page/components/password";
 import { ButtonBoxSignIn } from "../components/button-box";
 import { useNavigate } from "react-router";
 import { useCookies } from "react-cookie";
@@ -85,7 +85,10 @@ function LoginBox() {
                 handleSetPassword={(e) => setPassword(e.target.value)}
               />
             </Box>
-            <ButtonBoxSignIn handle={() => handleSignIn()} buttonType="Sign In"/>
+            <ButtonBoxSignIn
+              handle={() => handleSignIn()}
+              buttonType="Sign In"
+            />
             <Text className="button-text" onClick={onOpen} cursor="pointer">
               Forgot password?
             </Text>

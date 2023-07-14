@@ -29,7 +29,27 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
+  const [data1, setData1] = useState(null);
   const [cookies] = useCookies(["name"]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response1 = await axios.get(
+          "http://127.0.0.1:8000/api/user/profile",
+          {
+            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+          }
+        );
+        const updatedData1 = response1.data;
+        setData1(updatedData1);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [cookies.jwt_token.data]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,7 +105,7 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
   const firstRow = indexOfFirstRow + 1;
   const lastRow = Math.min(indexOfLastRow, totalRows);
   let no = 0;
-
+  let found = 0;
   useEffect(() => {
     setSortKey("");
   }, []);
@@ -163,50 +183,76 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
           </Tr>
         </Thead>
         <Tbody>
-          {currentRows.map((row, index) => {
-            if (roles_id === 1) {
-              if (row.mahasiswa_id == id) {
-                return (
-                  <Tr
-                    key={index}
-                    bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
-                    color="black"
-                  >
-                    <Td>{(no += 1)}</Td>
-                    <Td>{row.mahasiswa.name}</Td>
-                    <Td>{row.mahasiswa.nim}</Td>
-                    <Td>{row.dospem.name}</Td>
-                    <Td>
-                      <Flex>
-                        <ButtonBoxDetailRencanaKegiatan id={row.id} roles_id={roles_id}/>
-                      </Flex>
-                    </Td>
-                  </Tr>
-                );
+          {data.length === 0 ? (
+            <Tr bg={"#FFFFFF"} color="black">
+              <Td>{(no += 1)}</Td>
+              <Td>{data1?.name}</Td>
+              <Td>{data1?.nim}</Td>
+              <Td></Td>
+              <Td></Td>
+            </Tr>
+          ) : (
+            currentRows.map((row, index) => {
+              if (roles_id === 1) {
+                if (row.mahasiswa_id == id) {
+                  found = 1;
+                  return (
+                    <Tr
+                      key={index}
+                      bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                      color="black"
+                    >
+                      <Td>{(no += 1)}</Td>
+                      <Td>{row.mahasiswa.name}</Td>
+                      <Td>{row.mahasiswa.nim}</Td>
+                      <Td>{row.dospem.name}</Td>
+                      <Td>
+                        <Flex>
+                          <ButtonBoxDetailRencanaKegiatan
+                            id={row.id}
+                            roles_id={roles_id}
+                          />
+                        </Flex>
+                      </Td>
+                    </Tr>
+                  );
+                }
+              } else {
+                if (row.dospem_id === id || row.dpl_id === id) {
+                  return (
+                    <Tr
+                      key={index}
+                      bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                      color="black"
+                    >
+                      <Td>{(no += 1)}</Td>
+                      <Td>{row.mahasiswa.name}</Td>
+                      <Td>{row.mahasiswa.nim}</Td>
+                      <Td>{row.dospem.name}</Td>
+                      <Td>
+                        <Flex>
+                          <ButtonBoxDetailRencanaKegiatan
+                            id={row.id}
+                            roles_id={roles_id}
+                          />
+                        </Flex>
+                      </Td>
+                    </Tr>
+                  );
+                }
               }
-            } else {
-              if (row.dospem_id === id || row.dpl_id === id) {
-                return (
-                  <Tr
-                    key={index}
-                    bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
-                    color="black"
-                  >
-                    <Td>{(no += 1)}</Td>
-                    <Td>{row.mahasiswa.name}</Td>
-                    <Td>{row.mahasiswa.nim}</Td>
-                    <Td>{row.dospem.name}</Td>
-                    <Td>
-                      <Flex>
-                        <ButtonBoxDetailRencanaKegiatan id={row.id} roles_id={roles_id}/>
-                      </Flex>
-                    </Td>
-                  </Tr>
-                );
-              }
-            }
-            return null;
-          })}
+              return null;
+            })
+          )}
+          {found === 0 && id === 1 && (
+            <Tr bg={"#FFFFFF"} color="black">
+              <Td>{(no += 1)}</Td>
+              <Td>{data1?.name}</Td>
+              <Td>{data1?.nim}</Td>
+              <Td></Td>
+              <Td></Td>
+            </Tr>
+          )}
         </Tbody>
       </Table>
       <Box>

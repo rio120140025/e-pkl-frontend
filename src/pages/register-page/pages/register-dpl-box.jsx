@@ -6,8 +6,8 @@ import axios from "axios";
 
 import "../../login-page/components/box.css";
 
-import InputBox from "../../login-page/components/input-box";
-import PasswordInput from "../../login-page/components/password";
+import { InputBox, InputBox2 } from "../../login-page/components/input-box";
+import { PasswordInput } from "../../login-page/components/password";
 import { ButtonBoxSignIn } from "../../login-page/components/button-box";
 
 function RegisterBoxDPL() {
@@ -48,19 +48,9 @@ function RegisterBoxDPL() {
         navigate("/");
       })
       .catch((error) => {
-        console.error(error.response.data.errors);
-        if (error.response.data.errors.email !== null) {
-          callToast(error.response.data.errors.email, "error");
-        }
-        if (error.response.data.errors.nip !== null) {
-          callToast(error.response.data.errors.nip, "error");
-        }
-        if (error.response.data.errors.password !== null) {
-          callToast(error.response.data.errors.password, "error");
-        }
-        if (error.response.data.errors.jabatan !== null) {
-          callToast(error.response.data.errors.jabatan, "error");
-        }
+        Object.keys(error.response.data.errors).forEach(function (key, index) {
+          callToast(error.response.data.errors[key], "error");
+        });
       });
   };
 
