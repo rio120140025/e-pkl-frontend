@@ -3,7 +3,7 @@ import { Box, Center, Select, SimpleGrid, Text } from "@chakra-ui/react";
 import { ButtonBoxSimpanProfile, ButtonBox } from "../components/button-box";
 import DisplayBox from "../components/display-box";
 import { InputBox, InputBox2 } from "../../login-page/components/input-box";
-import {PasswordInput2} from "../../login-page/components/password";
+import { PasswordInput2 } from "../../login-page/components/password";
 import BackButton from "../../../assets/button-back.svg";
 import { Link } from "react-router-dom";
 import OnlyDisplay from "./onlyDisplay";
@@ -88,73 +88,79 @@ function ProfileBoxMahasiswa(props) {
   }
   return (
     <Flex
+      marginTop={15}
+      position="absolute"
+      left="78px"
       borderRadius="5px"
       background="#FFF"
       boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-      height="max-content"
-      fontSize="15px"
+      width="1375px"
       direction="column"
-      alignItems="center"
       gap="32px"
       py="35px"
     >
-      <Text
-        color="#000"
-        fontSize="15px"
-        fontStyle="normal"
-        fontWeight="700"
-        lineHeight="normal"
-        width="max-content"
-      >
-        Identitas Diri
-      </Text>
+      <Center>
+        <Text
+          color="#000"
+          fontSize="15px"
+          fontStyle="normal"
+          fontWeight="700"
+          lineHeight="normal"
+          width="max-content"
+        >
+          Identitas Diri
+        </Text>
+      </Center>
 
-      {rolesId == 1 && (
-        <Flex direction="row" gap="120px">
-          <Flex direction="column" w="max-content" gap="13.15px">
-            <OnlyDisplay name="name" value={name} />
-            <OnlyDisplay name="Email" value={email} />
-            <OnlyDisplay name="NIM" value={nim} />
-            <PasswordInput2 lihat="yes" name="Password" password={password} />
+      <Center>
+        {rolesId == 1 && (
+          <Flex direction="row" gap="120px">
+            <Flex direction="column" w="max-content" gap="13.15px">
+              <OnlyDisplay name="name" value={name} />
+              <OnlyDisplay name="Email" value={email} />
+              <OnlyDisplay name="NIM" value={nim} />
+              <PasswordInput2 lihat="yes" name="Password" password={password} />
+            </Flex>
+
+            <Flex direction="column" w="max-content" gap="13.15px">
+              <OnlyDisplay name="Nomor Telpon" value={no_hp} />
+              <OnlyDisplay name="Tempat PKL" value={lokasi} />
+              <OnlyDisplay name="Dosen Pembimbing" value={namaDosen} />
+              <OnlyDisplay name="Dosen Pembimbing Lapangan" value={namaDPL} />
+            </Flex>
           </Flex>
+        )}
 
-          <Flex direction="column" w="max-content" gap="13.15px">
-            <OnlyDisplay name="Nomor Telpon" value={no_hp} />
-            <OnlyDisplay name="Tempat PKL" value={lokasi} />
-            <OnlyDisplay name="Dosen Pembimbing" value={namaDosen} />
-            <OnlyDisplay name="Dosen Pembimbing Lapangan" value={namaDPL} />
-          </Flex>
-        </Flex>
-      )}
-
-      {rolesId == 2 && (
-        <Flex direction="column" w="max-content" gap="13.15px">
-          <OnlyDisplay name="name" value={name} />
-          <OnlyDisplay name="Email" value={email} />
-          <OnlyDisplay name="NRK/NIP" value={nip} />
-          <PasswordInput2 lihat="yes" name="Password" password={password} />
-          <OnlyDisplay name="Nomor Telpon" value={no_hp} />
-        </Flex>
-      )}
-
-      {rolesId == 3 && (
-        <Flex direction="row" gap="120px">
+        {rolesId == 2 && (
           <Flex direction="column" w="max-content" gap="13.15px">
             <OnlyDisplay name="name" value={name} />
             <OnlyDisplay name="Email" value={email} />
             <OnlyDisplay name="NRK/NIP" value={nip} />
             <PasswordInput2 lihat="yes" name="Password" password={password} />
-          </Flex>
-
-          <Flex direction="column" w="max-content" gap="13.15px">
             <OnlyDisplay name="Nomor Telpon" value={no_hp} />
-            <OnlyDisplay name="Jabatan" value={jabatan} />
-            <OnlyDisplay name="Instansi" value={lokasi} />
           </Flex>
-        </Flex>
-      )}
+        )}
 
-      <ButtonBox name="Ubah" handle={GoToUbah} />
+        {rolesId == 3 && (
+          <Flex direction="row" gap="120px">
+            <Flex direction="column" w="max-content" gap="13.15px">
+              <OnlyDisplay name="name" value={name} />
+              <OnlyDisplay name="Email" value={email} />
+              <OnlyDisplay name="NRK/NIP" value={nip} />
+              <PasswordInput2 lihat="yes" name="Password" password={password} />
+            </Flex>
+
+            <Flex direction="column" w="max-content" gap="13.15px">
+              <OnlyDisplay name="Nomor Telpon" value={no_hp} />
+              <OnlyDisplay name="Jabatan" value={jabatan} />
+              <OnlyDisplay name="Instansi" value={lokasi} />
+            </Flex>
+          </Flex>
+        )}
+      </Center>
+      <Center>
+        <ButtonBox name="Ubah" handle={GoToUbah} />
+      </Center>
     </Flex>
   );
 }
@@ -339,32 +345,36 @@ function ChangeProfileBoxMahasiswa(props) {
 
   return (
     <Flex
+      marginTop={15}
+      position="absolute"
+      left="78px"
       borderRadius="5px"
       background="#FFF"
       boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-      height="max-content"
-      fontSize="15px"
+      width="1375px"
       direction="column"
       gap="32px"
       py="35px"
     >
-      <Link as={RouterLink} to="/profile">
-        <Box marginLeft={10}>
-          <Image src={BackButton}></Image>
-        </Box>
-      </Link>
-      <Center>
-        <Text
-          color="#000"
-          fontSize="15px"
-          fontStyle="normal"
-          fontWeight="700"
-          lineHeight="normal"
-          width="max-content"
-        >
-          Identitas Diri
-        </Text>
-      </Center>
+      <Box>
+        <Link as={RouterLink} to="/profile">
+          <Box marginLeft={10}>
+            <Image src={BackButton}></Image>
+          </Box>
+        </Link>
+        <Center>
+          <Text
+            color="#000"
+            fontSize="15px"
+            fontStyle="normal"
+            fontWeight="700"
+            lineHeight="normal"
+            width="max-content"
+          >
+            Identitas Diri
+          </Text>
+        </Center>
+      </Box>
       <Center>
         {rolesId == 1 && (
           <Flex direction="row" gap="120px">
