@@ -49,44 +49,49 @@ function TableLogHarian() {
 
   let index = 0;
   // console.log("pkl_id", pkl_id)
-  // console.log("id", pkl_id)
+  console.log("id", id)
   useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/api/user/pkl/data", {
-        headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
-      })
-      .then((response) => {
-        const filteredData = response.data.body.filter((dataPKL) => {
-          if (roles_id == 1) {
-            // console.log("id mahasiswa", dataPKL.mahasiswa_id);
-            // console.log("id", id);
-            if (dataPKL.mahasiswa_id == id) {
-              setPkl_id(dataPKL.id)
-              console.log("berhasil");
-              return true;
+    async function waitForData() {
+      await axios
+        .get("http://127.0.0.1:8000/api/user/pkl/data", {
+          headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
+        })
+        .then((response) => {
+          const filteredData = response.data.body.filter((dataPKL) => {
+            if (roles_id == 1) {
+              // console.log("id mahasiswa", dataPKL.mahasiswa_id);
+              // console.log("id", id);
+              if (dataPKL.mahasiswa_id == id) {
+                setPkl_id(dataPKL.id)
+                console.log("berhasil");
+                return true;
+              }
             }
-          }
-          else if (roles_id == 2) {
-            if (dataPKL.dospem_id == id) {
-              // console.log("berhasil");
-              return true;
+            else if (roles_id == 2) {
+              if (dataPKL.dospem_id == id) {
+                // console.log("berhasil");
+                return true;
+              }
             }
-          }
-          else {
-            if (dataPKL.dpl_id == id) {
-              // console.log("berhasil");
-              return true;
+            else {
+              if (dataPKL.dpl_id == id) {
+                // console.log("berhasil");
+                return true;
 
+              }
             }
-          }
+          });
+          // console.log("test", filteredData);
+          setData(filteredData);
+        })
+        .catch((error) => {
+          console.log(error.response.data);
         });
-        // console.log("test", filteredData);
-        setData(filteredData);
-      })
-      .catch((error) => {
-        console.log(error.response.data);
-      });
-  }, []);
+    }
+    waitForData()
+    console.log('ini pkl_id', pkl_id)
+    console.log('ini filteredData', filteredData)
+  }, [pkl_id]);
   console.log("pkl_id", pkl_id)
   console.log("roles id", roles_id)
   useEffect(() => {
@@ -104,7 +109,7 @@ function TableLogHarian() {
           console.log(error.response.data);
         });
     }
-  },);
+  }, [pkl_id]);
 
   console.log("ini  data", data)
   const filteredData = data.filter((item) => {
@@ -142,7 +147,8 @@ function TableLogHarian() {
     }
   });
 
-  // console.log("ini sorted data", sortedData)
+
+
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;

@@ -59,26 +59,29 @@ function ButtonBoxTambahRencanaLogHarian(props) {
 
   useEffect(() => {
     console.log(cookies?.jwt_token?.data);
-    axios
-      .get("http://127.0.0.1:8000/api/user/jurnal/data", {
-        headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
-      })
-      .then((response) => {
-        console.log('pkl_id', props.pkl_id);
-        console.log('response.data.body', response.data.body);
-        const filterData = response.data.body.filter((data) => data.pkl_id == props.pkl_id);
-        console.log("ini filter data", filterData);
-        console.log("filterData.length", filterData.length);
+    async function waitGetData() {
+      await axios
+        .get("http://127.0.0.1:8000/api/user/jurnal/data", {
+          headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
+        })
+        .then((response) => {
+          console.log('pkl_id', props.pkl_id);
+          console.log('response.data.body', response.data.body);
+          const filterData = response.data.body.filter((data) => data.pkl_id == props.pkl_id);
+          console.log("ini filter data", filterData);
+          console.log("filterData.length", filterData.length);
 
-        if (filterData.length == '') {
-          setNo(1);
-        } else {
-          setNo(filterData.length + 1);
-        }
-      })
-      .catch((error) => {
-        console.log(error.response.data);
-      });
+          if (filterData.length == '') {
+            setNo(1);
+          } else {
+            setNo(filterData.length + 1);
+          }
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        });
+    }
+    waitGetData()
   }, []);
 
   console.log('no', no);

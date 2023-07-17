@@ -80,6 +80,7 @@ function Dashboard() {
         localStorage.setItem("roles_id", updatedData1.roles_id);
         localStorage.setItem("id", updatedData1.id);
         console.log(updatedData1);
+        console.log("id", updatedData1.id);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
