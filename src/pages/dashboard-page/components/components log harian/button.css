@@ -1,0 +1,65 @@
+.button-box-2 {
+  border-radius: 5px;
+  background-color: #bdcdd6;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border: 1px solid #bdcdd6;
+  box-sizing: border-box;
+  width: 121px;
+  height: 36px;
+  color: #f5f5f5;
+  cursor: pointer;
+  text-align: center;
+  padding-top: 4px;
+}
+
+.button-box-3 {
+  border-radius: 5px;
+  background-color: #bdcdd6;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  border: 1px solid #bdcdd6;
+  box-sizing: border-box;
+  width: 200px;
+  height: 36px;
+  color: #f5f5f5;
+  cursor: pointer;
+  text-align: center;
+  padding-top: 4px;
+}
+
+.button-box-table {
+  border-radius: 5px;
+  background-color: #93bfcf;
+  box-sizing: border-box;
+  width: 81px;
+  height: 26px;
+  color: #f5f5f5;
+  cursor: pointer;
+  text-align: center;
+  padding-top: 3px;
+  font-weight: bolder;
+}
+
+.button-box-table:hover {
+  background-color: #e1e7ea;
+  color: #93bfcf;
+  font-weight: bolder;
+}
+
+.button-box-download {
+  position: relative;
+  width: 121px;
+  top: 38.15px;
+  left: 30.5px;
+  background-color: #93BFCF;
+  color: white;
+  font-weight: bolder;
+  width: 121px;
+  height: 36px;
+  border-radius: 5px;
+  text-align: center;
+  padding-top: 6px;
+}
+
+.button-box-download:hover {
+  background-color: #6096B4;
+}
