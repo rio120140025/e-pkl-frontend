@@ -40,6 +40,8 @@ function ButtonBoxTambahRencanaLogHarian(props) {
   const [waktu, setWaktu] = useState(props.logHarian_data?.waktu || "");
   const [alat, setAlat] = useState(props.logHarian_data?.alatbahan || "");
   const [cookies, setCookie] = useCookies(["jwt_token"]);
+  const [filterData, setFilterData] = useState()
+  const [isGet, setIsGet] = useState(true)
   const toast = useToast();
 
   const {
@@ -60,29 +62,26 @@ function ButtonBoxTambahRencanaLogHarian(props) {
   useEffect(() => {
     console.log(cookies?.jwt_token?.data);
     async function waitGetData() {
-      await axios
-        .get("http://127.0.0.1:8000/api/user/jurnal/data", {
+      try {
+        const getDataJurnal = await axios.get("http://127.0.0.1:8000/api/user/jurnal/data", {
           headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
-        })
-        .then((response) => {
-          console.log('pkl_id', props.pkl_id);
-          console.log('response.data.body', response.data.body);
-          const filterData = response.data.body.filter((data) => data.pkl_id == props.pkl_id);
-          console.log("ini filter data", filterData);
-          console.log("filterData.length", filterData.length);
-
-          if (filterData.length == '') {
-            setNo(1);
-          } else {
-            setNo(filterData.length + 1);
-          }
-        })
-        .catch((error) => {
-          console.log(error.response.data);
         });
+        const filteredData = getDataJurnal.data.body.filter((data) => data.pkl_id == props.pkl_id);
+        setFilterData(filteredData);
+        if (filteredData.length === 0) {
+          setNo(1);
+        } else {
+          setNo(filteredData.length + 1);
+        }
+      } catch (error) {
+        // Handle the error if needed
+        console.error('Error fetching data:', error);
+      }
     }
-    waitGetData()
-  }, []);
+
+    waitGetData();
+
+  }, [cookies.jwt_token.data, props.pkl_id]);
 
   console.log('no', no);
 
@@ -167,9 +166,6 @@ function ButtonBoxTambahRencanaLogHarian(props) {
       });
   }, []);
 
-  if (no === '') {
-    return null; // Render nothing until `no` is updated
-  }
   function CloseModal() {
     onClose();
     onCloseQuitTambah();

@@ -48,45 +48,44 @@ function TableLogHarian() {
 
 
   let index = 0;
-  // console.log("pkl_id", pkl_id)
-  console.log("id", id)
   useEffect(() => {
     async function waitForData() {
-      await axios
-        .get("http://127.0.0.1:8000/api/user/pkl/data", {
-          headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
-        })
-        .then((response) => {
-          const filteredData = response.data.body.filter((dataPKL) => {
-            if (roles_id == 1) {
-              // console.log("id mahasiswa", dataPKL.mahasiswa_id);
-              // console.log("id", id);
-              if (dataPKL.mahasiswa_id == id) {
-                setPkl_id(dataPKL.id)
-                console.log("berhasil");
-                return true;
-              }
+      try {
+        const getDataPKL = await axios
+          .get("http://127.0.0.1:8000/api/user/pkl/data", {
+            headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
+          })
+        const filteredData = getDataPKL.data.body.filter((dataPKL) => {
+          if (roles_id == 1) {
+            // console.log("id mahasiswa", dataPKL.mahasiswa_id);
+            // console.log("id", id);
+            if (dataPKL.mahasiswa_id == id) {
+              setPkl_id(dataPKL.id)
+              console.log("berhasil");
+              return true;
             }
-            else if (roles_id == 2) {
-              if (dataPKL.dospem_id == id) {
-                // console.log("berhasil");
-                return true;
-              }
+          }
+          else if (roles_id == 2) {
+            if (dataPKL.dospem_id == id) {
+              // console.log("berhasil");
+              return true;
             }
-            else {
-              if (dataPKL.dpl_id == id) {
-                // console.log("berhasil");
-                return true;
+          }
+          else {
+            if (dataPKL.dpl_id == id) {
+              // console.log("berhasil");
+              return true;
 
-              }
             }
-          });
-          // console.log("test", filteredData);
-          setData(filteredData);
-        })
-        .catch((error) => {
-          console.log(error.response.data);
+          }
         });
+        setData(filteredData);
+
+
+      }
+      catch {
+        console.log("Error fetching data:");
+      }
     }
     waitForData()
     console.log('ini pkl_id', pkl_id)

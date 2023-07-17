@@ -102,6 +102,7 @@ const TableDetail = () => {
     const firstRow = indexOfFirstRow + 1;
     const lastRow = Math.min(indexOfLastRow, totalRows);
     console.log("currentRows", currentRows)
+    let no = 0
     return (
         // <Box
         //     // marginTop="28.86px"
@@ -216,7 +217,7 @@ const TableDetail = () => {
                             bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
                             color="black"
                         >
-                            <Td>{row.id}</Td>
+                            <Td>{no += 1}</Td>
                             <Td>{row.kegiatan}</Td>
                             <Td>{row.alatbahan}</Td>
                             <Td>{row.waktu}</Td>
