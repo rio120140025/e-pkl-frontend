@@ -169,26 +169,8 @@ function TableLogHarian() {
   const firstRow = indexOfFirstRow + 1;
   const lastRow = Math.min(indexOfLastRow, totalRows);
 
-  const {
-    isOpen: isOpenDelete,
-    onOpen: onOpenDelete,
-    onClose: onCloseDelete,
-  } = useDisclosure();
-
-
   const [deleteIndex, setDeleteIndex] = useState(null);
 
-  const handleDeleteRow = (index) => {
-    setDeleteIndex(index);
-    onOpenDelete();
-  };
-
-  const handleConfirmDelete = () => {
-    const updatedData = [...data];
-    updatedData.splice(indexOfFirstRow + deleteIndex, 1);
-    setData(updatedData);
-    onCloseDelete();
-  };
   if (data == '') {
     return (
       <Center marginTop={100}>
@@ -196,6 +178,10 @@ function TableLogHarian() {
       </Center>
     );
   }
+  const updatedRows = currentRows.map((item, index) => ({
+    ...item,
+    no: firstRow + index,
+  }));
   return (
     <Box
       marginTop="28.86px"
@@ -288,7 +274,7 @@ function TableLogHarian() {
             </Td>
             <Td>
             </Td>
-          </Tr> : currentRows.map((row, index) => (
+          </Tr> : updatedRows.map((row, index) => (
             <Tr
               key={index}
               bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
