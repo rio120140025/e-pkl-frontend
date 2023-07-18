@@ -500,7 +500,7 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
         <ModalContent>
           <ModalBody mt={10} textAlign={"center"} fontWeight={"bolder"}>
             <ModalCloseButton color={"#FF0000"} />
-            Apakah yakin menghapus rencana?
+            Apakah anda yakin menghapus rencana?
           </ModalBody>
           <Center>
             <ModalFooter>

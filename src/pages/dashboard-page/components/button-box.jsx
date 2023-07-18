@@ -443,7 +443,7 @@ const EditFunction = ({ id, pkl_id }) => {
               <Table variant="striped">
                 <Thead>
                   <Tr>
-                    <Th>No</Th>
+                    <Th width={100}>No</Th>
                     <Th>Capaian </Th>
                     <Th>Sub Capaian </Th>
                     <Th>Jumlah Jam </Th>
@@ -492,7 +492,7 @@ const EditFunction = ({ id, pkl_id }) => {
         <ModalContent>
           <ModalBody mt={10} textAlign={"center"} fontWeight={"bolder"}>
             <ModalCloseButton color={"#FF0000"} />
-            Apakah yakin menghapus Perubahan?
+            Apakah anda yakin membuang perubahan?
           </ModalBody>
           <Center>
             <ModalFooter>
@@ -830,6 +830,7 @@ function ButtonBoxTambahRencanaKehadiran({ id }) {
                         marginBlock={1}
                         onChange={(e) => setKehadiran(e.target.value)}
                       >
+                        <option >Pilih</option>
                         <option value={1}>Hadir</option>
                         <option value={2}>Sakit</option>
                         <option value={3}>Izin</option>

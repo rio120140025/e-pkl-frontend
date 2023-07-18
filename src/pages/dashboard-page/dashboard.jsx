@@ -115,7 +115,7 @@ function Dashboard() {
           <Box marginTop={"100px"} />
           <HaloUser name={data1.name} />
           <Box>
-            <DashboardBoxMahasiswa id={data1.id} />
+            <DashboardBoxMahasiswa id={data1.roles_id} />
           </Box>
         </Flex>
       </Box>

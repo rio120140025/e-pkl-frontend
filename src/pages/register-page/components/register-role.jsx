@@ -56,7 +56,7 @@ function RoleBox() {
               })}
             </SimpleGrid>
             <Link className="button-box" to={`/register-${selectedValue}`}>
-              Next
+              <Text fontWeight={"bold"}>Next</Text>
             </Link>
           </SimpleGrid>
         </Box>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box } from "@chakra-ui/layout";
+import { Box, Link } from "@chakra-ui/layout";
 
 import "./description.css";
 
@@ -15,7 +15,9 @@ function DashboardLogo() {
   return (
     <div>
       <Box className="icon">
-        <img className="homeVectorIcon" alt="Dashboard" src={LogoDashboard} />
+        <Link href="/dashboard">
+          <img className="homeVectorIcon" alt="Dashboard" src={LogoDashboard} />
+        </Link>
       </Box>
       <p className="desc-1">Dashboard</p>
       <p className="desc-2">Sistem Informasi PKL Institut Teknologi Sumatera</p>
@@ -26,7 +28,9 @@ function ProfileLogo() {
   return (
     <div>
       <Box className="icon">
-        <img className="homeVectorIcon" alt="Dashboard" src={LogoProfile} />
+        <Link href="/profile">
+          <img className="homeVectorIcon" alt="Dashboard" src={LogoProfile} />
+        </Link>
       </Box>
       <p className="desc-1">Profile</p>
       <p className="desc-2">Berfungsi untuk melengkapi data profil</p>
@@ -37,11 +41,13 @@ function RencanaKegiatanLogo() {
   return (
     <div>
       <Box className="icon">
-        <img
-          className="homeVectorIcon"
-          alt="Dashboard"
-          src={LogoRencanaKegiatan}
-        />
+        <Link href="/rencana-kegiatan">
+          <img
+            className="homeVectorIcon"
+            alt="Dashboard"
+            src={LogoRencanaKegiatan}
+          />
+        </Link>
       </Box>
       <p className="desc-1">Rencana Kegiatan</p>
       <p className="desc-2">
@@ -54,7 +60,9 @@ function LogHarianLogo() {
   return (
     <div>
       <Box className="icon">
-        <img className="homeVectorIcon" alt="Dashboard" src={LogoLogHarian} />
+        <Link href="/log-harian">
+          <img className="homeVectorIcon" alt="Dashboard" src={LogoLogHarian} />
+        </Link>
       </Box>
       <p className="desc-1">Log Harian</p>
       <p className="desc-2">
@@ -67,7 +75,9 @@ function KehadiranLogo() {
   return (
     <div>
       <Box className="icon">
-        <img className="homeVectorIcon" alt="Dashboard" src={LogoKehadiran} />
+        <Link href="/kehadiran">
+          <img className="homeVectorIcon" alt="Dashboard" src={LogoKehadiran} />
+        </Link>
       </Box>
       <p className="desc-1">Kehadiran</p>
       <p className="desc-2">
@@ -80,7 +90,9 @@ function PenilaianLogo() {
   return (
     <div>
       <Box className="icon">
-        <img className="homeVectorIcon" alt="Dashboard" src={LogoPenilaian} />
+        <Link href="/penilaian">
+          <img className="homeVectorIcon" alt="Dashboard" src={LogoPenilaian} />
+        </Link>
       </Box>
       <p className="desc-1">Penilaian PKL</p>
       <p className="desc-2">
@@ -93,7 +105,9 @@ function KuisionerLogo() {
   return (
     <div>
       <Box className="icon">
-        <img className="homeVectorIcon" alt="Dashboard" src={LogoKuisioner} />
+        <Link href="/kuisioner">
+          <img className="homeVectorIcon" alt="Dashboard" src={LogoKuisioner} />
+        </Link>
       </Box>
       <p className="desc-1">Kuisioner</p>
       <p className="desc-2">Berfungsi untuk mengisi kuisioner PKL</p>
