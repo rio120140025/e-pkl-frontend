@@ -33,7 +33,7 @@ import { ReactComponent as EditButton } from "../../../../assets/button-edit.svg
 import { ReactComponent as DeleteButton } from "../../../../assets/button-delete.svg";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import { TableEdit } from "./table-edit";
+
 
 
 function ButtonEditLogHarianMahasiswa(props) {
@@ -330,47 +330,50 @@ function VerifikasiDPL(props) {
     };
 
     return (
-        <Flex>
-            <Button
-                borderRadius='5px'
-                background='#C7F1D8'
-                display='flex'
-                padding='3px 20px'
-                justifyContent='space-between'
-                alignItems='center'
-                onClick={() => handleStatusChange(id_penilaian, "verifikasi")}
-            >
-                <Text
-                    color='#20B95D'
-                    fontFamily='Poppins'
-                    fontSize='12px'
-                    fontStyle='normal'
-                    fontWeight='700'
-                    lineHeight='20px'
+        <Flex gap='9px'>
+            <>
+                <Button
+                    borderRadius='5px'
+                    background='#C7F1D8'
+                    display='flex'
+                    padding='3px 20px'
+                    justifyContent='space-between'
+                    alignItems='center'
+                    onClick={() => handleStatusChange(id_penilaian, "verifikasi")}
                 >
-                    Verifikasi
-                </Text>
-            </Button>
-            <Button
-                borderRadius='5px'
-                background='#FFECEC'
-                display='flex'
-                padding='3px 20px'
-                justifyContent='space-between'
-                alignItems='center'
-                onClick={() => handleStatusChange(id_penilaian, "tolak")}
-            >
-                <Text
-                    color='#FF0000'
-                    fontFamily='Poppins'
-                    fontSize='12px'
-                    fontStyle='normal'
-                    fontWeight='700'
-                    lineHeight='20px'
+                    <Text
+                        color='#20B95D'
+                        fontFamily='Poppins'
+                        fontSize='12px'
+                        fontStyle='normal'
+                        fontWeight='700'
+                        lineHeight='20px'
+                    >
+                        Verifikasi
+                    </Text>
+                </Button>
+                <Button
+                    w='62px'
+                    borderRadius='5px'
+                    background='#FFECEC'
+                    display='flex'
+                    padding='3px 20px'
+                    justifyContent='space-between'
+                    alignItems='center'
+                    onClick={() => handleStatusChange(id_penilaian, "tolak")}
                 >
-                    Tolak
-                </Text>
-            </Button>
+                    <Text
+                        color='#FF0000'
+                        fontFamily='Poppins'
+                        fontSize='12px'
+                        fontStyle='normal'
+                        fontWeight='700'
+                        lineHeight='20px'
+                    >
+                        Tolak
+                    </Text>
+                </Button>
+            </>
         </Flex>
     );
 }
