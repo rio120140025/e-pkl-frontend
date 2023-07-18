@@ -73,15 +73,15 @@ function OnlyDisplay(props) {
                         >
                             {props.value}
                         </Text>
+                        {click === true ? (
+                            <Text
+                                color='red'
+                                fontSize='12px'
+                                fontStyle='normal'
+                                fontWeight='400'
+                                lineHeight='normal'>*kolom ini tidak dapat diubah, silahkan hubungi admin</Text>
+                        ) : null}
                     </Box>
-                    {click === true ? (
-                        <Text py='7.5px'
-                            color='red'
-                            fontSize='14px'
-                            fontStyle='normal'
-                            fontWeight='400'
-                            lineHeight='normal'>*kolom ini tidak dapat diubah, silahkan hubungi admin</Text>
-                    ) : null}
                 </>
             )}
         </Box>
