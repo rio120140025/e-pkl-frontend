@@ -14,6 +14,7 @@ import {
     InputLeftElement,
     Flex,
     Spacer,
+    Center
 } from "@chakra-ui/react";
 
 import { ReactComponent as SortButton } from "../../../../assets/button-sort.svg";
@@ -101,8 +102,20 @@ const TableDetail = () => {
     const totalRows = sortedData.length;
     const firstRow = indexOfFirstRow + 1;
     const lastRow = Math.min(indexOfLastRow, totalRows);
-    console.log("currentRows", currentRows)
-    let no = 0
+    const updatedRows = currentRows.map((item, index) => ({
+        ...item,
+        no: firstRow + index, // Calculate the correct "no" for each row on the current page.
+    }));
+
+    console.log("updatedRows", updatedRows);
+    if (data == '' || data == undefined || data == null) {
+        return (
+            <Center marginTop={100}>
+                <img src="74eD.gif" alt="loading..." />
+            </Center>
+        );
+    }
+
     return (
         // <Box
         //     // marginTop="28.86px"
@@ -211,13 +224,13 @@ const TableDetail = () => {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {currentRows.map((row, index) => (
+                    {updatedRows.map((row, index) => (
                         <Tr
                             key={index}
                             bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
                             color="black"
                         >
-                            <Td>{no += 1}</Td>
+                            <Td>{row.no}</Td>
                             <Td>{row.kegiatan}</Td>
                             <Td>{row.alatbahan}</Td>
                             <Td>{row.waktu}</Td>

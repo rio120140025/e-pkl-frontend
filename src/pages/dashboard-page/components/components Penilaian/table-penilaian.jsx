@@ -14,6 +14,7 @@ import {
     InputLeftElement,
     Flex,
     Spacer,
+    Center
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
@@ -200,6 +201,20 @@ const TableComponentPenilaian = (props) => {
     console.log("pkl_id", pkl_id)
     console.log("nama", nama)
     console.log("currentRows", currentRows)
+
+    if (currentRows === null || currentRows.length === 0) {
+        return (
+            <Center marginTop={100}>
+                <img src="74ed.gif" alt="loading..." />
+            </Center>
+        );
+    }
+    const updatedRows = currentRows.map((item, index) => ({
+        ...item,
+        no: firstRow + index, // Calculate the correct "no" for each row on the current page.
+    }));
+
+    console.log("updatedRows", updatedRows);
     return (
         <Box
             marginTop="28.86px"
@@ -286,10 +301,10 @@ const TableComponentPenilaian = (props) => {
                             <Td></Td>
                             <Td></Td>
                         </Tr> :
-                        currentRows.map((row, index) => {
+                        updatedRows.map((row, index) => {
                             return (
                                 <Tr key={index} bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"} color="black">
-                                    <Td style={{ textAlign: "left" }}>{index + 1}</Td>
+                                    <Td style={{ textAlign: "left" }}>{row.no}</Td>
                                     <Td style={{ textAlign: "left" }}>{row && row.mahasiswa && row.mahasiswa.name}</Td>
                                     <Td style={{ textAlign: "left" }}>{row && row.dospem && row.dospem.name}</Td>
                                     <Td style={{ textAlign: "left" }}>{row && row.mahasiswa && row.mahasiswa.lokasi}</Td>

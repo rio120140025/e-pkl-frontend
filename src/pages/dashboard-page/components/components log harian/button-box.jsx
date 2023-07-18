@@ -32,7 +32,7 @@ import closeButton from '../../../../assets/close vector.svg'
 
 function ButtonBoxTambahRencanaLogHarian(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [no, setNo] = useState('');
+  const [no, setNo] = useState();
   const [kegiatan, setKegiatan] = useState(props.logHarian_data?.kegiatan || "");
   const [materi, setMateri] = useState(props.logHarian_data?.materi || "");
   const [prosedur, setProsedur] = useState(props.logHarian_data?.prosedur || "");
@@ -68,11 +68,8 @@ function ButtonBoxTambahRencanaLogHarian(props) {
         });
         const filteredData = getDataJurnal.data.body.filter((data) => data.pkl_id == props.pkl_id);
         setFilterData(filteredData);
-        if (filteredData.length === 0) {
-          setNo(1);
-        } else {
-          setNo(filteredData.length + 1);
-        }
+        setNo(filteredData.length + 1);
+
       } catch (error) {
         // Handle the error if needed
         console.error('Error fetching data:', error);
@@ -153,22 +150,23 @@ function ButtonBoxTambahRencanaLogHarian(props) {
         const filterData = response.data.body.filter((data) => data.pkl_id == props.pkl_id)
         console.log("ini filter data", filterData)
         console.log("filterData.length", filterData.length)
-
-        if (filterData.length === 0) {
-          setNo(1)
-        }
-        else {
-          setNo(filterData.length + 1)
-        }
+        setNo(filterData.length + 1)
       })
       .catch((error) => {
         console.log(error.response.data);
       });
-  }, []);
+  }, [cookies.jwt_token.data, props.pkl_id]);
 
   function CloseModal() {
     onClose();
     onCloseQuitTambah();
+  }
+  if (no === '') {
+    return (
+      <Center marginTop={100}>
+        <img src="74ed.gif" alt="loading..." />
+      </Center>
+    );
   }
   return (
     <>

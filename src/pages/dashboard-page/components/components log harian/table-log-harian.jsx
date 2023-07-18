@@ -16,6 +16,7 @@ import {
   Spacer,
   HStack,
   useDisclosure,
+  Center
 
 } from "@chakra-ui/react";
 import { useCookies } from "react-cookie";
@@ -110,6 +111,7 @@ function TableLogHarian() {
     }
   }, [pkl_id]);
 
+
   console.log("ini  data", data)
   const filteredData = data.filter((item) => {
     const mahasiswaName = item.mahasiswa?.name || "";
@@ -187,7 +189,13 @@ function TableLogHarian() {
     setData(updatedData);
     onCloseDelete();
   };
-
+  if (data == '') {
+    return (
+      <Center marginTop={100}>
+        <img src="74ed.gif" alt="loading..." />
+      </Center>
+    );
+  }
   return (
     <Box
       marginTop="28.86px"
