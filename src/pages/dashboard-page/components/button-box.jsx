@@ -780,7 +780,7 @@ function ButtonBoxTambahRencanaKehadiran({ id }) {
         marginTop={4}
         onClick={onOpen}
       >
-        Tambah Rencana
+        Tambah Kehadiran
       </Button>
       <Modal isOpen={isOpen} onClose={onClose} size={"1"}>
         <ModalOverlay />
