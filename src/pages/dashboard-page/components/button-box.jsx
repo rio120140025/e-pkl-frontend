@@ -780,7 +780,7 @@ function ButtonBoxTambahRencanaKehadiran({ id }) {
         marginTop={4}
         onClick={onOpen}
       >
-        Tambah Rencana
+        Tambah Kehadiran
       </Button>
       <Modal isOpen={isOpen} onClose={onClose} size={"1"}>
         <ModalOverlay />
@@ -830,7 +830,7 @@ function ButtonBoxTambahRencanaKehadiran({ id }) {
                         marginBlock={1}
                         onChange={(e) => setKehadiran(e.target.value)}
                       >
-                        <option >Pilih</option>
+                        <option>Pilih</option>
                         <option value={1}>Hadir</option>
                         <option value={2}>Sakit</option>
                         <option value={3}>Izin</option>
