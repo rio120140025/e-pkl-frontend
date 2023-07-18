@@ -36,7 +36,7 @@ function PilihDosen(props) {
                 flexShrink='0'
                 borderRadius='5px'
                 border='1px solid #BDCDD6'
-                background='#FFF'
+                background='#F7F9FD'
                 placeholder={props.id == '' ? 'Pilih' : undefined}
                 value={props.id}
                 onChange={(e) => props.handleSet(e)}

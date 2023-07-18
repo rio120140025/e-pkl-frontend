@@ -373,6 +373,7 @@ function ChangeProfileBoxMahasiswa(props) {
               <OnlyDisplay
                 name="Email"
                 value={email}
+                isEmail='yes'
                 handleSet={(e) => setEmail(e.target.value)}
               />
               <InputBox2
@@ -424,6 +425,7 @@ function ChangeProfileBoxMahasiswa(props) {
             <OnlyDisplay
               name="Email"
               value={email}
+              isEmail='yes'
               handleSet={(e) => setEmail(e.target.value)}
             />
             <InputBox2
@@ -455,6 +457,7 @@ function ChangeProfileBoxMahasiswa(props) {
               <OnlyDisplay
                 name="Email"
                 value={email}
+                isEmail='yes'
                 handleSet={(e) => setEmail(e.target.value)}
               />
               <InputBox2

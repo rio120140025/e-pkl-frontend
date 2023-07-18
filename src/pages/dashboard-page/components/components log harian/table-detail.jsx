@@ -108,7 +108,7 @@ const TableDetail = () => {
     }));
 
     console.log("updatedRows", updatedRows);
-    if (data == '' || data == undefined || data == null) {
+    if (data == '') {
         return (
             <Center marginTop={100}>
                 <img src="74eD.gif" alt="loading..." />
