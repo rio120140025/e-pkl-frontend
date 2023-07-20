@@ -25,26 +25,26 @@ import {
   ModalFooter,
   Center,
   useToast,
-  Text,
+  Text
 } from "@chakra-ui/react";
+
 
 import { ReactComponent as EditButton } from "../../../../assets/button-edit.svg";
 import { ReactComponent as DeleteButton } from "../../../../assets/button-delete.svg";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 
+
+
+
 function ButtonEditLogHarianMahasiswa(props) {
-  const [no, setNo] = useState("");
-  const [kegiatan, setKegiatan] = useState(
-    props.logHarian_data?.kegiatan || ""
-  );
-  const [materi, setMateri] = useState(props.logHarian_data?.materi || "");
-  const [prosedur, setProsedur] = useState(
-    props.logHarian_data?.prosedur || ""
-  );
-  const [hasil, setHasil] = useState(props.logHarian_data?.hasil || "");
-  const [waktu, setWaktu] = useState(props.logHarian_data?.waktu || "");
-  const [alat, setAlat] = useState(props.logHarian_data?.alatbahan || "");
+  const [no, setNo] = useState('')
+  const [kegiatan, setKegiatan] = useState(props.logHarian_data?.kegiatan || "");
+  const [materi, setMateri] = useState(props.logHarian_data?.materi || "")
+  const [prosedur, setProsedur] = useState(props.logHarian_data?.prosedur || "")
+  const [hasil, setHasil] = useState(props.logHarian_data?.hasil || "")
+  const [waktu, setWaktu] = useState(props.logHarian_data?.waktu || "")
+  const [alat, setAlat] = useState(props.logHarian_data?.alatbahan || "")
   const [cookies, setCookie] = useCookies(["jwt_token"]);
   const toast = useToast();
 
@@ -58,27 +58,28 @@ function ButtonEditLogHarianMahasiswa(props) {
   }
 
   useEffect(() => {
-    console.log(cookies?.jwt_token?.data);
+    console.log(cookies?.jwt_token?.data)
     axios
       .get("http://127.0.0.1:8000/api/user/jurnal/data", {
-        headers: {
-          Authorization: "Bearer " + (cookies?.jwt_token?.data ?? ""),
-        },
+        headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
       })
       .then((response) => {
-        const dataLength = response.data.body.length;
-        console.log(dataLength);
+        const dataLength = response.data.body.length
+        console.log(dataLength)
         if (dataLength == undefined) {
-          setNo(1);
-        } else {
-          setNo(dataLength + 1);
+          setNo(1)
         }
+        else {
+          setNo(dataLength + 1)
+        }
+
+
       })
       .catch((error) => {
         console.log(error.response.data);
       });
   }, []);
-  console.log("ini props", props.id);
+  console.log("ini props", props.id)
   const simpan = () => {
     let updateData = {
       pkl_id: props.logHarian_data?.pkl_id || parseInt(props.pkl_id),
@@ -88,37 +89,31 @@ function ButtonEditLogHarianMahasiswa(props) {
       waktu: waktu,
       materi: materi,
       hasil: hasil,
-      komentar:
-        props.logHarian_data?.komentar || "Akan diisi oleh Dosen Lapangan",
+      komentar: props.logHarian_data?.komentar || "Akan diisi oleh Dosen Lapangan",
       status: 1,
-    };
-    console.log(updateData);
+
+    }
+    console.log(updateData)
     axios
-      .post(
-        `http://127.0.0.1:8000/api/user/jurnal/update/${props.id}`,
-        updateData,
-        {
-          headers: { Authorization: "Bearer " + cookies.jwt_token.data },
-        }
-      )
-      .then((response) => {
+      .post(`http://127.0.0.1:8000/api/user/jurnal/update/${props.id}`, updateData, {
+        headers: { Authorization: "Bearer " + cookies.jwt_token.data }
+      })
+      .then(response => {
         async function notif() {
-          await callToast("Berhasil Mengubah Log Harian", "success");
+          await callToast("Berhasil Mengubah Log Harian", 'success')
           setTimeout(() => {
             window.location.reload();
           }, 0);
         }
-        notif();
+        notif()
       })
-      .catch((error) => {
-        Object.keys(error?.response?.data?.errors).forEach(function (
-          key,
-          index
-        ) {
-          callToast(error.response.data.errors[key], "error");
+      .catch(error => {
+        Object.keys(error?.response?.data?.errors).forEach(function (key, index) {
+          callToast(error.response.data.errors[key], 'error');
         });
       });
-  };
+
+  }
 
   const {
     isOpen: isOpenDelete,
@@ -131,6 +126,8 @@ function ButtonEditLogHarianMahasiswa(props) {
     onClose: onCloseEdit,
   } = useDisclosure();
 
+
+
   const handleDeleteRow = () => {
     onOpenDelete();
   };
@@ -138,23 +135,20 @@ function ButtonEditLogHarianMahasiswa(props) {
   const handleConfirmDelete = () => {
     axios
       .post(`http://127.0.0.1:8000/api/user/jurnal/delete/${props.id}`, null, {
-        headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+        headers: { Authorization: "Bearer " + cookies.jwt_token.data }
       })
-      .then((response) => {
+      .then(response => {
         async function notif() {
-          await callToast("Berhasil Menghapus Log Harian", "success");
+          await callToast("Berhasil Menghapus Log Harian", 'success')
           setTimeout(() => {
             window.location.reload();
           }, null);
         }
-        notif();
+        notif()
       })
       .catch((error) => {
         if (error?.response?.data?.errors) {
-          Object.keys(error.response.data.errors).forEach(function (
-            key,
-            index
-          ) {
+          Object.keys(error.response.data.errors).forEach(function (key, index) {
             callToast(error.response.data.errors[key], "error");
           });
         }
@@ -162,19 +156,13 @@ function ButtonEditLogHarianMahasiswa(props) {
     onCloseDelete();
   };
   return (
-    <Flex gap="10px">
-      {props.roles_id == 1 ? (
+    <Flex gap='10px'>
+      {props.roles_id == 1 ?
         <>
-          <EditButton onClick={onOpenEdit} w="22px" h="22px" />
+          <EditButton onClick={onOpenEdit} w='22px' h='22px' />
           <DeleteButton onClick={() => handleDeleteRow()} />
-        </>
-      ) : null}
-      <Modal
-        isOpen={isOpenDelete}
-        onClose={onCloseDelete}
-        isLazy={true}
-        closeOnOverlayClick={false}
-      >
+        </> : null}
+      <Modal isOpen={isOpenDelete} onClose={onCloseDelete} isLazy={true} closeOnOverlayClick={false}>
         <ModalOverlay />
         <ModalContent>
           <ModalBody mt={10} textAlign={"center"} fontWeight={"bolder"}>
@@ -205,13 +193,7 @@ function ButtonEditLogHarianMahasiswa(props) {
           </Center>
         </ModalContent>
       </Modal>
-      <Modal
-        isOpen={isOpenEdit}
-        onClose={onCloseEdit}
-        size={"1"}
-        isLazy={true}
-        closeOnOverlayClick={false}
-      >
+      <Modal isOpen={isOpenEdit} onClose={onCloseEdit} size={"1"} isLazy={true} closeOnOverlayClick={false}>
         <ModalOverlay />
         <ModalContent>
           <ModalBody>
@@ -224,7 +206,7 @@ function ButtonEditLogHarianMahasiswa(props) {
               bgColor="#F9FAFC"
               boxShadow="0 0 0 1px rgba(152, 161, 178, 0.1), 0 1px 4px rgba(69, 75, 87, 0.12), 0 0 2px rgba(0, 0, 0, 0.08)"
             >
-              <Flex direction="column" gap="65px">
+              <Flex direction='column' gap='65px'>
                 <Table variant="striped">
                   <Thead>
                     <Tr>
@@ -239,77 +221,45 @@ function ButtonEditLogHarianMahasiswa(props) {
                   </Thead>
                   <Tbody>
                     <Tr color="black">
-                      <Td>{no}</Td>
                       <Td>
-                        <Input
-                          value={kegiatan}
-                          onChange={(e) => {
-                            setKegiatan(e.target.value);
-                          }}
-                        />
+                        {no}
                       </Td>
                       <Td>
-                        <Input
-                          value={materi}
-                          onChange={(e) => {
-                            setMateri(e.target.value);
-                          }}
-                        />
+                        <Input value={kegiatan} onChange={(e) => { setKegiatan(e.target.value) }} />
                       </Td>
                       <Td>
-                        <Input
-                          value={prosedur}
-                          onChange={(e) => {
-                            setProsedur(e.target.value);
-                          }}
-                        />
+                        <Input value={materi} onChange={(e) => { setMateri(e.target.value) }} />
                       </Td>
                       <Td>
-                        <Input
-                          value={hasil}
-                          onChange={(e) => {
-                            setHasil(e.target.value);
-                          }}
-                        />
+                        <Input value={prosedur} onChange={(e) => { setProsedur(e.target.value) }} />
                       </Td>
                       <Td>
-                        <Input
-                          value={waktu}
-                          type="date"
-                          onChange={(e) => {
-                            setWaktu(e.target.value);
-                          }}
-                        />
+                        <Input value={hasil} onChange={(e) => { setHasil(e.target.value) }} />
                       </Td>
                       <Td>
-                        <Input
-                          value={alat}
-                          onChange={(e) => {
-                            setAlat(e.target.value);
-                          }}
-                        />
+                        <Input value={waktu} type="date" onChange={(e) => { setWaktu(e.target.value) }} />
+                      </Td>
+                      <Td>
+                        <Input value={alat} onChange={(e) => { setAlat(e.target.value) }} />
                       </Td>
                     </Tr>
                   </Tbody>
                 </Table>
               </Flex>
-            </Box>
+            </Box >
           </ModalBody>
           <ModalFooter>
             <Button
-              className="button-box-2"
-              bg="#93BFCF"
-              color="#FFFFFF"
+              className="button-box-2" bg='#93BFCF' color='#FFFFFF'
               _hover={{ background: "#e1e7ea", color: "#93BFCF" }}
-              onClick={simpan}
-            >
-              Ubah
-            </Button>
+              onClick={simpan}>Ubah</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
     </Flex>
-  );
+
+  )
+
 }
 function VerifikasiDPL(props) {
   const { id_penilaian } = props;
@@ -335,9 +285,7 @@ function VerifikasiDPL(props) {
 
     axios
       .get("http://127.0.0.1:8000/api/user/jurnal/data", {
-        headers: {
-          Authorization: "Bearer " + (cookies?.jwt_token?.data ?? ""),
-        },
+        headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
       })
       .then((response) => {
         const filteredData = response.data.body.find((dataPKL) => {
@@ -357,13 +305,9 @@ function VerifikasiDPL(props) {
         };
 
         axios
-          .post(
-            `http://127.0.0.1:8000/api/user/jurnal/update/${id}`,
-            updateData,
-            {
-              headers: { Authorization: "Bearer " + cookies.jwt_token.data },
-            }
-          )
+          .post(`http://127.0.0.1:8000/api/user/jurnal/update/${id}`, updateData, {
+            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+          })
           .then((response) => {
             async function notif() {
               await callToast("Berhasil Mengubah Status Log Harian", "success");
@@ -375,10 +319,7 @@ function VerifikasiDPL(props) {
           })
           .catch((error) => {
             if (error?.response?.data?.errors) {
-              Object.keys(error.response.data.errors).forEach(function (
-                key,
-                index
-              ) {
+              Object.keys(error.response.data.errors).forEach(function (key, index) {
                 callToast(error.response.data.errors[key], "error");
               });
             }
@@ -390,45 +331,45 @@ function VerifikasiDPL(props) {
   };
 
   return (
-    <Flex gap="9px">
+    <Flex gap='9px'>
       <>
         <Button
-          borderRadius="5px"
-          background="#C7F1D8"
-          display="flex"
-          padding="3px 20px"
-          justifyContent="space-between"
-          alignItems="center"
+          borderRadius='5px'
+          background='#C7F1D8'
+          display='flex'
+          padding='3px 20px'
+          justifyContent='space-between'
+          alignItems='center'
           onClick={() => handleStatusChange(id_penilaian, "verifikasi")}
         >
           <Text
-            color="#20B95D"
-            fontFamily="Poppins"
-            fontSize="12px"
-            fontStyle="normal"
-            fontWeight="700"
-            lineHeight="20px"
+            color='#20B95D'
+            fontFamily='Poppins'
+            fontSize='12px'
+            fontStyle='normal'
+            fontWeight='700'
+            lineHeight='20px'
           >
             Verifikasi
           </Text>
         </Button>
         <Button
-          w="62px"
-          borderRadius="5px"
-          background="#FFECEC"
-          display="flex"
-          padding="3px 20px"
-          justifyContent="space-between"
-          alignItems="center"
+          w='62px'
+          borderRadius='5px'
+          background='#FFECEC'
+          display='flex'
+          padding='3px 20px'
+          justifyContent='space-between'
+          alignItems='center'
           onClick={() => handleStatusChange(id_penilaian, "tolak")}
         >
           <Text
-            color="#FF0000"
-            fontFamily="Poppins"
-            fontSize="12px"
-            fontStyle="normal"
-            fontWeight="700"
-            lineHeight="20px"
+            color='#FF0000'
+            fontFamily='Poppins'
+            fontSize='12px'
+            fontStyle='normal'
+            fontWeight='700'
+            lineHeight='20px'
           >
             Tolak
           </Text>
@@ -437,4 +378,6 @@ function VerifikasiDPL(props) {
     </Flex>
   );
 }
-export { ButtonEditLogHarianMahasiswa, VerifikasiDPL };
+
+export { ButtonEditLogHarianMahasiswa, VerifikasiDPL }
+

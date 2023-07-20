@@ -38,7 +38,7 @@ function RegisterBoxDPL() {
       nip: nip,
       password: password,
       jabatan: jabatan,
-      instansi: instansi,
+      lokasi: instansi,
     };
 
     axios

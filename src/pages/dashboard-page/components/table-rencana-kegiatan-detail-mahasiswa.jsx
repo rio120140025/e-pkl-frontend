@@ -446,6 +446,7 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
                         <EditFunction id={row.id} pkl_id={row.pkl_id} />
                         <DeleteButton onClick={() => handleDeleteRow(row.id)} />
                       </Flex>
+
                     </Td>
                   </Tr>
                 );
@@ -480,6 +481,7 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
                             pkl_id={row.pkl_id}
                           />
                         </Flex>
+
                       </Td>
                     </Tr>
                   );
@@ -525,6 +527,7 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
           <ModalBody mt={10} textAlign={"center"} fontWeight={"bolder"}>
             <ModalCloseButton color={"#FF0000"} />
             Apakah anda yakin menghapus rencana?
+
           </ModalBody>
           <Center>
             <ModalFooter>

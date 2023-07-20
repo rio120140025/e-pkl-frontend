@@ -14,7 +14,8 @@ import {
     InputLeftElement,
     Flex,
     Spacer,
-    Center
+    Center,
+    Image
 } from "@chakra-ui/react";
 
 import { ReactComponent as SortButton } from "../../../../assets/button-sort.svg";
@@ -108,11 +109,12 @@ const TableDetail = () => {
     }));
 
     console.log("updatedRows", updatedRows);
-    if (data == null) {
+
+    if (data == '') {
         return (
-            <Center marginTop={250}>
-        <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
-      </Center>
+            <Center>
+                <Image src="/74eD.gif" alt="loading..." />
+            </Center>
         );
     }
 

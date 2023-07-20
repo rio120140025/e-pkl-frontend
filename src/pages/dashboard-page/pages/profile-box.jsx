@@ -114,7 +114,7 @@ function ProfileBoxMahasiswa(props) {
       {rolesId == 1 && (
         <Flex direction="row" gap="120px">
           <Flex direction="column" w="max-content" gap="13.15px">
-            <OnlyDisplay name="name" value={name} />
+            <OnlyDisplay name="Nama" value={name} />
             <OnlyDisplay name="Email" value={email} />
             <OnlyDisplay name="NIM" value={nim} />
             <PasswordInput2 lihat="yes" name="Password" password={password} />
@@ -131,7 +131,7 @@ function ProfileBoxMahasiswa(props) {
 
       {rolesId == 2 && (
         <Flex direction="column" w="max-content" gap="13.15px">
-          <OnlyDisplay name="name" value={name} />
+          <OnlyDisplay name="Nama" value={name} />
           <OnlyDisplay name="Email" value={email} />
           <OnlyDisplay name="NRK/NIP" value={nip} />
           <PasswordInput2 lihat="yes" name="Password" password={password} />
@@ -142,7 +142,7 @@ function ProfileBoxMahasiswa(props) {
       {rolesId == 3 && (
         <Flex direction="row" gap="120px">
           <Flex direction="column" w="max-content" gap="13.15px">
-            <OnlyDisplay name="name" value={name} />
+            <OnlyDisplay name="Nama" value={name} />
             <OnlyDisplay name="Email" value={email} />
             <OnlyDisplay name="NRK/NIP" value={nip} />
             <PasswordInput2 lihat="yes" name="Password" password={password} />
@@ -373,6 +373,7 @@ function ChangeProfileBoxMahasiswa(props) {
               <OnlyDisplay
                 name="Email"
                 value={email}
+                isEmail='yes'
                 handleSet={(e) => setEmail(e.target.value)}
               />
               <InputBox2
@@ -424,6 +425,7 @@ function ChangeProfileBoxMahasiswa(props) {
             <OnlyDisplay
               name="Email"
               value={email}
+              isEmail='yes'
               handleSet={(e) => setEmail(e.target.value)}
             />
             <InputBox2
@@ -455,6 +457,7 @@ function ChangeProfileBoxMahasiswa(props) {
               <OnlyDisplay
                 name="Email"
                 value={email}
+                isEmail='yes'
                 handleSet={(e) => setEmail(e.target.value)}
               />
               <InputBox2
