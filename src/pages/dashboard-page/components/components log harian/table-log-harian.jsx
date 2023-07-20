@@ -170,7 +170,7 @@ function TableLogHarian() {
   const [deleteIndex, setDeleteIndex] = useState(null);
   if (data == '') {
     return (
-      <Center marginTop={100}>
+      <Center >
         <img src="74ed.gif" alt="loading..." />
       </Center>
     );
