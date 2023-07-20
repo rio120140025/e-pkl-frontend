@@ -89,14 +89,6 @@ function Dashboard() {
     fetchData();
   }, [cookies.jwt_token.data]);
 
-  if (data1 === null) {
-    return (
-      <Center marginTop={250}>
-        <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
-      </Center>
-    );
-  }
-
   return (
     <>
       <Box
@@ -113,9 +105,9 @@ function Dashboard() {
         <DashboardLogo />
         <Flex direction="column" py="10px" mx="5.27%">
           <Box marginTop={"100px"} />
-          <HaloUser name={data1.name} />
+          <HaloUser name={data1?.name} />
           <Box>
-            <DashboardBoxMahasiswa id={data1.id} />
+            <DashboardBoxMahasiswa id={data1?.id} />
           </Box>
         </Flex>
       </Box>
@@ -195,13 +187,6 @@ function RencanaKegiatan() {
     fetchData();
   }, [cookies.jwt_token.data]);
 
-  if (data1 === null) {
-    return (
-      <Center marginTop={250}>
-        <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
-      </Center>
-    );
-  }
   return (
     <Box
       height={"100vh"}
@@ -218,7 +203,7 @@ function RencanaKegiatan() {
         <Spacer />
         <BreadcrumbRencanaKegiatan />
       </Flex>
-      <RencanaKegiatanBox roles_id={data1.roles_id} id={data1.id} />
+      <RencanaKegiatanBox roles_id={data1?.roles_id} id={data1?.id} />
     </Box>
   );
 }
@@ -337,13 +322,6 @@ function Kehadiran() {
     fetchData();
   }, [cookies.jwt_token.data]);
 
-  if (data1 === null) {
-    return (
-      <Center marginTop={250}>
-        <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
-      </Center>
-    );
-  }
   return (
     <Box
       height={"100vh"}
@@ -360,7 +338,7 @@ function Kehadiran() {
         <Spacer />
         <BreadcrumbKehadiran />
       </Flex>
-      <KehadiranMahasiswa roles_id={data1.roles_id} id={data1.id} />
+      <KehadiranMahasiswa roles_id={data1?.roles_id} id={data1?.id} />
     </Box>
   );
 }
