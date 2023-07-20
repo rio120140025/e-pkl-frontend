@@ -192,7 +192,7 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
           </Tr>
         </Thead>
         <Tbody>
-          {data.length === 0 ? (
+          {/* {data.length === 0 ? (
             <Tr bg={"#FFFFFF"} color="black">
               <Td>{(no += 1)}</Td>
               <Td>{data1?.name}</Td>
@@ -200,8 +200,8 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
               <Td></Td>
               <Td></Td>
             </Tr>
-          ) : (
-            currentRows.map((row, index) => {
+          ) : ( */}
+            {currentRows.map((row, index) => {
               if (roles_id === 1) {
                 if (row.mahasiswa_id == id) {
                   found = 1;
@@ -228,6 +228,7 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
                 }
               } else {
                 if (row.dospem_id === id || row.dpl_id === id) {
+                  found = 1;
                   return (
                     <Tr
                       key={index}
@@ -252,8 +253,8 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
               }
               return null;
             })
-          )}
-          {found === 0 && roles_id === 1 && (
+          }
+          {found === 0 && parseInt(data1?.roles_id) === 1 && (
             <Tr bg={"#FFFFFF"} color="black">
               <Td>{(no += 1)}</Td>
               <Td>{data1?.name}</Td>
