@@ -541,6 +541,7 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
                             keterangan={row.keterangan}
                           />
                         </Flex>
+
                       </Td>
                     </Tr>
                   );

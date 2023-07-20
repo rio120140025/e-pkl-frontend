@@ -1,8 +1,6 @@
 import React from "react";
 import { Box, Link } from "@chakra-ui/layout";
-
 import "./description.css";
-
 import LogoDashboard from "../../../assets/icon-dashboard.svg";
 import LogoProfile from "../../../assets/icon-profile.svg";
 import LogoRencanaKegiatan from "../../../assets/icon-rencana-kegiatan.svg";

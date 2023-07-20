@@ -59,6 +59,13 @@ function InputBox2(props) {
           borderRadius="5px"
           border="1px solid #BDCDD6"
           background="#FFF"
+          py="7.5px"
+          px="13px"
+          color='#000'
+          fontSize='14px'
+          fontStyle='normal'
+          fontWeight='400'
+          lineHeight='normal'
         />
         {!isError ? null : (
           <FormErrorMessage>*this field must be filled</FormErrorMessage>

@@ -77,6 +77,7 @@ function PasswordInput2(props) {
             onBlur={handleInputBlur}
             borderRadius="5"
             bgColor={"#fff"}
+
             borderColor={"#bdcdd6"}
             borderStyle={"solid"}
             height={"36px"}
@@ -101,4 +102,5 @@ function PasswordInput2(props) {
   );
 }
 
-export {PasswordInput, PasswordInput2};
+export { PasswordInput, PasswordInput2 };
+

@@ -245,6 +245,7 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
             })
           )}
           {found === 0 && roles_id === 1 && (
+
             <Tr bg={"#FFFFFF"} color="black">
               <Td>{(no += 1)}</Td>
               <Td>{data1?.name}</Td>
