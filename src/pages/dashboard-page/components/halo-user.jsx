@@ -22,7 +22,7 @@ function HaloUser({ name }) {
           width="100%"
           height="36px"
           fontSize="14px"
-          marginBottom={"30px"}
+          marginBottom={"20px"}
         >
           <Flex gap="1" marginTop={1.5} marginLeft={5}>
             <Text display="inline-block">Halo</Text>

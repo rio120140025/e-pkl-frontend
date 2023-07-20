@@ -207,7 +207,7 @@ const TableDashboard = ({ user_id }) => {
           </Tr>
         </Thead>
         <Tbody>
-          {data.length === 0 ? (
+          {/* {data.length === 0 && parseInt(data1?.roles_id) === 1 ? (
             <Tr bg={"#FFFFFF"} color="black">
               <Td>{(no += 1)}</Td>
               <Td>{data1?.name}</Td>
@@ -216,8 +216,8 @@ const TableDashboard = ({ user_id }) => {
               <Td></Td>
               <Td>{data1?.lokasi}</Td>
             </Tr>
-          ) : (
-            currentRows.map((row, index) => {
+          ) : ( */}
+            {currentRows.map((row, index) => {
               if (row.mahasiswa_id === user_id) {
                 found = 1;
                 return (
@@ -235,6 +235,7 @@ const TableDashboard = ({ user_id }) => {
                   </Tr>
                 );
               } else if (row.dospem_id === user_id || row.dpl_id === user_id) {
+                found = 1;
                 return (
                   <Tr
                     key={index}
@@ -252,8 +253,8 @@ const TableDashboard = ({ user_id }) => {
               }
               return null;
             })
-          )}
-          {found === 0 && user_id === 1 && (
+          }
+          {found === 0 && parseInt(data1?.roles_id) === 1 && (
             <Tr bg={"#FFFFFF"} color="black">
               <Td>{(no += 1)}</Td>
               <Td>{data1?.name}</Td>
