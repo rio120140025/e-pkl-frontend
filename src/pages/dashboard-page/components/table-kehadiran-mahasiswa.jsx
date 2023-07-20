@@ -49,7 +49,27 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
-  const [cookies] = useCookies(["jwt_token"]);
+  const [data1, setData1] = useState(null);
+  const [cookies] = useCookies(["name"]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response1 = await axios.get(
+          "http://127.0.0.1:8000/api/user/profile",
+          {
+            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+          }
+        );
+        const updatedData1 = response1.data;
+        setData1(updatedData1);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [cookies.jwt_token.data]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -221,6 +241,14 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
   const params = new URLSearchParams(location.search);
   const valueId = params.get("valueid");
   const valueRolesId = params.get("valuerolesid");
+
+  if (data1 === null) {
+    return (
+      <Center marginTop={50}>
+        <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
+      </Center>
+    );
+  }
 
   return (
     <Box

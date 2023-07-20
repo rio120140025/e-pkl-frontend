@@ -14,6 +14,7 @@ import {
   InputLeftElement,
   Flex,
   Spacer,
+  Center,
 } from "@chakra-ui/react";
 import axios from "axios";
 
@@ -109,6 +110,14 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
   useEffect(() => {
     setSortKey("");
   }, []);
+
+  if (data1 === null) {
+    return (
+      <Center marginTop={50}>
+        <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
+      </Center>
+    );
+  }
 
   return (
     <Box
