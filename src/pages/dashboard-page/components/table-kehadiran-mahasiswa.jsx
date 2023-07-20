@@ -342,9 +342,7 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
                   <SortButton />
                 </Button>
               </Th>
-              <Th colSpan={4} textAlign={"center"}>
-                Aksi
-              </Th>
+              <Th>Aksi</Th>
             </Tr>
           )}
           {parseInt(valueRolesId) === 2 && (
@@ -463,9 +461,7 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
                   <SortButton />
                 </Button>
               </Th>
-              <Th colSpan={2} textAlign={"center"}>
-                Aksi
-              </Th>
+              <Th>Aksi</Th>
             </Tr>
           )}
         </Thead>
@@ -486,10 +482,13 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
                     <Td>{row.keterangan}</Td>
                     <Td>{renderStatus(parseInt(row.status))}</Td>
                     <Td>
-                      <EditFunctionKehadiran id={row.id} pkl_id={row.pkl_id} />
-                    </Td>
-                    <Td>
-                      <DeleteButton onClick={() => handleDeleteRow(row.id)} />
+                      <Flex gap={"10px"}>
+                        <EditFunctionKehadiran
+                          id={row.id}
+                          pkl_id={row.pkl_id}
+                        />
+                        <DeleteButton onClick={() => handleDeleteRow(row.id)} />
+                      </Flex>
                     </Td>
                   </Tr>
                 );
@@ -526,22 +525,22 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
                       <Td>{renderStatusKehadiran(parseInt(row.kehadiran))}</Td>
                       <Td>{row.keterangan}</Td>
                       <Td>
-                        <ButtonBoxVerifikasi2
-                          id={row.id}
-                          pkl_id={row.pkl_id}
-                          tanggalwaktu={row.tanggalwaktu}
-                          kehadiran={row.kehadiran}
-                          keterangan={row.keterangan}
-                        />
-                      </Td>
-                      <Td>
-                        <ButtonBoxTolak2
-                          id={row.id}
-                          pkl_id={row.pkl_id}
-                          tanggalwaktu={row.tanggalwaktu}
-                          kehadiran={row.kehadiran}
-                          keterangan={row.keterangan}
-                        />
+                        <Flex gap={"10px"}>
+                          <ButtonBoxVerifikasi2
+                            id={row.id}
+                            pkl_id={row.pkl_id}
+                            tanggalwaktu={row.tanggalwaktu}
+                            kehadiran={row.kehadiran}
+                            keterangan={row.keterangan}
+                          />
+                          <ButtonBoxTolak2
+                            id={row.id}
+                            pkl_id={row.pkl_id}
+                            tanggalwaktu={row.tanggalwaktu}
+                            kehadiran={row.kehadiran}
+                            keterangan={row.keterangan}
+                          />
+                        </Flex>
                       </Td>
                     </Tr>
                   );
@@ -560,7 +559,6 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
                       <Td>
                         <Td>{renderStatus(parseInt(row.status))}</Td>
                       </Td>
-                      <Td />
                     </Tr>
                   );
                 }

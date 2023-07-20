@@ -43,9 +43,7 @@ import {
   RencanaKegiatanBoxDetailDosen,
   RencanaKegiatanBoxDetailMahasiswa,
 } from "./pages/rencana-kegiatan";
-import {
-  LogHarianTable
-} from "./pages/log-harian";
+import { LogHarianTable } from "./pages/log-harian";
 import {
   KehadiranDPL,
   KehadiranDosen,
@@ -60,9 +58,11 @@ import GetDataLogin from "./components/get-data-login";
 
 function Dashboard() {
   const [data1, setData1] = useState(null);
-  const [cookies] = useCookies(["name"])
+  const [cookies] = useCookies(["name"]);
   const [id, setId] = useState(localStorage.getItem("id") || null);
-  const [roles_id, setRolesId] = useState(localStorage.getItem("roles_id") || null);
+  const [roles_id, setRolesId] = useState(
+    localStorage.getItem("roles_id") || null
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -111,11 +111,11 @@ function Dashboard() {
         <Header page="1" />
 
         <DashboardLogo />
-        <Flex direction="column" gap="12px" py="24px" mx="6.3%">
+        <Flex direction="column" py="10px" mx="5.27%">
           <Box marginTop={"100px"} />
           <HaloUser name={data1.name} />
           <Box>
-            <DashboardBoxMahasiswa id={data1.roles_id} />
+            <DashboardBoxMahasiswa id={data1.id} />
           </Box>
         </Flex>
       </Box>
@@ -124,7 +124,7 @@ function Dashboard() {
 }
 
 function Profile() {
-  const roles_id = parseInt(localStorage.getItem('roles_id'));
+  const roles_id = parseInt(localStorage.getItem("roles_id"));
   console.log(roles_id);
   return (
     <Box
@@ -148,7 +148,7 @@ function Profile() {
 }
 
 function ProfileChange() {
-  const roles_id = parseInt(localStorage.getItem('roles_id'));
+  const roles_id = parseInt(localStorage.getItem("roles_id"));
   console.log(roles_id);
   return (
     <Box

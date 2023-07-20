@@ -298,9 +298,7 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
                   <SortButton />
                 </Button>
               </Th>
-              <Th colSpan={2} textAlign={"center"}>
-                Aksi
-              </Th>
+              <Th>Aksi</Th>
             </Tr>
           )}
           {parseInt(valueRolesId) === 2 && (
@@ -342,9 +340,7 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
                   <SortButton />
                 </Button>
               </Th>
-              <Th colSpan={2} textAlign={"center"}>
-                Aksi
-              </Th>
+              <Th>Aksi</Th>
             </Tr>
           )}
           {parseInt(valueRolesId) === 3 && (
@@ -417,10 +413,10 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
                     <Td>{row.jam}</Td>
                     <Td>{renderStatus(parseInt(row.status))}</Td>
                     <Td>
-                      <EditFunction id={row.id} pkl_id={row.pkl_id} />
-                    </Td>
-                    <Td>
-                      <DeleteButton onClick={() => handleDeleteRow(row.id)} />
+                      <Flex gap={"10px"}>
+                        <EditFunction id={row.id} pkl_id={row.pkl_id} />
+                        <DeleteButton onClick={() => handleDeleteRow(row.id)} />
+                      </Flex>
                     </Td>
                   </Tr>
                 );
@@ -439,22 +435,22 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
                       <Td>{row.sub_capaian}</Td>
                       <Td>{row.jam}</Td>
                       <Td>
-                        <ButtonBoxVerifikasi
-                          id={row.id}
-                          capaian={row.capaian}
-                          sub_capaian={row.sub_capaian}
-                          jam={row.jam}
-                          pkl_id={row.pkl_id}
-                        />
-                      </Td>
-                      <Td>
-                        <ButtonBoxTolak
-                          id={row.id}
-                          capaian={row.capaian}
-                          sub_capaian={row.sub_capaian}
-                          jam={row.jam}
-                          pkl_id={row.pkl_id}
-                        />
+                        <Flex gap={"10px"}>
+                          <ButtonBoxVerifikasi
+                            id={row.id}
+                            capaian={row.capaian}
+                            sub_capaian={row.sub_capaian}
+                            jam={row.jam}
+                            pkl_id={row.pkl_id}
+                          />
+                          <ButtonBoxTolak
+                            id={row.id}
+                            capaian={row.capaian}
+                            sub_capaian={row.sub_capaian}
+                            jam={row.jam}
+                            pkl_id={row.pkl_id}
+                          />
+                        </Flex>
                       </Td>
                     </Tr>
                   );
@@ -470,7 +466,6 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
                       <Td>{row.sub_capaian}</Td>
                       <Td>{row.jam}</Td>
                       <Td>{renderStatus(parseInt(row.status))}</Td>
-                      <Td />
                     </Tr>
                   );
                 }
