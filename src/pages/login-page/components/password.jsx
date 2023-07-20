@@ -75,7 +75,7 @@ function PasswordInput2(props) {
             onChange={(e) => props.handleSetPassword(e)}
             onBlur={handleInputBlur}
             borderRadius="5"
-            bgColor={props.profil === 'yes' ? "#fff" : "#F7F9FD"}
+            bgColor={props.lihat == 'yes' ? "#fff" : "#F7F9FD"}
             borderColor={"#bdcdd6"}
             borderStyle={"solid"}
             height={"36px"}
