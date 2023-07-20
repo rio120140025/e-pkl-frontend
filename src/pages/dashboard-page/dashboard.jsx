@@ -91,8 +91,8 @@ function Dashboard() {
 
   if (data1 === null) {
     return (
-      <Center marginTop={100}>
-        <img src="74ed.gif" alt="loading..." />
+      <Center marginTop={250}>
+        <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
       </Center>
     );
   }
@@ -197,8 +197,8 @@ function RencanaKegiatan() {
 
   if (data1 === null) {
     return (
-      <Center marginTop={100}>
-        <img src="74ed.gif" alt="loading..." />
+      <Center marginTop={250}>
+        <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
       </Center>
     );
   }
@@ -315,8 +315,8 @@ function Kehadiran() {
 
   if (data1 === null) {
     return (
-      <Center marginTop={100}>
-        <img src="74ed.gif" alt="loading..." />
+      <Center marginTop={250}>
+        <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
       </Center>
     );
   }

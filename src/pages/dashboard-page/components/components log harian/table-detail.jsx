@@ -110,9 +110,9 @@ const TableDetail = () => {
     console.log("updatedRows", updatedRows);
     if (data == null) {
         return (
-            <Center marginTop={100}>
-                <img src="74eD.gif" alt="loading..." />
-            </Center>
+            <Center marginTop={250}>
+        <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
+      </Center>
         );
     }
 
