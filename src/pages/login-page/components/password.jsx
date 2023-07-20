@@ -72,12 +72,10 @@ function PasswordInput2(props) {
       <InputGroup size="md">
         <FormControl isInvalid={isError}>
           <Input
-            value={props.password}
             onChange={(e) => props.handleSetPassword(e)}
             onBlur={handleInputBlur}
             borderRadius="5"
-            bgColor={"#fff"}
-
+            bgColor={props.profil === 'yes' ? "#fff" : "#F7F9FD"}
             borderColor={"#bdcdd6"}
             borderStyle={"solid"}
             height={"36px"}
@@ -103,4 +101,3 @@ function PasswordInput2(props) {
 }
 
 export { PasswordInput, PasswordInput2 };
-

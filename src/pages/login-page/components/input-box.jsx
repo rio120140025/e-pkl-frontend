@@ -58,7 +58,7 @@ function InputBox2(props) {
           height="36px"
           borderRadius="5px"
           border="1px solid #BDCDD6"
-          background="#FFF"
+          background='#F7F9FD'
           py="7.5px"
           px="13px"
           color='#000'

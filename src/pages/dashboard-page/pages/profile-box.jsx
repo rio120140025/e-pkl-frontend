@@ -114,7 +114,6 @@ function ProfileBoxMahasiswa(props) {
       {rolesId == 1 && (
         <Flex direction="row" gap="120px">
           <Flex direction="column" w="max-content" gap="13.15px">
-
             <OnlyDisplay name="Nama" value={name} />
             <OnlyDisplay name="Email" value={email} />
             <OnlyDisplay name="NIM" value={nim} />
@@ -426,7 +425,6 @@ function ChangeProfileBoxMahasiswa(props) {
             <OnlyDisplay
               name="Email"
               value={email}
-
               isEmail='yes'
               handleSet={(e) => setEmail(e.target.value)}
             />

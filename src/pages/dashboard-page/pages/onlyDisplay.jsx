@@ -30,7 +30,6 @@ function OnlyDisplay(props) {
                         </option>
                     ))}
                 </Select>
-
             ) : props.isEmail !== 'yes' ? (
                 <Box
                     width='373.913px'
@@ -41,7 +40,6 @@ function OnlyDisplay(props) {
                     background='#FFF'
                 >
                     <Text
-
                         py='7.5px'
                         px='13px'
                         color='#000'
