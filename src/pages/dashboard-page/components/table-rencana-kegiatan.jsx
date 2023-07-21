@@ -32,6 +32,7 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
   const [data, setData] = useState([]);
   const [data1, setData1] = useState(null);
   const [cookies] = useCookies(["name"]);
+  const [found, setFound] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
