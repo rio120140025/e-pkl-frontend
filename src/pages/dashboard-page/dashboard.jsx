@@ -58,11 +58,7 @@ import GetDataLogin from "./components/get-data-login";
 
 function Dashboard() {
   const [data1, setData1] = useState(null);
-  const [cookies] = useCookies(["name"]);
-  const [id, setId] = useState(localStorage.getItem("id") || null);
-  const [roles_id, setRolesId] = useState(
-    localStorage.getItem("roles_id") || null
-  );
+  const [cookies] = useCookies(["jwt_token"]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,12 +71,6 @@ function Dashboard() {
         );
         const updatedData1 = response1.data;
         setData1(updatedData1);
-        setRolesId(updatedData1.roles_id);
-        setId(updatedData1.id);
-        localStorage.setItem("roles_id", updatedData1.roles_id);
-        localStorage.setItem("id", updatedData1.id);
-        console.log(updatedData1);
-        console.log("id", updatedData1.id);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -103,11 +93,14 @@ function Dashboard() {
         <Header page="1" />
 
         <DashboardLogo />
-        <Flex direction="column" py="10px" mx="5.27%">
+        <Flex direction="column" py="10px" mx="5.3%">
           <Box marginTop={"100px"} />
           <HaloUser name={data1?.name} />
           <Box>
-            <DashboardBoxMahasiswa id={data1?.id} />
+            {/* Cek apakah data1 sudah ada sebelum menampilkan DashboardBoxMahasiswa */}
+            {data1?.id && data1?.roles_id && (
+              <DashboardBoxMahasiswa id={data1?.id} roles={data1?.roles_id} />
+            )}
           </Box>
         </Flex>
       </Box>
@@ -209,6 +202,28 @@ function RencanaKegiatan() {
 }
 
 function RencanaKegiatanDetail() {
+  const [data1, setData1] = useState(null);
+  const [cookies] = useCookies(["name"]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response1 = await axios.get(
+          "http://127.0.0.1:8000/api/user/profile",
+          {
+            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+          }
+        );
+        const updatedData1 = response1.data;
+        setData1(updatedData1);
+        console.log(updatedData1);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [cookies.jwt_token.data]);
   return (
     <Box
       height={"100vh"}
@@ -225,7 +240,10 @@ function RencanaKegiatanDetail() {
         <Spacer />
         <BreadcrumbRencanaKegiatanDetail />
       </Flex>
-      <RencanaKegiatanBoxDetailMahasiswa />
+      <RencanaKegiatanBoxDetailMahasiswa
+        roles_id={data1?.roles_id}
+        id={data1?.id}
+      />
     </Box>
   );
 }
@@ -253,7 +271,6 @@ function LogHarian() {
 
     fetchData();
   }, [cookies.jwt_token.data]);
-
 
   return (
     <Box
@@ -387,7 +404,6 @@ function Penilaian() {
 
     fetchData();
   }, [cookies.jwt_token.data]);
-
 
   return (
     <Box

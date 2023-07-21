@@ -43,7 +43,7 @@ import {
 } from "./button-box";
 import { TableEdit } from "./table-edit";
 
-const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
+const TableRencanaKegiatanDetailMahasiswa = ({ roles_id, id }) => {
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
@@ -52,7 +52,35 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
   const [data, setData] = useState([]);
   const [cookies] = useCookies(["jwt_token"]);
 
+  const [found, setFound] = useState(false);
   const [data1, setData1] = useState(null);
+
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const valueId = params.get("valueid");
+  const valueRolesId = params.get("valuerolesid");
+
+  const getStatusTextAndColor = (value) => {
+    let statusText = "";
+    let statusColor = "";
+
+    switch (value) {
+      case 1:
+        statusText = "Belum Diverifikasi";
+        statusColor = "#93BFCF";
+        break;
+      case 2:
+        statusText = "Diverifikasi";
+        statusColor = "#20B95D";
+        break;
+      case 3:
+        statusText = "Ditolak";
+        statusColor = "#FF0000";
+        break;
+    }
+
+    return { statusText, statusColor };
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,42 +102,88 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
   }, [cookies.jwt_token.data]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/user/kegiatan",
-          {
-            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
-          }
+    axios
+      .get("http://127.0.0.1:8000/api/user/kegiatan", {
+        headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+      })
+      .then((response) => {
+        const dataKegiatan = response.data.body;
+        let foundData = null;
+        foundData = dataKegiatan.filter(
+          (data) => data.pkl_id === parseInt(valueId)
         );
-        const updatedData = response.data.body;
-        setData(updatedData);
-        console.log(updatedData);
-      } catch (error) {
+        if (foundData.length > 0) {
+          console.log("Masuk", foundData);
+          setFound(true);
+          setData(foundData);
+        }
+      })
+      .catch((error) => {
         console.error("Error fetching data:", error);
-      }
-    };
+      });
+  }, [id, roles_id, cookies.jwt_token.data]);
 
-    fetchData();
-  }, []);
+  console.log(data);
 
-  const filteredData = data.filter((item) =>
-    item.capaian.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredData = data.filter((item) => {
+    const capaian = item.capaian || "";
+    const subCapaian = item.sub_capaian || "";
+    const jam = item.jam || "";
+    const status = item.status.toString();
 
-  const sortedData = filteredData.slice().sort((a, b) => {
+    const isMatch =
+      capaian.toLowerCase().includes(search.toLowerCase()) ||
+      subCapaian.toLowerCase().includes(search.toLowerCase()) ||
+      jam.toLowerCase().includes(search.toLowerCase()) ||
+      status.includes(search) ||
+      getStatusTextAndColor(parseInt(status))
+        .statusText.toLowerCase()
+        .includes(search.toLowerCase());
+
+    return isMatch;
+  });
+  // console.log("ini filter data", filteredData)
+
+  const sortedData = filteredData.sort((a, b) => {
     if (sortKey === "") return 0;
-    const valA = a[sortKey] ? a[sortKey].toUpperCase() : "";
-    const valB = b[sortKey] ? b[sortKey].toUpperCase() : "";
-
-    if (valA === "" || valB === "") {
-      if (valA === "") return sortOrder === "asc" ? 1 : -1;
-      if (valB === "") return sortOrder === "asc" ? -1 : 1;
+    const compare = (valA, valB) => {
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    };
+    if (sortKey === "no") {
+      return sortOrder === "asc" ? a.id - b.id : b.id - a.id;
+    } else if (sortKey === "capaian") {
+      const valA = a.capaian.toUpperCase();
+      const valB = b.capaian.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else if (sortKey === "subCapaian") {
+      const valA = a.sub_capaian.toUpperCase();
+      const valB = b.sub_capaian.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else if (sortKey === "jam") {
+      const valA = a.jam.toUpperCase();
+      const valB = b.jam.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else if (sortKey === "status") {
+      return compare(a.status.toString(), b.status.toString());
+    } else if (sortKey === "statusText") {
+      const valA = getStatusTextAndColor(
+        parseInt(a.status)
+      ).statusText.toUpperCase();
+      const valB = getStatusTextAndColor(
+        parseInt(b.status)
+      ).statusText.toUpperCase();
+      return compare(valA, valB);
+    } else {
+      return 0;
     }
-
-    if (valA < valB) return sortOrder === "asc" ? -1 : 1;
-    if (valA > valB) return sortOrder === "asc" ? 1 : -1;
-    return 0;
   });
 
   const indexOfLastRow = currentPage * rowsPerPage;
@@ -127,7 +201,7 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
   const totalRows = sortedData.length;
   const firstRow = indexOfFirstRow + 1;
   const lastRow = Math.min(indexOfLastRow, totalRows);
-  let no = 0;
+  let no = (currentPage - 1) * rowsPerPage;
 
   useEffect(() => {
     setSortKey("");
@@ -170,33 +244,6 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
       });
   };
 
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const valueId = params.get("valueid");
-  const valueRolesId = params.get("valuerolesid");
-
-  const getStatusTextAndColor = (value) => {
-    let statusText = "";
-    let statusColor = "";
-
-    switch (value) {
-      case 1:
-        statusText = "Belum Diverifikasi";
-        statusColor = "#93BFCF";
-        break;
-      case 2:
-        statusText = "Diverifikasi";
-        statusColor = "#20B95D";
-        break;
-      case 3:
-        statusText = "Ditolak";
-        statusColor = "#FF0000";
-        break;
-    }
-
-    return { statusText, statusColor };
-  };
-
   const renderStatus = (value) => {
     const { statusText, statusColor } = getStatusTextAndColor(value);
 
@@ -206,14 +253,6 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
 
     return <div style={statusStyle}>{statusText}</div>;
   };
-
-  if (data1 === null) {
-    return (
-      <Center marginTop={50}>
-        <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
-      </Center>
-    );
-  }
 
   return (
     <Box
@@ -252,28 +291,27 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
           <ButtonBoxTambahRencana id={parseInt(valueId)} />
         </HStack>
       )}
-      {parseInt(valueRolesId) === 2 ||
-        (parseInt(valueRolesId) === 3 && (
-          <InputGroup
-            top="12px"
-            marginLeft={875}
-            marginBottom={2}
-            backgroundColor="#fff"
-            width="418px"
-            fontSize="14px"
-            color="#a1a9b8"
-          >
-            <InputLeftElement>
-              <SearchIcon />
-            </InputLeftElement>
-            <Input
-              type="text"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </InputGroup>
-        ))}
+      {(parseInt(valueRolesId) === 2 || parseInt(valueRolesId) === 3) && (
+        <InputGroup
+          top="12px"
+          marginLeft={875}
+          marginBottom={2}
+          backgroundColor="#fff"
+          width="418px"
+          fontSize="14px"
+          color="#a1a9b8"
+        >
+          <InputLeftElement>
+            <SearchIcon />
+          </InputLeftElement>
+          <Input
+            type="text"
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </InputGroup>
+      )}
       <Table variant="striped" top="1384px" left="0" width="1314px">
         <Thead>
           {parseInt(valueRolesId) === 1 && (
@@ -443,10 +481,9 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
                     <Td>{renderStatus(parseInt(row.status))}</Td>
                     <Td>
                       <Flex gap={"10px"}>
-                        <EditFunction id={row.id} pkl_id={row.pkl_id} />
+                        <EditFunction id={row.id} pkl_id={row.pkl_id} no={no} />
                         <DeleteButton onClick={() => handleDeleteRow(row.id)} />
                       </Flex>
-
                     </Td>
                   </Tr>
                 );
@@ -481,7 +518,6 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
                             pkl_id={row.pkl_id}
                           />
                         </Flex>
-
                       </Td>
                     </Tr>
                   );
@@ -527,7 +563,6 @@ const TableRencanaKegiatanDetailMahasiswa = ({ id, roles_id }) => {
           <ModalBody mt={10} textAlign={"center"} fontWeight={"bolder"}>
             <ModalCloseButton color={"#FF0000"} />
             Apakah anda yakin menghapus rencana?
-
           </ModalBody>
           <Center>
             <ModalFooter>

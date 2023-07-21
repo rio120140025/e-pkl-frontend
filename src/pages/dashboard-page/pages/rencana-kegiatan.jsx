@@ -23,7 +23,7 @@ function RencanaKegiatanBox({ roles_id, id }) {
   );
 }
 
-function RencanaKegiatanBoxDetailMahasiswa() {
+function RencanaKegiatanBoxDetailMahasiswa({ roles_id, id }) {
   return (
     <Box
       position="absolute"
@@ -35,7 +35,7 @@ function RencanaKegiatanBoxDetailMahasiswa() {
       width="1375px"
       fontSize="15px"
     >
-      <TableRencanaKegiatanDetailMahasiswa />
+      <TableRencanaKegiatanDetailMahasiswa roles_id={roles_id} id={id}/>
     </Box>
   );
 }

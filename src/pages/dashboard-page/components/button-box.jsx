@@ -365,7 +365,7 @@ const ButtonBoxTambahRencana = ({ id }) => {
     </>
   );
 };
-const EditFunction = ({ id, pkl_id }) => {
+const EditFunction = ({ id, pkl_id, no }) => {
   const [capaian, setCapaian] = useState("");
   const [subCapaian, setSubCapaian] = useState("");
   const [jam, setJam] = useState("");
@@ -452,7 +452,7 @@ const EditFunction = ({ id, pkl_id }) => {
                 <Tbody>
                   <Tr color="black">
                     <Td>
-                      <Input value={1} />
+                      <Input value={no} />
                     </Td>
                     <Td>
                       <Input
@@ -524,7 +524,7 @@ const EditFunction = ({ id, pkl_id }) => {
     </>
   );
 };
-const EditFunctionKehadiran = ({ id, pkl_id }) => {
+const EditFunctionKehadiran = ({ id, pkl_id, no }) => {
   const [kehadiran, setKehadiran] = useState("");
   const [keterangan, setKeterangan] = useState("");
   const [tanggal, setTanggal] = useState("");
@@ -618,7 +618,7 @@ const EditFunctionKehadiran = ({ id, pkl_id }) => {
                 <Tbody>
                   <Tr color="black">
                     <Td>
-                      <Input value={1} />
+                      <Input value={no} />
                     </Td>
                     <Td>
                       <Input
@@ -645,7 +645,7 @@ const EditFunctionKehadiran = ({ id, pkl_id }) => {
                         <option value={1}>Hadir</option>
                         <option value={2}>Sakit</option>
                         <option value={3}>Izin</option>
-                        <option value={4}>Tanpa Kehadiran</option>
+                        <option value={0}>Tanpa Kehadiran</option>
                       </Select>
                     </Td>
                     <Td>
@@ -834,7 +834,7 @@ function ButtonBoxTambahRencanaKehadiran({ id }) {
                         <option value={1}>Hadir</option>
                         <option value={2}>Sakit</option>
                         <option value={3}>Izin</option>
-                        <option value={4}>Tanpa Kehadiran</option>
+                        <option value={0}>Tanpa Kehadiran</option>
                       </Select>
                     </Td>
                     <Td>

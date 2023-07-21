@@ -22,14 +22,17 @@ import { ReactComponent as SortButton } from "../../../assets/button-sort.svg";
 import { ReactComponent as SearchIcon } from "../../../assets/icon-search.svg";
 import { useCookies } from "react-cookie";
 
-const TableDashboard = ({ user_id }) => {
+const TableDashboard = ({ user_id, user_roles }) => {
+
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [data, setData] = useState([]);
+  const [pagination, setPagination] = useState(null);
+  const [data2, setData2] = useState([]);
   const [data1, setData1] = useState(null);
+  const [found, setFound] = useState(false);
   const [cookies] = useCookies(["name"]);
 
   useEffect(() => {
@@ -52,42 +55,90 @@ const TableDashboard = ({ user_id }) => {
   }, [cookies.jwt_token.data]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/user/pkl/data",
-          {
-            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
-          }
-        );
-        const updatedData = response.data.body;
-        setData(updatedData);
-        console.log(updatedData);
-      } catch (error) {
+    axios
+      .get("http://127.0.0.1:8000/api/user/pkl/data", {
+        headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+      })
+      .then((response) => {
+        const dataDashboard = response.data.body;
+        let foundData = null;
+        if (user_roles === 1) {
+          foundData = dataDashboard.filter(
+            (data) => data.mahasiswa_id === user_id
+          );
+        } else if (user_roles === 2 || user_roles === 3) {
+          foundData = dataDashboard.filter(
+            (data) => data.dospem_id === user_id || data.dpl_id === user_id
+          );
+        }
+
+        if (foundData.length > 0) {
+          console.log("Masuk", foundData);
+          setFound(true);
+          setData2(foundData);
+        }
+      })
+      .catch((error) => {
         console.error("Error fetching data:", error);
-      }
-    };
+      });
+  }, [user_id, user_roles, cookies.jwt_token.data]);
 
-    fetchData();
-  }, []);
+  console.log(data2);
+  const filteredData = data2.filter((item) => {
+    const mahasiswaName = item.mahasiswa?.name || "";
+    const mahasiswaNim = item.mahasiswa?.nim || "";
+    const dospemName = item.dospem?.name || "";
+    const dplName = item.dpl?.name || "";
+    const lokasi = item.mahasiswa?.lokasi || "";
 
-  const filteredData = data.filter((item) =>
-    item.mahasiswa.name.toLowerCase().includes(search.toLowerCase())
-  );
+    const isMatch =
+      mahasiswaName.toLowerCase().includes(search.toLowerCase()) ||
+      mahasiswaNim.toLowerCase().includes(search.toLowerCase()) ||
+      dospemName.toLowerCase().includes(search.toLowerCase()) ||
+      dplName.toLowerCase().includes(search.toLowerCase()) ||
+      lokasi.toLowerCase().includes(search.toLowerCase());
 
-  const sortedData = filteredData.slice().sort((a, b) => {
+    return isMatch;
+  });
+  // console.log("ini filter data", filteredData)
+
+  const sortedData = filteredData.sort((a, b) => {
     if (sortKey === "") return 0;
-    const valA = a[sortKey] ? a[sortKey].toUpperCase() : "";
-    const valB = b[sortKey] ? b[sortKey].toUpperCase() : "";
-
-    if (valA === "" || valB === "") {
-      if (valA === "") return sortOrder === "asc" ? 1 : -1;
-      if (valB === "") return sortOrder === "asc" ? -1 : 1;
+    if (sortKey === "no") {
+      return sortOrder === "asc" ? a.id - b.id : b.id - a.id;
+    } else if (sortKey === "nama") {
+      const valA = a.mahasiswa.name.toUpperCase();
+      const valB = b.mahasiswa.name.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else if (sortKey === "nim") {
+      const valA = a.mahasiswa.nim.toUpperCase();
+      const valB = b.mahasiswa.nim.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else if (sortKey === "dosenPembimbing") {
+      const valA = a.dospem.name.toUpperCase();
+      const valB = b.dospem.name.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else if (sortKey === "dpl") {
+      const valA = a.dpl.name.toUpperCase();
+      const valB = b.dpl.name.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else if (sortKey === "lokasi") {
+      const valA = a.lokasi.name.toUpperCase();
+      const valB = b.lokasi.name.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else {
+      return 0;
     }
-
-    if (valA < valB) return sortOrder === "asc" ? -1 : 1;
-    if (valA > valB) return sortOrder === "asc" ? 1 : -1;
-    return 0;
   });
 
   const indexOfLastRow = currentPage * rowsPerPage;
@@ -105,8 +156,7 @@ const TableDashboard = ({ user_id }) => {
   const totalRows = sortedData.length;
   const firstRow = indexOfFirstRow + 1;
   const lastRow = Math.min(indexOfLastRow, totalRows);
-  let no = 0;
-  let found = 0;
+  let no = (currentPage - 1) * rowsPerPage;
 
   useEffect(() => {
     setSortKey("");
@@ -115,7 +165,13 @@ const TableDashboard = ({ user_id }) => {
   if (data1 === null) {
     return (
       <Center marginTop={50}>
-        <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
+        <img
+          width="200px"
+          height="200px"
+          sizes="1000px"
+          src="74ed.gif"
+          alt="loading..."
+        />
       </Center>
     );
   }
@@ -216,37 +272,8 @@ const TableDashboard = ({ user_id }) => {
           </Tr>
         </Thead>
         <Tbody>
-          {/* {data.length === 0 && parseInt(data1?.roles_id) === 1 ? (
-
-            <Tr bg={"#FFFFFF"} color="black">
-              <Td>{(no += 1)}</Td>
-              <Td>{data1?.name}</Td>
-              <Td>{data1?.nim}</Td>
-              <Td></Td>
-              <Td></Td>
-              <Td>{data1?.lokasi}</Td>
-            </Tr>
-          ) : ( */}
           {currentRows.map((row, index) => {
-
-            if (row.mahasiswa_id === user_id) {
-              found = 1;
-              return (
-                <Tr
-                  key={index}
-                  bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
-                  color="black"
-                >
-                  <Td>{(no += 1)}</Td>
-                  <Td>{row.mahasiswa.name}</Td>
-                  <Td>{row.mahasiswa.nim}</Td>
-                  <Td>{row.dospem.name}</Td>
-                  <Td>{row.dpl.name}</Td>
-                  <Td>{row.mahasiswa.lokasi}</Td>
-                </Tr>
-              );
-            } else if (row.dospem_id === user_id || row.dpl_id === user_id) {
-              found = 1;
+            if (found === true) {
               return (
                 <Tr
                   key={index}
@@ -262,51 +289,50 @@ const TableDashboard = ({ user_id }) => {
                 </Tr>
               );
             }
-            return null;
-          })
-          }
-          {found === 0 && parseInt(data1?.roles_id) === 1 && (
-
+          })}
+          {found === false && user_roles === 1 && (
             <Tr bg={"#FFFFFF"} color="black">
               <Td>{(no += 1)}</Td>
-              <Td>{data1?.name}</Td>
-              <Td>{data1?.nim}</Td>
+              <Td>{data1.name}</Td>
+              <Td>{data1.nim}</Td>
               <Td></Td>
               <Td></Td>
-              <Td>{data1?.lokasi}</Td>
+              <Td>{data1.lokasi}</Td>
             </Tr>
           )}
         </Tbody>
       </Table>
       <Box>
-        <Flex>
-          <Box marginLeft="25px" fontSize="14px" color="#687182">
-            {firstRow} - {lastRow} of {totalRows}
-          </Box>
-          <Spacer />
-          <Box
-            display="flex"
-            fontSize="14px"
-            color="#687182"
-            alignItems="center"
-            marginRight={25}
-          >
-            <Box width={200} marginRight={2}>
-              Rows per page:
+        {found === true && (
+          <Flex>
+            <Box marginLeft="25px" fontSize="14px" color="#687182">
+              {firstRow} - {lastRow} of {totalRows}
             </Box>
-            <Select
-              variant="unstyled"
-              value={rowsPerPage}
-              onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
-              border="none"
-              marginBlock={1}
+            <Spacer />
+            <Box
+              display="flex"
+              fontSize="14px"
+              color="#687182"
+              alignItems="center"
+              marginRight={25}
             >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={15}>15</option>
-            </Select>
-          </Box>
-        </Flex>
+              <Box width={200} marginRight={2}>
+                Rows per page:
+              </Box>
+              <Select
+                variant="unstyled"
+                value={rowsPerPage}
+                onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
+                border="none"
+                marginBlock={1}
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={15}>15</option>
+              </Select>
+            </Box>
+          </Flex>
+        )}
       </Box>
 
       <Box>

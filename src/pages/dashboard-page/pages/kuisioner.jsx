@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/layout";
 import React from "react";
 
 function KuisionerBox() {
-  const googleFormUrl = "https://forms.gle/P4JcKskeMZqW89sY7";
+  const googleFormUrl = "https://forms.gle/Zn4sxbCVZy5E74gM9";
 
   return (
     <Box

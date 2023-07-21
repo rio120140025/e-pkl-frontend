@@ -53,41 +53,71 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
   }, [cookies.jwt_token.data]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/user/pkl/data",
-          {
-            headers: { Authorization: "Bearer " + cookies.jwt_token.data },
-          }
-        );
-        const updatedData = response.data.body;
-        setData(updatedData);
-      } catch (error) {
+    axios
+      .get("http://127.0.0.1:8000/api/user/pkl/data", {
+        headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+      })
+      .then((response) => {
+        const dataKegiatan = response.data.body;
+        let foundData = null;
+        if (roles_id === 1) {
+          foundData = dataKegiatan.filter((data) => data.mahasiswa_id === id);
+        } else if (roles_id === 2 || roles_id === 3) {
+          foundData = dataKegiatan.filter(
+            (data) => data.dospem_id === id || data.dpl_id === id
+          );
+        }
+
+        if (foundData.length > 0) {
+          console.log("Masuk", foundData);
+          setFound(true);
+          setData(foundData);
+        }
+      })
+      .catch((error) => {
         console.error("Error fetching data:", error);
-      }
-    };
+      });
+  }, [id, roles_id, cookies.jwt_token.data]);
 
-    fetchData();
-  }, []);
+  const filteredData = data.filter((item) => {
+    const mahasiswaName = item.mahasiswa?.name || "";
+    const mahasiswaNim = item.mahasiswa?.nim || "";
+    const dospemName = item.dospem?.name || "";
 
-  const filteredData = data.filter((item) =>
-    item.mahasiswa.name.toLowerCase().includes(search.toLowerCase())
-  );
+    const isMatch =
+      mahasiswaName.toLowerCase().includes(search.toLowerCase()) ||
+      mahasiswaNim.toLowerCase().includes(search.toLowerCase()) ||
+      dospemName.toLowerCase().includes(search.toLowerCase());
 
-  const sortedData = filteredData.slice().sort((a, b) => {
+    return isMatch;
+  });
+  // console.log("ini filter data", filteredData)
+
+  const sortedData = filteredData.sort((a, b) => {
     if (sortKey === "") return 0;
-    const valA = a[sortKey] ? a[sortKey].toUpperCase() : "";
-    const valB = b[sortKey] ? b[sortKey].toUpperCase() : "";
-
-    if (valA === "" || valB === "") {
-      if (valA === "") return sortOrder === "asc" ? 1 : -1;
-      if (valB === "") return sortOrder === "asc" ? -1 : 1;
+    if (sortKey === "no") {
+      return sortOrder === "asc" ? a.id - b.id : b.id - a.id;
+    } else if (sortKey === "nama") {
+      const valA = a.mahasiswa.name.toUpperCase();
+      const valB = b.mahasiswa.name.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else if (sortKey === "nim") {
+      const valA = a.mahasiswa.nim.toUpperCase();
+      const valB = b.mahasiswa.nim.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else if (sortKey === "dosenPembimbing") {
+      const valA = a.dospem.name.toUpperCase();
+      const valB = b.dospem.name.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else {
+      return 0;
     }
-
-    if (valA < valB) return sortOrder === "asc" ? -1 : 1;
-    if (valA > valB) return sortOrder === "asc" ? 1 : -1;
-    return 0;
   });
 
   const indexOfLastRow = currentPage * rowsPerPage;
@@ -105,8 +135,8 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
   const totalRows = sortedData.length;
   const firstRow = indexOfFirstRow + 1;
   const lastRow = Math.min(indexOfLastRow, totalRows);
-  let no = 0;
-  let found = 0;
+  let no = (currentPage - 1) * rowsPerPage;
+
   useEffect(() => {
     setSortKey("");
   }, []);
@@ -114,7 +144,13 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
   if (data1 === null) {
     return (
       <Center marginTop={50}>
-        <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
+        <img
+          width="200px"
+          height="200px"
+          sizes="1000px"
+          src="74ed.gif"
+          alt="loading..."
+        />
       </Center>
     );
   }
@@ -192,70 +228,31 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
           </Tr>
         </Thead>
         <Tbody>
-          {/* {data.length === 0 ? (
-            <Tr bg={"#FFFFFF"} color="black">
-              <Td>{(no += 1)}</Td>
-              <Td>{data1?.name}</Td>
-              <Td>{data1?.nim}</Td>
-              <Td></Td>
-              <Td></Td>
-            </Tr>
-          ) : ( */}
-            {currentRows.map((row, index) => {
-              if (roles_id === 1) {
-                if (row.mahasiswa_id == id) {
-                  found = 1;
-                  return (
-                    <Tr
-                      key={index}
-                      bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
-                      color="black"
-                    >
-                      <Td>{(no += 1)}</Td>
-                      <Td>{row.mahasiswa.name}</Td>
-                      <Td>{row.mahasiswa.nim}</Td>
-                      <Td>{row.dospem.name}</Td>
-                      <Td>
-                        <Flex>
-                          <ButtonBoxDetailRencanaKegiatan
-                            id={row.id}
-                            roles_id={roles_id}
-                          />
-                        </Flex>
-                      </Td>
-                    </Tr>
-                  );
-                }
-              } else {
-                if (row.dospem_id === id || row.dpl_id === id) {
-                  found = 1;
-                  return (
-                    <Tr
-                      key={index}
-                      bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
-                      color="black"
-                    >
-                      <Td>{(no += 1)}</Td>
-                      <Td>{row.mahasiswa.name}</Td>
-                      <Td>{row.mahasiswa.nim}</Td>
-                      <Td>{row.dospem.name}</Td>
-                      <Td>
-                        <Flex>
-                          <ButtonBoxDetailRencanaKegiatan
-                            id={row.id}
-                            roles_id={roles_id}
-                          />
-                        </Flex>
-                      </Td>
-                    </Tr>
-                  );
-                }
-              }
-              return null;
-            })
-          }
-          {found === 0 && parseInt(data1?.roles_id) === 1 && (
-
+          {currentRows.map((row, index) => {
+            if (found === true) {
+              return (
+                <Tr
+                  key={index}
+                  bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                  color="black"
+                >
+                  <Td>{(no += 1)}</Td>
+                  <Td>{row.mahasiswa.name}</Td>
+                  <Td>{row.mahasiswa.nim}</Td>
+                  <Td>{row.dospem.name}</Td>
+                  <Td>
+                    <Flex>
+                      <ButtonBoxDetailRencanaKegiatan
+                        id={row.id}
+                        roles_id={roles_id}
+                      />
+                    </Flex>
+                  </Td>
+                </Tr>
+              );
+            }
+          })}
+          {found === false && roles_id === 1 && (
             <Tr bg={"#FFFFFF"} color="black">
               <Td>{(no += 1)}</Td>
               <Td>{data1?.name}</Td>
@@ -267,34 +264,36 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
         </Tbody>
       </Table>
       <Box>
-        <Flex>
-          <Box marginLeft="25px" fontSize="14px" color="#687182">
-            {firstRow} - {lastRow} of {totalRows}
-          </Box>
-          <Spacer />
-          <Box
-            display="flex"
-            fontSize="14px"
-            color="#687182"
-            alignItems="center"
-            marginRight={25}
-          >
-            <Box width={200} marginRight={2}>
-              Rows per page:
+        {found === true && (
+          <Flex>
+            <Box marginLeft="25px" fontSize="14px" color="#687182">
+              {firstRow} - {lastRow} of {totalRows}
             </Box>
-            <Select
-              variant="unstyled"
-              value={rowsPerPage}
-              onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
-              border="none"
-              marginBlock={1}
+            <Spacer />
+            <Box
+              display="flex"
+              fontSize="14px"
+              color="#687182"
+              alignItems="center"
+              marginRight={25}
             >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={15}>15</option>
-            </Select>
-          </Box>
-        </Flex>
+              <Box width={200} marginRight={2}>
+                Rows per page:
+              </Box>
+              <Select
+                variant="unstyled"
+                value={rowsPerPage}
+                onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
+                border="none"
+                marginBlock={1}
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={15}>15</option>
+              </Select>
+            </Box>
+          </Flex>
+        )}
       </Box>
 
       <Box>

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Box, SimpleGrid, Text, } from "@chakra-ui/react";
+
+import { Box, SimpleGrid, Text } from "@chakra-ui/react";
 
 import { ButtonBoxDownload } from "../components/button-box";
 import TableDashboard from "../components/table-dashboard";
 // import { useCookies } from "react-cookie";
 // import axios from "axios";
 
-
-function DashboardBoxMahasiswa({ id }) {
+function DashboardBoxMahasiswa({ id, roles }) {
   // const [id, setId] = useState(localStorage.getItem("id") || null);
   // const [roles_id, setRolesId] = useState(localStorage.getItem("roles_id") || null);
   // const [data1, setData1] = useState(null);
@@ -65,7 +65,7 @@ function DashboardBoxMahasiswa({ id }) {
         >
           Mahasiswa Bimbingan PKL
         </Text>
-        <TableDashboard user_id={id} />
+        <TableDashboard user_id={id} user_roles={roles} />
       </SimpleGrid>
     </Box>
   );

@@ -19,7 +19,7 @@ function HaloUser({ name }) {
           borderRadius="5px"
           backgroundColor="#e1e7ea"
           boxShadow="0 4px 4px rgba(0, 0, 0, 0.25)"
-          width="100%"
+          width="101%"
           height="36px"
           fontSize="14px"
           marginBottom={"20px"}
