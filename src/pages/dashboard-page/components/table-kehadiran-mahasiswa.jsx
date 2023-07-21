@@ -408,7 +408,7 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
                 <Button
                   variant="link"
                   onClick={() => {
-                    setSortKey("keterangan");
+                    setSortKey("Keterangan");
                     toggleSortOrder();
                   }}
                 >
