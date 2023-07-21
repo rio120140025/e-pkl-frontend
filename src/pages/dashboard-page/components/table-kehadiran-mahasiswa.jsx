@@ -215,7 +215,7 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
 
     if (sortKey === "no") {
       return sortOrder === "asc" ? a.id - b.id : b.id - a.id;
-    } else if (sortKey === "Keterangan") {
+    } else if (sortKey === "keterangan") {
       const valA = a.keterangan.toUpperCase();
       const valB = b.keterangan.toUpperCase();
       return sortOrder === "asc"
@@ -408,7 +408,7 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
                 <Button
                   variant="link"
                   onClick={() => {
-                    setSortKey("Keterangan");
+                    setSortKey("keterangan");
                     toggleSortOrder();
                   }}
                 >
@@ -539,7 +539,7 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
                 <Button
                   variant="link"
                   onClick={() => {
-                    setSortKey("Keterangan");
+                    setSortKey("keterangan");
                     toggleSortOrder();
                   }}
                 >
