@@ -62,9 +62,7 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
         const dataKegiatan = response.data.body;
         let foundData = null;
         if (roles_id === 1) {
-          foundData = dataKegiatan.filter(
-            (data) => data.mahasiswa_id === id
-          );
+          foundData = dataKegiatan.filter((data) => data.mahasiswa_id === id);
         } else if (roles_id === 2 || roles_id === 3) {
           foundData = dataKegiatan.filter(
             (data) => data.dospem_id === id || data.dpl_id === id
@@ -82,23 +80,45 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
       });
   }, [id, roles_id, cookies.jwt_token.data]);
 
-  const filteredData = data.filter((item) =>
-    item.mahasiswa.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredData = data.filter((item) => {
+    const mahasiswaName = item.mahasiswa?.name || "";
+    const mahasiswaNim = item.mahasiswa?.nim || "";
+    const dospemName = item.dospem?.name || "";
 
-  const sortedData = filteredData.slice().sort((a, b) => {
+    const isMatch =
+      mahasiswaName.toLowerCase().includes(search.toLowerCase()) ||
+      mahasiswaNim.toLowerCase().includes(search.toLowerCase()) ||
+      dospemName.toLowerCase().includes(search.toLowerCase());
+
+    return isMatch;
+  });
+  // console.log("ini filter data", filteredData)
+
+  const sortedData = filteredData.sort((a, b) => {
     if (sortKey === "") return 0;
-    const valA = a[sortKey] ? a[sortKey].toUpperCase() : "";
-    const valB = b[sortKey] ? b[sortKey].toUpperCase() : "";
-
-    if (valA === "" || valB === "") {
-      if (valA === "") return sortOrder === "asc" ? 1 : -1;
-      if (valB === "") return sortOrder === "asc" ? -1 : 1;
+    if (sortKey === "no") {
+      return sortOrder === "asc" ? a.id - b.id : b.id - a.id;
+    } else if (sortKey === "nama") {
+      const valA = a.mahasiswa.name.toUpperCase();
+      const valB = b.mahasiswa.name.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else if (sortKey === "nim") {
+      const valA = a.mahasiswa.nim.toUpperCase();
+      const valB = b.mahasiswa.nim.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else if (sortKey === "dosenPembimbing") {
+      const valA = a.dospem.name.toUpperCase();
+      const valB = b.dospem.name.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else {
+      return 0;
     }
-
-    if (valA < valB) return sortOrder === "asc" ? -1 : 1;
-    if (valA > valB) return sortOrder === "asc" ? 1 : -1;
-    return 0;
   });
 
   const indexOfLastRow = currentPage * rowsPerPage;
@@ -116,7 +136,7 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
   const totalRows = sortedData.length;
   const firstRow = indexOfFirstRow + 1;
   const lastRow = Math.min(indexOfLastRow, totalRows);
-  let no = (currentPage-1) * rowsPerPage;
+  let no = (currentPage - 1) * rowsPerPage;
 
   useEffect(() => {
     setSortKey("");
@@ -125,7 +145,13 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
   if (data1 === null) {
     return (
       <Center marginTop={50}>
-        <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
+        <img
+          width="200px"
+          height="200px"
+          sizes="1000px"
+          src="74ed.gif"
+          alt="loading..."
+        />
       </Center>
     );
   }
@@ -203,33 +229,31 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
           </Tr>
         </Thead>
         <Tbody>
-            {currentRows.map((row, index) => {
-              if (found === true) {
-                  return (
-                    <Tr
-                      key={index}
-                      bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
-                      color="black"
-                    >
-                      <Td>{(no += 1)}</Td>
-                      <Td>{row.mahasiswa.name}</Td>
-                      <Td>{row.mahasiswa.nim}</Td>
-                      <Td>{row.dospem.name}</Td>
-                      <Td>
-                        <Flex>
-                          <ButtonBoxDetailRencanaKegiatan
-                            id={row.id}
-                            roles_id={roles_id}
-                          />
-                        </Flex>
-                      </Td>
-                    </Tr>
-                  );
-              }
-            })
-          }
+          {currentRows.map((row, index) => {
+            if (found === true) {
+              return (
+                <Tr
+                  key={index}
+                  bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"}
+                  color="black"
+                >
+                  <Td>{(no += 1)}</Td>
+                  <Td>{row.mahasiswa.name}</Td>
+                  <Td>{row.mahasiswa.nim}</Td>
+                  <Td>{row.dospem.name}</Td>
+                  <Td>
+                    <Flex>
+                      <ButtonBoxDetailRencanaKegiatan
+                        id={row.id}
+                        roles_id={roles_id}
+                      />
+                    </Flex>
+                  </Td>
+                </Tr>
+              );
+            }
+          })}
           {found === false && roles_id === 1 && (
-
             <Tr bg={"#FFFFFF"} color="black">
               <Td>{(no += 1)}</Td>
               <Td>{data1?.name}</Td>
@@ -241,36 +265,36 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
         </Tbody>
       </Table>
       <Box>
-      {found === true && (
-        <Flex>
-          <Box marginLeft="25px" fontSize="14px" color="#687182">
-            {firstRow} - {lastRow} of {totalRows}
-          </Box>
-          <Spacer />
-          <Box
-            display="flex"
-            fontSize="14px"
-            color="#687182"
-            alignItems="center"
-            marginRight={25}
-          >
-            <Box width={200} marginRight={2}>
-              Rows per page:
+        {found === true && (
+          <Flex>
+            <Box marginLeft="25px" fontSize="14px" color="#687182">
+              {firstRow} - {lastRow} of {totalRows}
             </Box>
-            <Select
-              variant="unstyled"
-              value={rowsPerPage}
-              onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
-              border="none"
-              marginBlock={1}
+            <Spacer />
+            <Box
+              display="flex"
+              fontSize="14px"
+              color="#687182"
+              alignItems="center"
+              marginRight={25}
             >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={15}>15</option>
-            </Select>
-          </Box>
-        </Flex>
-      )}
+              <Box width={200} marginRight={2}>
+                Rows per page:
+              </Box>
+              <Select
+                variant="unstyled"
+                value={rowsPerPage}
+                onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
+                border="none"
+                marginBlock={1}
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={15}>15</option>
+              </Select>
+            </Box>
+          </Flex>
+        )}
       </Box>
 
       <Box>

@@ -59,6 +59,28 @@ const TableRencanaKegiatanDetailMahasiswa = ({ roles_id, id }) => {
   const valueId = params.get("valueid");
   const valueRolesId = params.get("valuerolesid");
 
+  const getStatusTextAndColor = (value) => {
+    let statusText = "";
+    let statusColor = "";
+
+    switch (value) {
+      case 1:
+        statusText = "Belum Diverifikasi";
+        statusColor = "#93BFCF";
+        break;
+      case 2:
+        statusText = "Diverifikasi";
+        statusColor = "#20B95D";
+        break;
+      case 3:
+        statusText = "Ditolak";
+        statusColor = "#FF0000";
+        break;
+    }
+
+    return { statusText, statusColor };
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -86,7 +108,9 @@ const TableRencanaKegiatanDetailMahasiswa = ({ roles_id, id }) => {
       .then((response) => {
         const dataKegiatan = response.data.body;
         let foundData = null;
-        foundData = dataKegiatan.filter((data) => data.pkl_id === parseInt(valueId));
+        foundData = dataKegiatan.filter(
+          (data) => data.pkl_id === parseInt(valueId)
+        );
         if (foundData.length > 0) {
           console.log("Masuk", foundData);
           setFound(true);
@@ -98,25 +122,67 @@ const TableRencanaKegiatanDetailMahasiswa = ({ roles_id, id }) => {
       });
   }, [id, roles_id, cookies.jwt_token.data]);
 
-  console.log(data)
+  console.log(data);
 
-  const filteredData = data.filter((item) =>
-    item.capaian.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredData = data.filter((item) => {
+    const capaian = item.capaian || "";
+    const subCapaian = item.sub_capaian || "";
+    const jam = item.jam || "";
+    const status = item.status.toString();
 
-  const sortedData = filteredData.slice().sort((a, b) => {
+    const isMatch =
+      capaian.toLowerCase().includes(search.toLowerCase()) ||
+      subCapaian.toLowerCase().includes(search.toLowerCase()) ||
+      jam.toLowerCase().includes(search.toLowerCase()) ||
+      status.includes(search) ||
+      getStatusTextAndColor(parseInt(status))
+        .statusText.toLowerCase()
+        .includes(search.toLowerCase());
+
+    return isMatch;
+  });
+  // console.log("ini filter data", filteredData)
+
+  const sortedData = filteredData.sort((a, b) => {
     if (sortKey === "") return 0;
-    const valA = a[sortKey] ? a[sortKey].toUpperCase() : "";
-    const valB = b[sortKey] ? b[sortKey].toUpperCase() : "";
-
-    if (valA === "" || valB === "") {
-      if (valA === "") return sortOrder === "asc" ? 1 : -1;
-      if (valB === "") return sortOrder === "asc" ? -1 : 1;
+    const compare = (valA, valB) => {
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    };
+    if (sortKey === "no") {
+      return sortOrder === "asc" ? a.id - b.id : b.id - a.id;
+    } else if (sortKey === "capaian") {
+      const valA = a.capaian.toUpperCase();
+      const valB = b.capaian.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else if (sortKey === "subCapaian") {
+      const valA = a.sub_capaian.toUpperCase();
+      const valB = b.sub_capaian.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else if (sortKey === "jam") {
+      const valA = a.jam.toUpperCase();
+      const valB = b.jam.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else if (sortKey === "status") {
+      return compare(a.status.toString(), b.status.toString());
+    } else if (sortKey === "statusText") {
+      const valA = getStatusTextAndColor(
+        parseInt(a.status)
+      ).statusText.toUpperCase();
+      const valB = getStatusTextAndColor(
+        parseInt(b.status)
+      ).statusText.toUpperCase();
+      return compare(valA, valB);
+    } else {
+      return 0;
     }
-
-    if (valA < valB) return sortOrder === "asc" ? -1 : 1;
-    if (valA > valB) return sortOrder === "asc" ? 1 : -1;
-    return 0;
   });
 
   const indexOfLastRow = currentPage * rowsPerPage;
@@ -177,28 +243,6 @@ const TableRencanaKegiatanDetailMahasiswa = ({ roles_id, id }) => {
       });
   };
 
-  const getStatusTextAndColor = (value) => {
-    let statusText = "";
-    let statusColor = "";
-
-    switch (value) {
-      case 1:
-        statusText = "Belum Diverifikasi";
-        statusColor = "#93BFCF";
-        break;
-      case 2:
-        statusText = "Diverifikasi";
-        statusColor = "#20B95D";
-        break;
-      case 3:
-        statusText = "Ditolak";
-        statusColor = "#FF0000";
-        break;
-    }
-
-    return { statusText, statusColor };
-  };
-
   const renderStatus = (value) => {
     const { statusText, statusColor } = getStatusTextAndColor(value);
 
@@ -208,20 +252,6 @@ const TableRencanaKegiatanDetailMahasiswa = ({ roles_id, id }) => {
 
     return <div style={statusStyle}>{statusText}</div>;
   };
-
-  if (data1 === null) {
-    return (
-      <Center marginTop={50}>
-        <img
-          width="200px"
-          height="200px"
-          sizes="1000px"
-          src="74ed.gif"
-          alt="loading..."
-        />
-      </Center>
-    );
-  }
 
   return (
     <Box
@@ -260,28 +290,27 @@ const TableRencanaKegiatanDetailMahasiswa = ({ roles_id, id }) => {
           <ButtonBoxTambahRencana id={parseInt(valueId)} />
         </HStack>
       )}
-      {parseInt(valueRolesId) === 2 ||
-        (parseInt(valueRolesId) === 3 && (
-          <InputGroup
-            top="12px"
-            marginLeft={875}
-            marginBottom={2}
-            backgroundColor="#fff"
-            width="418px"
-            fontSize="14px"
-            color="#a1a9b8"
-          >
-            <InputLeftElement>
-              <SearchIcon />
-            </InputLeftElement>
-            <Input
-              type="text"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </InputGroup>
-        ))}
+      {(parseInt(valueRolesId) === 2 || parseInt(valueRolesId) === 3) && (
+        <InputGroup
+          top="12px"
+          marginLeft={875}
+          marginBottom={2}
+          backgroundColor="#fff"
+          width="418px"
+          fontSize="14px"
+          color="#a1a9b8"
+        >
+          <InputLeftElement>
+            <SearchIcon />
+          </InputLeftElement>
+          <Input
+            type="text"
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </InputGroup>
+      )}
       <Table variant="striped" top="1384px" left="0" width="1314px">
         <Thead>
           {parseInt(valueRolesId) === 1 && (
@@ -451,7 +480,7 @@ const TableRencanaKegiatanDetailMahasiswa = ({ roles_id, id }) => {
                     <Td>{renderStatus(parseInt(row.status))}</Td>
                     <Td>
                       <Flex gap={"10px"}>
-                        <EditFunction id={row.id} pkl_id={row.pkl_id} no={no}/>
+                        <EditFunction id={row.id} pkl_id={row.pkl_id} no={no} />
                         <DeleteButton onClick={() => handleDeleteRow(row.id)} />
                       </Flex>
                     </Td>

@@ -86,23 +86,45 @@ const TableKehadiran = ({ roles_id, id }) => {
 
   console.log("mana nih", data);
 
-  const filteredData = data.filter((item) =>
-    item.mahasiswa.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredData = data.filter((item) => {
+    const mahasiswaName = item.mahasiswa?.name || "";
+    const mahasiswaNim = item.mahasiswa?.nim || "";
+    const dospemName = item.dospem?.name || "";
 
-  const sortedData = filteredData.slice().sort((a, b) => {
+    const isMatch =
+      mahasiswaName.toLowerCase().includes(search.toLowerCase()) ||
+      mahasiswaNim.toLowerCase().includes(search.toLowerCase()) ||
+      dospemName.toLowerCase().includes(search.toLowerCase());
+
+    return isMatch;
+  });
+  // console.log("ini filter data", filteredData)
+
+  const sortedData = filteredData.sort((a, b) => {
     if (sortKey === "") return 0;
-    const valA = a[sortKey] ? a[sortKey].toUpperCase() : "";
-    const valB = b[sortKey] ? b[sortKey].toUpperCase() : "";
-
-    if (valA === "" || valB === "") {
-      if (valA === "") return sortOrder === "asc" ? 1 : -1;
-      if (valB === "") return sortOrder === "asc" ? -1 : 1;
+    if (sortKey === "no") {
+      return sortOrder === "asc" ? a.id - b.id : b.id - a.id;
+    } else if (sortKey === "nama") {
+      const valA = a.mahasiswa.name.toUpperCase();
+      const valB = b.mahasiswa.name.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else if (sortKey === "nim") {
+      const valA = a.mahasiswa.nim.toUpperCase();
+      const valB = b.mahasiswa.nim.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else if (sortKey === "dosenPembimbing") {
+      const valA = a.dospem.name.toUpperCase();
+      const valB = b.dospem.name.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    } else {
+      return 0;
     }
-
-    if (valA < valB) return sortOrder === "asc" ? -1 : 1;
-    if (valA > valB) return sortOrder === "asc" ? 1 : -1;
-    return 0;
   });
 
   const indexOfLastRow = currentPage * rowsPerPage;

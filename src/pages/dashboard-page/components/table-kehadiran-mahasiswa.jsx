@@ -60,6 +60,66 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
 
   const getTimeAndDate = (datetime) => {
     const [date, time] = datetime.split(" ");
+    return { date, time };
+  };
+
+  const getStatusTextAndColor = (value) => {
+    let statusText = "";
+    let statusColor = "";
+
+    switch (value) {
+      case 1:
+        statusText = "Belum Diverifikasi";
+        statusColor = "#93BFCF";
+        break;
+      case 2:
+        statusText = "Diverifikasi";
+        statusColor = "#20B95D";
+        break;
+      case 3:
+        statusText = "Ditolak";
+        statusColor = "#FF0000";
+        break;
+    }
+
+    return { statusText, statusColor };
+  };
+
+  const renderStatus = (value) => {
+    const { statusText, statusColor } = getStatusTextAndColor(value);
+
+    const statusStyle = {
+      color: statusColor,
+    };
+
+    return <div style={statusStyle}>{statusText}</div>;
+  };
+
+  const getStatusText = (value) => {
+    let statusText = "";
+
+    switch (value) {
+      case 1:
+        statusText = "Hadir";
+        break;
+      case 2:
+        statusText = "Sakit";
+        break;
+      case 3:
+        statusText = "Izin";
+        break;
+      case 0:
+        statusText = "Tanpa Kehadiran";
+        break;
+    }
+
+    return { statusText };
+  };
+
+  const renderStatusKehadiran = (value) => {
+    const { statusText } = getStatusText(value);
+
+    return <div>{statusText}</div>;
   };
 
   useEffect(() => {
@@ -123,23 +183,71 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
 
   console.log("mana nih", data);
 
-  const filteredData = data.filter((item) =>
-    item.keterangan.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredData = data.filter((item) => {
+    const kehadiran = item.kehadiran.toString();
+    const keterangan = item.keterangan || "";
+    const status = item.status.toString();
+    const { date, time } = getTimeAndDate(item.tanggalwaktu);
 
-  const sortedData = filteredData.slice().sort((a, b) => {
+    const isMatch =
+      kehadiran.includes(search) ||
+      keterangan.toLowerCase().includes(search.toLowerCase()) ||
+      status.includes(search) ||
+      date.includes(search) ||
+      time.includes(search) ||
+      getStatusText(parseInt(kehadiran))
+        .statusText.toLowerCase()
+        .includes(search.toLowerCase()) ||
+      getStatusTextAndColor(parseInt(status))
+        .statusText.toLowerCase()
+        .includes(search.toLowerCase());
+
+    return isMatch;
+  });
+
+  const sortedData = filteredData.sort((a, b) => {
     if (sortKey === "") return 0;
-    const valA = a[sortKey] ? a[sortKey].toUpperCase() : "";
-    const valB = b[sortKey] ? b[sortKey].toUpperCase() : "";
 
-    if (valA === "" || valB === "") {
-      if (valA === "") return sortOrder === "asc" ? 1 : -1;
-      if (valB === "") return sortOrder === "asc" ? -1 : 1;
+    const compare = (valA, valB) => {
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
+    };
+
+    if (sortKey === "no") {
+      return sortOrder === "asc" ? a.id - b.id : b.id - a.id;
+    } else if (sortKey === "kehadiran") {
+      return compare(
+        a.kehadiran.toString().toUpperCase(),
+        b.kehadiran.toString().toUpperCase()
+      );
+    } else if (sortKey === "keterangan") {
+      return compare(a.keterangan.toUpperCase(), b.keterangan.toUpperCase());
+    } else if (sortKey === "status") {
+      return compare(a.status.toString(), b.status.toString());
+    } else if (sortKey === "tanggalwaktu") {
+      return sortOrder === "asc"
+        ? new Date(a.tanggalwaktu) - new Date(b.tanggalwaktu)
+        : new Date(b.tanggalwaktu) - new Date(a.tanggalwaktu);
+    } else if (sortKey === "statusText") {
+      const valA = getStatusTextAndColor(
+        parseInt(a.status)
+      ).statusText.toUpperCase();
+      const valB = getStatusTextAndColor(
+        parseInt(b.status)
+      ).statusText.toUpperCase();
+      return compare(valA, valB);
+    } else if (sortKey === "kehadiranText") {
+      const valA = getStatusText(
+        parseInt(a.kehadiran)
+      ).statusText.toUpperCase();
+      const valB = getStatusText(
+        parseInt(b.kehadiran)
+      ).statusText.toUpperCase();
+      return compare(valA, valB);
+    } else {
+      return 0;
     }
-
-    if (valA < valB) return sortOrder === "asc" ? -1 : 1;
-    if (valA > valB) return sortOrder === "asc" ? 1 : -1;
-    return 0;
   });
 
   const indexOfLastRow = currentPage * rowsPerPage;
@@ -196,79 +304,6 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
       });
   };
 
-  const getStatusTextAndColor = (value) => {
-    let statusText = "";
-    let statusColor = "";
-
-    switch (value) {
-      case 1:
-        statusText = "Belum Diverifikasi";
-        statusColor = "#93BFCF";
-        break;
-      case 2:
-        statusText = "Diverifikasi";
-        statusColor = "#20B95D";
-        break;
-      case 3:
-        statusText = "Ditolak";
-        statusColor = "#FF0000";
-        break;
-    }
-
-    return { statusText, statusColor };
-  };
-
-  const renderStatus = (value) => {
-    const { statusText, statusColor } = getStatusTextAndColor(value);
-
-    const statusStyle = {
-      color: statusColor,
-    };
-
-    return <div style={statusStyle}>{statusText}</div>;
-  };
-
-  const getStatusText = (value) => {
-    let statusText = "";
-
-    switch (value) {
-      case 1:
-        statusText = "Hadir";
-        break;
-      case 2:
-        statusText = "Sakit";
-        break;
-      case 3:
-        statusText = "Izin";
-        break;
-      case 0:
-        statusText = "Tanpa Kehadiran";
-        break;
-    }
-
-    return { statusText };
-  };
-
-  const renderStatusKehadiran = (value) => {
-    const { statusText } = getStatusText(value);
-
-    return <div>{statusText}</div>;
-  };
-
-  if (data1 === null) {
-    return (
-      <Center marginTop={50}>
-        <img
-          width="200px"
-          height="200px"
-          sizes="1000px"
-          src="74ed.gif"
-          alt="loading..."
-        />
-      </Center>
-    );
-  }
-
   return (
     <Box
       marginTop="28.86px"
@@ -302,28 +337,28 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
           <ButtonBoxTambahRencanaKehadiran id={parseInt(id)} />
         </HStack>
       )}
-      {parseInt(valueRolesId) === 2 ||
-        (parseInt(valueRolesId) === 3 && (
-          <InputGroup
-            top="12px"
-            marginLeft={875}
-            marginBottom={2}
-            backgroundColor="#fff"
-            width="418px"
-            fontSize="14px"
-            color="#a1a9b8"
-          >
-            <InputLeftElement>
-              <SearchIcon />
-            </InputLeftElement>
-            <Input
-              type="text"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </InputGroup>
-        ))}
+      {(parseInt(valueRolesId) === 2 || parseInt(valueRolesId) === 3) && (
+        <InputGroup
+          top="12px"
+          marginLeft={875}
+          marginBottom={2}
+          backgroundColor="#fff"
+          width="418px"
+          fontSize="14px"
+          color="#a1a9b8"
+        >
+          <InputLeftElement>
+            <SearchIcon />
+          </InputLeftElement>
+          <Input
+            type="text"
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </InputGroup>
+      )}
+
       <Table variant="striped" top="1384px" left="0" width="1314px">
         <Thead>
           {parseInt(roles_id) === 1 && (
@@ -529,7 +564,11 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
                   <Td>{renderStatus(parseInt(row.status))}</Td>
                   <Td>
                     <Flex gap={"10px"}>
-                      <EditFunctionKehadiran id={row.id} pkl_id={row.pkl_id} no={no} />
+                      <EditFunctionKehadiran
+                        id={row.id}
+                        pkl_id={row.pkl_id}
+                        no={no}
+                      />
                       <DeleteButton onClick={() => handleDeleteRow(row.id)} />
                     </Flex>
                   </Td>
