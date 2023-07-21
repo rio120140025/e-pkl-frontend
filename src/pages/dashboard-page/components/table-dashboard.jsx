@@ -23,6 +23,7 @@ import { ReactComponent as SearchIcon } from "../../../assets/icon-search.svg";
 import { useCookies } from "react-cookie";
 
 const TableDashboard = ({ user_id, user_roles }) => {
+
   const [search, setSearch] = useState("");
   const [sortKey, setSortKey] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");

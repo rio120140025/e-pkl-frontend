@@ -121,7 +121,6 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
 
     return <div>{statusText}</div>;
   };
-
   useEffect(() => {
     if (data.length > 0) {
       data.forEach((entry) => {

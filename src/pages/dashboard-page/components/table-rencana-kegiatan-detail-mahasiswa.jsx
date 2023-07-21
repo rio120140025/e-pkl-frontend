@@ -51,6 +51,7 @@ const TableRencanaKegiatanDetailMahasiswa = ({ roles_id, id }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [data, setData] = useState([]);
   const [cookies] = useCookies(["jwt_token"]);
+
   const [found, setFound] = useState(false);
   const [data1, setData1] = useState(null);
 

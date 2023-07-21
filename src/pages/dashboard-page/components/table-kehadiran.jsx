@@ -255,6 +255,7 @@ const TableKehadiran = ({ roles_id, id }) => {
             <Tbody>
               {currentRows.map((row, index) => {
                 if (parseInt(roles_id) === 2 || parseInt(roles_id) === 3) {
+
                   return (
                     <Tr
                       key={index}
