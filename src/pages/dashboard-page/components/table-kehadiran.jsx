@@ -116,7 +116,7 @@ const TableKehadiran = ({ roles_id, id }) => {
       return sortOrder === "asc"
         ? valA.localeCompare(valB)
         : valB.localeCompare(valA);
-    } else if (sortKey === "dosenPembimbing") {
+    } else if (sortKey === "dospem") {
       const valA = a.dospem.name.toUpperCase();
       const valB = b.dospem.name.toUpperCase();
       return sortOrder === "asc"
@@ -218,7 +218,7 @@ const TableKehadiran = ({ roles_id, id }) => {
                   <Button
                     variant="link"
                     onClick={() => {
-                      setSortKey("mahasiswa.name");
+                      setSortKey("nama");
                       toggleSortOrder();
                     }}
                   >
@@ -230,7 +230,7 @@ const TableKehadiran = ({ roles_id, id }) => {
                   <Button
                     variant="link"
                     onClick={() => {
-                      setSortKey("mahasiswa.nim");
+                      setSortKey("nim");
                       toggleSortOrder();
                     }}
                   >
@@ -242,7 +242,7 @@ const TableKehadiran = ({ roles_id, id }) => {
                   <Button
                     variant="link"
                     onClick={() => {
-                      setSortKey("dospem.name");
+                      setSortKey("dospem");
                       toggleSortOrder();
                     }}
                   >

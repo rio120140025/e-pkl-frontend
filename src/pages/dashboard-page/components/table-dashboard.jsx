@@ -90,56 +90,47 @@ const TableDashboard = ({ user_id, user_roles }) => {
     const dospemName = item.dospem?.name || "";
     const dplName = item.dpl?.name || "";
     const lokasi = item.mahasiswa?.lokasi || "";
-
+  
     const isMatch =
       mahasiswaName.toLowerCase().includes(search.toLowerCase()) ||
       mahasiswaNim.toLowerCase().includes(search.toLowerCase()) ||
       dospemName.toLowerCase().includes(search.toLowerCase()) ||
       dplName.toLowerCase().includes(search.toLowerCase()) ||
       lokasi.toLowerCase().includes(search.toLowerCase());
-
+  
     return isMatch;
   });
-  // console.log("ini filter data", filteredData)
-
-  const sortedData = filteredData.sort((a, b) => {
+  
+  const sortedData = filteredData.slice().sort((a, b) => {
     if (sortKey === "") return 0;
     if (sortKey === "no") {
       return sortOrder === "asc" ? a.id - b.id : b.id - a.id;
     } else if (sortKey === "nama") {
-      const valA = a.mahasiswa.name.toUpperCase();
-      const valB = b.mahasiswa.name.toUpperCase();
-      return sortOrder === "asc"
-        ? valA.localeCompare(valB)
-        : valB.localeCompare(valA);
+      const valA = a.mahasiswa.name.toUpperCase() || "";
+      const valB = b.mahasiswa.name.toUpperCase() || "";
+      return sortOrder === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
     } else if (sortKey === "nim") {
-      const valA = a.mahasiswa.nim.toUpperCase();
-      const valB = b.mahasiswa.nim.toUpperCase();
-      return sortOrder === "asc"
-        ? valA.localeCompare(valB)
-        : valB.localeCompare(valA);
+      const valA = a.mahasiswa.nim.toUpperCase() || "";
+      const valB = b.mahasiswa.nim.toUpperCase() || "";
+      return sortOrder === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
     } else if (sortKey === "dosenPembimbing") {
-      const valA = a.dospem.name.toUpperCase();
-      const valB = b.dospem.name.toUpperCase();
-      return sortOrder === "asc"
-        ? valA.localeCompare(valB)
-        : valB.localeCompare(valA);
+      const valA = a.dospem?.name?.toUpperCase() || "";
+      const valB = b.dospem?.name?.toUpperCase() || "";
+      return sortOrder === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
     } else if (sortKey === "dpl") {
-      const valA = a.dpl.name.toUpperCase();
-      const valB = b.dpl.name.toUpperCase();
-      return sortOrder === "asc"
-        ? valA.localeCompare(valB)
-        : valB.localeCompare(valA);
+      const valA = a.dpl.name.toUpperCase() || "";
+      const valB = b.dpl.name.toUpperCase() || "";
+      return sortOrder === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
     } else if (sortKey === "lokasi") {
-      const valA = a.lokasi.name.toUpperCase();
-      const valB = b.lokasi.name.toUpperCase();
-      return sortOrder === "asc"
-        ? valA.localeCompare(valB)
-        : valB.localeCompare(valA);
+      const valA = a.mahasiswa.lokasi.toUpperCase() || "";
+      const valB = b.mahasiswa.lokasi.toUpperCase() || "";
+      return sortOrder === "asc" ? valA.localeCompare(valB) : valB.localeCompare(valA);
     } else {
       return 0;
     }
   });
+  
+  console.log(sortedData);
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
@@ -157,10 +148,6 @@ const TableDashboard = ({ user_id, user_roles }) => {
   const firstRow = indexOfFirstRow + 1;
   const lastRow = Math.min(indexOfLastRow, totalRows);
   let no = (currentPage - 1) * rowsPerPage;
-
-  useEffect(() => {
-    setSortKey("");
-  }, []);
 
   if (data1 === null) {
     return (
@@ -214,7 +201,7 @@ const TableDashboard = ({ user_id, user_roles }) => {
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("mahasiswa.name");
+                  setSortKey("nama");
                   toggleSortOrder();
                 }}
               >
@@ -226,7 +213,7 @@ const TableDashboard = ({ user_id, user_roles }) => {
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("mahasiswa.nim");
+                  setSortKey("nim");
                   toggleSortOrder();
                 }}
               >
@@ -238,7 +225,7 @@ const TableDashboard = ({ user_id, user_roles }) => {
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("dospem.name");
+                  setSortKey("dosenPembimbing");
                   toggleSortOrder();
                 }}
               >
@@ -250,7 +237,7 @@ const TableDashboard = ({ user_id, user_roles }) => {
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("dpl.name");
+                  setSortKey("dpl");
                   toggleSortOrder();
                 }}
               >
@@ -262,7 +249,7 @@ const TableDashboard = ({ user_id, user_roles }) => {
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("mahasiswa.lokasi");
+                  setSortKey("lokasi");
                   toggleSortOrder();
                 }}
               >

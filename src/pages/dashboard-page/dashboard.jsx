@@ -58,7 +58,11 @@ import GetDataLogin from "./components/get-data-login";
 
 function Dashboard() {
   const [data1, setData1] = useState(null);
-  const [cookies] = useCookies(["jwt_token"]);
+  const [cookies] = useCookies(["name"]);
+  const [id, setId] = useState(localStorage.getItem("id") || null);
+  const [roles_id, setRolesId] = useState(
+    localStorage.getItem("roles_id") || null
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,6 +75,12 @@ function Dashboard() {
         );
         const updatedData1 = response1.data;
         setData1(updatedData1);
+        setRolesId(updatedData1.roles_id);
+        setId(updatedData1.id);
+        localStorage.setItem("roles_id", updatedData1.roles_id);
+        localStorage.setItem("id", updatedData1.id);
+        console.log(updatedData1);
+        console.log("id", updatedData1.id);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

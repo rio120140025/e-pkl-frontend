@@ -194,7 +194,7 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("mahasiswa.name");
+                  setSortKey("nama");
                   toggleSortOrder();
                 }}
               >
@@ -206,7 +206,7 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("mahasiswa.nim");
+                  setSortKey("nim");
                   toggleSortOrder();
                 }}
               >
@@ -218,7 +218,7 @@ const TableRencanaKegiatan = ({ roles_id, id }) => {
               <Button
                 variant="link"
                 onClick={() => {
-                  setSortKey("dospem.name");
+                  setSortKey("dosenPembimbing");
                   toggleSortOrder();
                 }}
               >

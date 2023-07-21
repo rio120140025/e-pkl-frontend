@@ -190,7 +190,7 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
 
     const isMatch =
       kehadiran.includes(search) ||
-      keterangan.toLowerCase().includes(search.toLowerCase()) ||
+      keterangan.includes(search) ||
       status.includes(search) ||
       date.includes(search) ||
       time.includes(search) ||
@@ -215,13 +215,17 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
 
     if (sortKey === "no") {
       return sortOrder === "asc" ? a.id - b.id : b.id - a.id;
+    } else if (sortKey === "Keterangan") {
+      const valA = a.keterangan.toUpperCase();
+      const valB = b.keterangan.toUpperCase();
+      return sortOrder === "asc"
+        ? valA.localeCompare(valB)
+        : valB.localeCompare(valA);
     } else if (sortKey === "kehadiran") {
       return compare(
         a.kehadiran.toString().toUpperCase(),
         b.kehadiran.toString().toUpperCase()
       );
-    } else if (sortKey === "keterangan") {
-      return compare(a.keterangan.toUpperCase(), b.keterangan.toUpperCase());
     } else if (sortKey === "status") {
       return compare(a.status.toString(), b.status.toString());
     } else if (sortKey === "tanggalwaktu") {
@@ -404,7 +408,7 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
                 <Button
                   variant="link"
                   onClick={() => {
-                    setSortKey("Keterangan");
+                    setSortKey("keterangan");
                     toggleSortOrder();
                   }}
                 >
@@ -470,7 +474,7 @@ const TableKehadiranMahasiswa = ({ id, roles_id }) => {
                 <Button
                   variant="link"
                   onClick={() => {
-                    setSortKey("Keterangan");
+                    setSortKey("keterangan");
                     toggleSortOrder();
                   }}
                 >
