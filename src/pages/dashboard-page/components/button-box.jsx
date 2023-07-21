@@ -642,6 +642,7 @@ const EditFunctionKehadiran = ({ id, pkl_id, no }) => {
                         value={kehadiran}
                         onChange={(e) => setKehadiran(e.target.value)}
                       >
+                        <option>Pilih</option>
                         <option value={1}>Hadir</option>
                         <option value={2}>Sakit</option>
                         <option value={3}>Izin</option>
@@ -830,7 +831,7 @@ function ButtonBoxTambahRencanaKehadiran({ id }) {
                         marginBlock={1}
                         onChange={(e) => setKehadiran(e.target.value)}
                       >
-                        <option >Pilih</option>
+                        <option>Pilih</option>
                         <option value={1}>Hadir</option>
                         <option value={2}>Sakit</option>
                         <option value={3}>Izin</option>
