@@ -380,11 +380,11 @@ function ChangeProfileBoxMahasiswa(props) {
                 input={nim}
                 handleSet={(e) => setNim(e.target.value)}
               />
-              <PasswordInput2
+              {/* <PasswordInput2
                 name="Password"
                 password={password}
                 handleSetPassword={(e) => setPassword(e.target.value)}
-              />
+              /> */}
             </Flex>
 
             <Flex direction="column" w="max-content" gap="13.15px">
@@ -432,11 +432,11 @@ function ChangeProfileBoxMahasiswa(props) {
               input={nip}
               handleSet={(e) => setNip(e.target.value)}
             />
-            <PasswordInput2
+            {/* <PasswordInput2
               name="Password"
               password={password}
               handleSetPassword={(e) => setPassword(e.target.value)}
-            />
+            /> */}
             <InputBox2
               name="Nomor Telpon"
               input={no_hp}
@@ -464,11 +464,11 @@ function ChangeProfileBoxMahasiswa(props) {
                 input={nip}
                 handleSet={(e) => setNip(e.target.value)}
               />
-              <PasswordInput2
+              {/* <PasswordInput2
                 name="Password"
                 password={password}
                 handleSetPassword={(e) => setPassword(e.target.value)}
-              />
+              /> */}
             </Flex>
 
             <Flex direction="column" w="max-content" gap="13.15px">
