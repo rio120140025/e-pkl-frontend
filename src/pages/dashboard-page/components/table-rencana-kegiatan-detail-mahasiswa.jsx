@@ -388,7 +388,7 @@ const TableRencanaKegiatanDetailMahasiswa = ({ roles_id, id }) => {
                 <Button
                   variant="link"
                   onClick={() => {
-                    setSortKey("sub_capaian");
+                    setSortKey("subCapaian");
                     toggleSortOrder();
                   }}
                 >
@@ -430,7 +430,7 @@ const TableRencanaKegiatanDetailMahasiswa = ({ roles_id, id }) => {
                 <Button
                   variant="link"
                   onClick={() => {
-                    setSortKey("sub_capaian");
+                    setSortKey("subCapaian");
                     toggleSortOrder();
                   }}
                 >

@@ -6,6 +6,7 @@ import TableComponentPenilaian from "../components/components Penilaian/table-pe
 function PenilaianPKL() {
   // const boxRef = useRef(null);
   const roles_id = localStorage.getItem('roles_id');
+  const id = localStorage.getItem("id");
 
   // useEffect(() => {
   //   const updateBoxHeight = () => {
@@ -33,7 +34,7 @@ function PenilaianPKL() {
       fontSize="15px"
       height="max-content"
     >
-      <TableComponentPenilaian roles_id={roles_id} />
+      <TableComponentPenilaian roles_id={roles_id} id={id} />
     </Box>
   );
 }

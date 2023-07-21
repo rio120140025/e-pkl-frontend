@@ -34,13 +34,12 @@ const TableComponentPenilaian = (props) => {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [sortedData, setSortedData] = useState([]);
     const [cookies, setCookie] = useCookies(["jwt_token"]);
-    const id = localStorage.getItem("id");
     const [nama, setNama] = useState('');
     const [pkl_id, setPkl_id] = useState('')
-    const roles_id = localStorage.getItem('roles_id');
     const [isDataLoaded, setIsDataLoaded] = useState(false);
     let index = 0
-
+    console.log(props.pkl_id)
+    console.log(props.id)
     const toggleSortOrder = (key) => {
         if (key === sortKey) {
             setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
@@ -54,70 +53,65 @@ const TableComponentPenilaian = (props) => {
         setCurrentPage(pageNumber);
     };
     useEffect(() => {
-        axios
-            .get("http://127.0.0.1:8000/api/user/pkl/data", {
-                headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
-            })
-            .then((response) => {
-                let filteredData = "";
+        const fetchData = async () => {
+            try {
+                const pklDataResponse = await axios.get("http://127.0.0.1:8000/api/user/pkl/data", {
+                    headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
+                });
+
+                let filteredData = [];
                 if (props.roles_id == 1) {
-                    filteredData = response.data.body.filter(
-                        (dataPKL) => dataPKL.mahasiswa_id == id
-                    );
+                    filteredData = pklDataResponse.data.body.filter((dataPKL) => dataPKL.mahasiswa_id == props.id);
                 } else if (props.roles_id == 2) {
-                    filteredData = response.data.body.filter(
-                        (dataPKL) => dataPKL.dospem_id == id
-                    );
+                    filteredData = pklDataResponse.data.body.filter((dataPKL) => dataPKL.dospem_id == props.id);
                 } else {
-                    filteredData = response.data.body.filter(
-                        (dataPKL) => dataPKL.dpl_id == id
-                    );
+                    filteredData = pklDataResponse.data.body.filter((dataPKL) => dataPKL.dpl_id == props.id);
                 }
+
                 setDataPKL(filteredData);
                 setPkl_id(filteredData.length > 0 ? filteredData[0].id : "");
                 setIsDataLoaded(true);
-            })
-            .catch((error) => {
-                console.log(error.response.data);
-            });
 
-        if (props.roles_id == 1 && pkl_id == "") {
-            axios
-                .get("http://127.0.0.1:8000/api/user/profile", {
-                    headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
-                })
-                .then((response) => {
-                    console.log("ini data mahasiswa", response.data);
-                    setNama(response.data.name);
-                })
-                .catch((error) => {
-                    console.log(error.response.data);
-                });
-        }
-    }, [props.roles_id, pkl_id, id, cookies.jwt_token.data]);
+                if (props.roles_id == 1 && pkl_id == "") {
+                    const profileResponse = await axios.get("http://127.0.0.1:8000/api/user/profile", {
+                        headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
+                    });
+                    setNama(profileResponse.data.name);
+                }
+            } catch (error) {
+                console.log(error.response.data);
+            }
+        };
+
+        fetchData();
+
+    }, [props.roles_id, props.pkl_id, props.id, cookies.jwt_token.data]);
+
     useEffect(() => {
         if (dataPKL.length === 0) {
             return;
         }
 
-        axios
-            .get("http://127.0.0.1:8000/api/user/penilaian", {
-                headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
-            })
-            .then((response) => {
+        const fetchPenilaianData = async () => {
+            try {
+                const penilaianResponse = await axios.get("http://127.0.0.1:8000/api/user/penilaian", {
+                    headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
+                });
+
                 const combinedData = dataPKL.map((pkl) => {
-                    const penilaian = response.data.body.find(
-                        (nilai) => nilai.pkl_id === pkl.id
-                    );
+                    const penilaian = penilaianResponse.data.body.find((nilai) => nilai.pkl_id === pkl.id);
                     return { ...pkl, penilaian };
                 });
+
                 setSortedData(combinedData);
-            })
-            .catch((error) => {
+            } catch (error) {
                 console.log(error.response.data);
-            });
+            }
+        };
+
+        fetchPenilaianData();
+
     }, [dataPKL]);
-    // Sorting function
     const sortData = (data) => {
         const sorted = [...data].sort((a, b) => {
             const keyA = getSortValue(a, sortKey);
@@ -166,7 +160,6 @@ const TableComponentPenilaian = (props) => {
         }
     };
 
-    // Filtering function based on the search input
     const filterData = (data) => {
         return data.filter((row) => {
             const searchData = search.toLowerCase();
@@ -291,7 +284,7 @@ const TableComponentPenilaian = (props) => {
                 </Thead>
                 <Tbody>
                     {console.log('ini id pkl', pkl_id)}
-                    {(roles_id == 1 && (pkl_id == undefined || pkl_id == null || pkl_id == '')) ?
+                    {(props.roles_id == 1 && (pkl_id == undefined || pkl_id == null || pkl_id == '')) ?
                         <Tr key={index} bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"} color="black">
                             <Td style={{ textAlign: "left" }}>{index += 1}</Td>
                             <Td style={{ textAlign: "left" }}>{nama}</Td>
@@ -327,11 +320,19 @@ const TableComponentPenilaian = (props) => {
                                     }
 
                                     <Td style={{ textAlign: "left" }}>
-                                        {props.roles_id == 1 && <ButtonBoxDetailPenilaian />}
+                                        {props.roles_id == 1 && <ButtonBoxDetailPenilaian
+                                            pkl_id={row && row.penilaian && row.penilaian.pkl_id}
+                                            penilaianId={row && row.penilaian && row.penilaian.id}
+                                            dataNilai={row}
+                                            id={props.id}
+                                        />}
                                         {props.roles_id == 2 &&
                                             <ButtonBoxDetailPenilaianDosen
                                                 pkl_id={row && row.penilaian && row.penilaian.pkl_id} no={index + 1}
-                                                penilaianId={row && row.penilaian && row.penilaian.id} />
+                                                penilaianId={row && row.penilaian && row.penilaian.id}
+                                                dataNilai={row}
+                                                id={props.id}
+                                            />
                                         }
                                         {props.roles_id == 3 &&
                                             <ButtonEditandDelete

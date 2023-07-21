@@ -8,55 +8,68 @@ import {
     ModalContent,
     ModalBody,
     ModalFooter,
-    Flex
+    Flex,
+    Center
 } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/button";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import ExportPDF from "./export-penilaian";
+import Loading from "../../../../assets/74eD.gif";
 
-const TableMahasiswaDetail = () => {
+const TableMahasiswaDetail = (props) => {
     const [cookies, setCookie] = useCookies(["jwt_token"]);
-    const [dataPenilaian, setDataPenilaian] = useState([]);
+    const [dataPenilaian, setDataPenilaian] = useState(null);
     const [dataPKL, setDataPKL] = useState([]);
-    const id = localStorage.getItem('id');
     useEffect(() => {
-        axios
-            .get("http://127.0.0.1:8000/api/user/pkl/data", {
-                headers: { Authorization: "Bearer " + cookies.jwt_token.data },
-            })
-            .then((response) => {
-                response.data.body.map((dataPKL) => {
-                    if (dataPKL.mahasiswa.id == id) {
-                        setDataPKL(dataPKL)
-                        return
-                    }
-                })
-            })
-            .catch((error) => {
+        const fetchPKLData = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:8000/api/user/pkl/data", {
+                    headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+                });
+
+                const dataPKL = response.data.body.find((data) => data.mahasiswa.id == props.id);
+                setDataPKL(dataPKL);
+            } catch (error) {
                 console.log(error.response.data);
-            });
+            }
+        };
+
+        fetchPKLData();
     }, []);
+
     console.log("data pkl", dataPKL)
     useEffect(() => {
-        axios
-            .get("http://127.0.0.1:8000/api/user/penilaian", {
-                headers: { Authorization: "Bearer " + cookies.jwt_token.data },
-            })
-            .then((response) => {
-                response.data.body.map((dataNilai) => {
-                    console.log("id PKL", dataPKL.id)
-                    console.log("dataNilai.pkl_id", dataNilai.pkl_id)
-                    if (dataNilai.pkl_id == dataPKL.id) {
-                        setDataPenilaian(dataNilai)
-                        return
-                    }
-                })
-            })
-            .catch((error) => {
+        const fetchPenilaianData = async () => {
+            try {
+                const response = await axios.get("http://127.0.0.1:8000/api/user/penilaian", {
+                    headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+                });
+
+                const dataPenilaian = response.data.body.find((data) => data.pkl_id == dataPKL.id);
+                setDataPenilaian(dataPenilaian);
+            } catch (error) {
                 console.log(error.response.data);
-            });
+            }
+        };
+
+        if (dataPKL) {
+            fetchPenilaianData();
+        }
     }, [dataPKL]);
+    // if (dataPenilaian == null) {
+    //     return (
+    //         <Center>
+    //             <img
+    //                 width="200px"
+    //                 height="200px"
+    //                 sizes="1000px"
+    //                 src={Loading}
+    //                 alt="loading..."
+    //             />
+    //         </Center>
+    //     );
+    // }
     return (
         <Box
             marginTop="75px"
@@ -94,7 +107,7 @@ const TableMahasiswaDetail = () => {
         </Box>
     );
 };
-function ButtonBoxDetailPenilaian() {
+function ButtonBoxDetailPenilaian(props) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
         <>
@@ -117,11 +130,11 @@ function ButtonBoxDetailPenilaian() {
                 <ModalContent>
                     <ModalBody>
                         <ModalCloseButton color={"#BDCDD6"} />
-                        <TableMahasiswaDetail />
+                        <TableMahasiswaDetail pkl_id={props.pkl_id} penilaianId={props.penilaianId} id={props.id} />
                     </ModalBody>
                     <ModalFooter>
                         <Flex gap='22px'>
-                            <ExportPDF />
+                            <ExportPDF dataNilai={props.dataNilai} />
                             <Button onClick={onClose} className="button-box-2" bg='#93BFCF' color='#FFFFFF'>
                                 Tutup
                             </Button>

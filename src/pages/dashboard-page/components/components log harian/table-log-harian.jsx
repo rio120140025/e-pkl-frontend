@@ -190,7 +190,7 @@ function TableLogHarian() {
       bgColor="#F9FAFC"
       boxShadow="0 0 0 1px rgba(152, 161, 178, 0.1), 0 1px 4px rgba(69, 75, 87, 0.12), 0 0 2px rgba(0, 0, 0, 0.08)"
     >
-      <HStack marginLeft={665} spacing={19}>
+      <HStack marginLeft={roles_id == 1 ? 665 : 875} spacing={19}>
         <InputGroup
           top="12px"
           marginBottom={2}
@@ -285,7 +285,7 @@ function TableLogHarian() {
               <Td>
                 <Flex justifyContent="center" gap='10px'>
                   <DetailMahasiswaDosen pkl_id={row.id} />
-                  <ExportPDF />
+                  <ExportPDF data={row} />
                 </Flex>
               </Td>
             </Tr>

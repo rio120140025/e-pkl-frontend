@@ -7,11 +7,13 @@ import {
     ModalContent,
     ModalBody,
     ModalFooter,
+    Flex
 
 } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/button";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import ExportPDF from "./export-penilaian";
 
 const TableDosenDetail = (props) => {
     const [cookies, setCookie] = useCookies(["jwt_token"]);
@@ -117,15 +119,18 @@ function ButtonBoxDetailPenilaianDosen(props) {
                         <TableDosenDetail id={props.penilaianId} no={props.no} />
                     </ModalBody>
                     <ModalFooter>
-                        <Button
-                            className="button-box-2"
-                            bg='#93BFCF'
-                            color='#FFFFFF'
-                            value={props.penilaianId}
-                            onClick={handleClose}
-                        >
-                            Tutup
-                        </Button>
+                        <Flex gap='22px'>
+                            <ExportPDF dataNilai={props.dataNilai} />
+                            <Button
+                                className="button-box-2"
+                                bg='#93BFCF'
+                                color='#FFFFFF'
+                                value={props.penilaianId}
+                                onClick={handleClose}
+                            >
+                                Tutup
+                            </Button>
+                        </Flex>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

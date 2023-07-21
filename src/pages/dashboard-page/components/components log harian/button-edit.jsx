@@ -405,12 +405,6 @@ function VerifikasiDPL(props) {
           onClick={() => handleStatusChange(id_penilaian, "verifikasi")}
         >
           <Text
-            color="#20B95D"
-            fontFamily="Poppins"
-            fontSize="12px"
-            fontStyle="normal"
-            fontWeight="700"
-            lineHeight="20px"
           >
             Verifikasi
           </Text>
@@ -426,12 +420,6 @@ function VerifikasiDPL(props) {
           onClick={() => handleStatusChange(id_penilaian, "tolak")}
         >
           <Text
-            color="#F00"
-            fontFamily="Poppins"
-            fontSize="12px"
-            fontStyle="normal"
-            fontWeight="700"
-            lineHeight="20px"
           >
             Tolak
           </Text>

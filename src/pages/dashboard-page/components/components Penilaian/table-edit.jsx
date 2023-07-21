@@ -90,31 +90,35 @@ function ButtonBeriNilai(props) {
   };
 
   useEffect(() => {
-    let found = false;
-    axios
-      .get('http://127.0.0.1:8000/api/user/penilaian', {
-        headers: { Authorization: 'Bearer ' + (cookies?.jwt_token?.data ?? '') },
-      })
-      .then((response) => {
-        response?.data?.body?.map((data) => {
-          if (data.pkl_id === props.pkl_id && found === false) {
-            console.log('response.data.body', response.data.body);
-            setPengetahuan(data.pengetahuan);
-            setMulai(new Date(data.tgl_mulai));
-            setSelesai(new Date(data.tgl_selesai));
-            setRata(data.rerata);
-            setPelaksanaan(data.pelaksanaan);
-            setKerjaSama(data.kerjasama);
-            setKreativitas(data.kreativitas);
-            setKedisplinan(data.kedisiplinan);
-            setSikap(data.sikap);
-            found = true;
-          }
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/user/penilaian', {
+          headers: { Authorization: 'Bearer ' + (cookies?.jwt_token?.data ?? '') },
         });
-      })
-      .catch((error) => {
+
+        const data = response?.data?.body || [];
+
+        for (const item of data) {
+          if (item.pkl_id == props.pkl_id) {
+            console.log('response.data.body', data);
+            setPengetahuan(item.pengetahuan);
+            setMulai(new Date(item.tgl_mulai));
+            setSelesai(new Date(item.tgl_selesai));
+            setRata(item.rerata);
+            setPelaksanaan(item.pelaksanaan);
+            setKerjaSama(item.kerjasama);
+            setKreativitas(item.kreativitas);
+            setKedisplinan(item.kedisiplinan);
+            setSikap(item.sikap);
+            break;
+          }
+        }
+      } catch (error) {
         console.log(error);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
   const toast = useToast();

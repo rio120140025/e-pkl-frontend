@@ -176,7 +176,6 @@ function ChangeProfileBoxMahasiswa(props) {
   const [existingPKLData, setExistingPKLData] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-
     axios
       .get("http://127.0.0.1:8000/api/user/profile", {
         headers: { Authorization: "Bearer " + cookies.jwt_token.data },
