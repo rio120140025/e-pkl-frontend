@@ -30,7 +30,7 @@ import ExportPDFKegiatan from "./pages/dashboard-page/components/components log 
 function App() {
   return (
     <BrowserRouter>
-      <Box>
+      <Box h='100%' w='100%'>
         <Routes>
           <Route exact path="/" Component={Login} />
           <Route exact path="/register" Component={RoleRegister} />

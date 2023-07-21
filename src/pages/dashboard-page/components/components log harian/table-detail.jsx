@@ -112,8 +112,8 @@ const TableDetail = () => {
 
     if (data == '') {
         return (
-            <Center>
-                <Image src="/74eD.gif" alt="loading..." />
+            <Center >
+                <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
             </Center>
         );
     }

@@ -18,7 +18,6 @@ import {
   ModalContent,
   ModalBody,
   ModalFooter,
-  ModalHeader,
   Center,
   Text,
   useToast,
@@ -43,6 +42,7 @@ function ButtonBeriNilai(props) {
   const [selesai, setSelesai] = useState(null); // Set initial value to null
   const [cookies, setCookie] = useCookies(['jwt_token']);
 
+
   function handleDateChange(e, setter) {
     const dateValue = e.target.value;
     const newDate = dateValue ? new Date(dateValue) : null;
@@ -59,17 +59,34 @@ function ButtonBeriNilai(props) {
     return `${year}-${month}-${day}`;
   };
 
+  const calculateAverage = () => {
+    const pengetahuanValue = parseInt(pengetahuan) || 0;
+    const pelaksanaanValue = parseInt(pelaksanaan) || 0;
+    const kerjaSamaValue = parseInt(kerjaSama) || 0;
+    const kreativitasValue = parseInt(kreativitas) || 0;
+    const kedisplinanValue = parseInt(kedisplinan) || 0;
+    const sikapValue = parseInt(sikap) || 0;
+
+    const total = pengetahuanValue + pelaksanaanValue + kerjaSamaValue + kreativitasValue + kedisplinanValue + sikapValue;
+    const average = total / 6;
+    setRata(parseInt(average));
+  };
+
+  useEffect(() => {
+    calculateAverage();
+  }, [pengetahuan, pelaksanaan, kerjaSama, kreativitas, kedisplinan, sikap]);
+
   let input_nilai = {
     pkl_id: props.pkl_id,
     tgl_mulai: mulai ? mulai.toISOString().split('T')[0] : null, // Check if mulai is null
     tgl_selesai: selesai ? selesai.toISOString().split('T')[0] : null, // Check if selesai is null
-    rerata: rata,
     pengetahuan: pengetahuan,
     pelaksanaan: pelaksanaan,
     kerjasama: kerjaSama,
     kreativitas: kreativitas,
     kedisiplinan: kedisplinan,
     sikap: sikap,
+    rerata: rata,
   };
 
   useEffect(() => {
@@ -220,7 +237,8 @@ function ButtonBeriNilai(props) {
                         />
                       </Td>
                       <Td>
-                        <Input value={rata} onChange={(e) => setRata(e.target.value)} />
+                        {/* <Input value={rata} onChange={(e) => setRata(e.target.value)} /> */}
+                        <Text>{rata}</Text>
                       </Td>
                     </Tr>
                   </Tbody>
@@ -270,6 +288,22 @@ const ButtonEditandDelete = (props) => {
 
     return `${year}-${month}-${day}`;
   };
+  const calculateAverage = () => {
+    const pengetahuanValue = parseFloat(pengetahuan) || 0;
+    const pelaksanaanValue = parseFloat(pelaksanaan) || 0;
+    const kerjaSamaValue = parseFloat(kerjaSama) || 0;
+    const kreativitasValue = parseFloat(kreativitas) || 0;
+    const kedisplinanValue = parseFloat(kedisplinan) || 0;
+    const sikapValue = parseFloat(sikap) || 0;
+
+    const total = pengetahuanValue + pelaksanaanValue + kerjaSamaValue + kreativitasValue + kedisplinanValue + sikapValue;
+    const average = total / 6;
+    setRata(parseInt(average));
+  };
+
+  useEffect(() => {
+    calculateAverage();
+  }, [pengetahuan, pelaksanaan, kerjaSama, kreativitas, kedisplinan, sikap]);
 
   let input_nilai = {
     pkl_id: props.pkl_id,
@@ -455,7 +489,8 @@ const ButtonEditandDelete = (props) => {
                         />
                       </Td>
                       <Td>
-                        <Input value={rata} onChange={(e) => setRata(e.target.value)} />
+                        {/* <Input value={rata} onChange={(e) => setRata(e.target.value)} /> */}
+                        <Text>{rata}</Text>
                       </Td>
                     </Tr>
                   </Tbody>
@@ -477,7 +512,7 @@ const ButtonEditandDelete = (props) => {
         <ModalContent>
           <ModalBody mt={10} textAlign={"center"} fontWeight={"bolder"}>
             <ModalCloseButton color={"#FF0000"} />
-            Apakah yakin menghapus rencana?
+            Apakah yakin menghapus penilaian?
           </ModalBody>
           <Center>
             <ModalFooter>

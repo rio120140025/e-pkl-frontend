@@ -222,7 +222,7 @@ function ButtonEditLogHarianMahasiswa(props) {
                   <Tbody>
                     <Tr color="black">
                       <Td>
-                        {no}
+                        {props.logHarian_data?.no}
                       </Td>
                       <Td>
                         <Input value={kegiatan} onChange={(e) => { setKegiatan(e.target.value) }} />
@@ -334,12 +334,13 @@ function VerifikasiDPL(props) {
     <Flex gap='9px'>
       <>
         <Button
-          borderRadius='5px'
-          background='#C7F1D8'
-          display='flex'
-          padding='3px 20px'
-          justifyContent='space-between'
-          alignItems='center'
+          variant="solid"
+          w="81px"
+          height="26px"
+          bgColor="#C7F1D8"
+          color="#20B95D"
+          fontWeight={"bold"}
+          _hover={{ background: "#20B95D", color: "#18753D" }}
           onClick={() => handleStatusChange(id_penilaian, "verifikasi")}
         >
           <Text
@@ -354,25 +355,24 @@ function VerifikasiDPL(props) {
           </Text>
         </Button>
         <Button
-          w='62px'
-          borderRadius='5px'
-          background='#FFECEC'
-          display='flex'
-          padding='3px 20px'
-          justifyContent='space-between'
-          alignItems='center'
+          variant="solid"
+          w="81px"
+          h="26px"
+          bgColor="#FFECEC"
+          color="#FF0000"
+          fontWeight={"bold"}
+          _hover={{ background: "#FF5B5B", color: "#7B2121" }}
           onClick={() => handleStatusChange(id_penilaian, "tolak")}
         >
           <Text
-            color='#FF0000'
+            color='#F00'
             fontFamily='Poppins'
             fontSize='12px'
             fontStyle='normal'
             fontWeight='700'
             lineHeight='20px'
-          >
-            Tolak
-          </Text>
+
+          >Tolak</Text>
         </Button>
       </>
     </Flex>
