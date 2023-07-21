@@ -274,9 +274,11 @@ function ChangeProfileBoxMahasiswa(props) {
             console.log(updateData);
           })
           .catch(error => {
-            Object.keys(error.response.data.errors).forEach(function (key, index) {
-              callToast(error.response.data.errors[key], "error");
-            });
+            if (error?.response?.data?.reason) {
+              Object.keys(error.response.data.errors).forEach(function (key, index) {
+                callToast(error.response.data.errors[key], "error");
+              });
+            }
           });
       } else {
         axios
@@ -322,8 +324,9 @@ function ChangeProfileBoxMahasiswa(props) {
         console.log("data sudah terkirim", updateData);
       })
       .catch((error) => {
-        console.log(error.response);
-        callToast(error.response.data.reason, "error");
+        if (error?.response?.data?.reason) {
+          callToast(error.response.data.reason, "error");
+        }
       });
   };
 
