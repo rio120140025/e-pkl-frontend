@@ -69,7 +69,7 @@ function ButtonBeriNilai(props) {
 
     const total = pengetahuanValue + pelaksanaanValue + kerjaSamaValue + kreativitasValue + kedisplinanValue + sikapValue;
     const average = total / 6;
-    setRata(average);
+    setRata(parseInt(average));
   };
 
   useEffect(() => {
@@ -298,7 +298,7 @@ const ButtonEditandDelete = (props) => {
 
     const total = pengetahuanValue + pelaksanaanValue + kerjaSamaValue + kreativitasValue + kedisplinanValue + sikapValue;
     const average = total / 6;
-    setRata(average.toFixed(2));
+    setRata(parseInt(average));
   };
 
   useEffect(() => {
