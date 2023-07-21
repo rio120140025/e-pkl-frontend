@@ -512,7 +512,7 @@ const ButtonEditandDelete = (props) => {
         <ModalContent>
           <ModalBody mt={10} textAlign={"center"} fontWeight={"bolder"}>
             <ModalCloseButton color={"#FF0000"} />
-            Apakah yakin menghapus rencana?
+            Apakah yakin menghapus penilaian?
           </ModalBody>
           <Center>
             <ModalFooter>

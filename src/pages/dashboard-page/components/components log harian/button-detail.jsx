@@ -153,7 +153,7 @@ function DetailLogHarianMahasiswaDosenDetail(props) {
                                         <Tbody>
                                             <Tr color="black">
                                                 <Td>
-                                                    {no}
+                                                    {props.logHarian_data?.no}
                                                 </Td>
                                                 <Td>
                                                     <Text>{materi}</Text>
@@ -194,7 +194,7 @@ function DetailLogHarianMahasiswaDosenDetail(props) {
                                     </Thead>
                                     <Tbody>
                                         <Tr color="black">
-                                            <Td>{props.logHarian_data.id}</Td>
+                                            <Td>{props.logHarian_data?.no}</Td>
                                             <Td>{props.logHarian_data.materi}</Td>
                                             <Td>{props.logHarian_data.prosedur}</Td>
                                             <Td>{props.logHarian_data.hasil}</Td>

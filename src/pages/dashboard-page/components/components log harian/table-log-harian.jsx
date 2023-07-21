@@ -171,7 +171,7 @@ function TableLogHarian() {
   if (data == '') {
     return (
       <Center >
-        <img src="74ed.gif" alt="loading..." />
+        <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
       </Center>
     );
   }

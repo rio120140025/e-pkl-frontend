@@ -35,7 +35,7 @@ function RencanaKegiatanBoxDetailMahasiswa() {
       width="1375px"
       fontSize="15px"
     >
-      <TableRencanaKegiatanDetailMahasiswa/>
+      <TableRencanaKegiatanDetailMahasiswa />
     </Box>
   );
 }

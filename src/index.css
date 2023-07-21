@@ -4,9 +4,24 @@ body,
 html {
   margin: 0;
   font-family: "Poppins" !important;
+  margin: 0;
+  padding: 0;
+  height: 100%;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+/* index.css atau file CSS lainnya */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+#root {
+  height: 100%;
 }

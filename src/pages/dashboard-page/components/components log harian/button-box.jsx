@@ -163,8 +163,8 @@ function ButtonBoxTambahRencanaLogHarian(props) {
   }
   if (no === '') {
     return (
-      <Center marginTop={100}>
-        <img src="74ed.gif" alt="loading..." />
+      <Center >
+        <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
       </Center>
     );
   }

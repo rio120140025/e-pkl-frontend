@@ -41,8 +41,9 @@ function Header(props) {
   return (
     <Flex
       bgColor="#BDCDD6"
-      Width="1280px"
-      padding="12px 80px"
+      Width="100%"
+      py="12px"
+      px='6.8%'
       justifyContent="space-between"
       alignItems="center"
     >

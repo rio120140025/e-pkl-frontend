@@ -94,7 +94,7 @@ function ProfileBoxMahasiswa(props) {
       borderRadius="5px"
       background="#FFF"
       boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-      width="1375px"
+      width="87.9%"
       direction="column"
       gap="32px"
       py="35px"
@@ -117,11 +117,10 @@ function ProfileBoxMahasiswa(props) {
             <OnlyDisplay name="Nama" value={name} />
             <OnlyDisplay name="Email" value={email} />
             <OnlyDisplay name="NIM" value={nim} />
-            <PasswordInput2 lihat="yes" name="Password" password={password} />
+            <OnlyDisplay name="Nomor Telpon" value={no_hp} />
           </Flex>
 
           <Flex direction="column" w="max-content" gap="13.15px">
-            <OnlyDisplay name="Nomor Telpon" value={no_hp} />
             <OnlyDisplay name="Tempat PKL" value={lokasi} />
             <OnlyDisplay name="Dosen Pembimbing" value={namaDosen} />
             <OnlyDisplay name="Dosen Pembimbing Lapangan" value={namaDPL} />
@@ -134,7 +133,6 @@ function ProfileBoxMahasiswa(props) {
           <OnlyDisplay name="Nama" value={name} />
           <OnlyDisplay name="Email" value={email} />
           <OnlyDisplay name="NRK/NIP" value={nip} />
-          <PasswordInput2 lihat="yes" name="Password" password={password} />
           <OnlyDisplay name="Nomor Telpon" value={no_hp} />
         </Flex>
       )}
@@ -145,7 +143,6 @@ function ProfileBoxMahasiswa(props) {
             <OnlyDisplay name="Nama" value={name} />
             <OnlyDisplay name="Email" value={email} />
             <OnlyDisplay name="NRK/NIP" value={nip} />
-            <PasswordInput2 lihat="yes" name="Password" password={password} />
           </Flex>
 
           <Flex direction="column" w="max-content" gap="13.15px">

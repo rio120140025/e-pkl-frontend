@@ -222,7 +222,7 @@ function ButtonEditLogHarianMahasiswa(props) {
                   <Tbody>
                     <Tr color="black">
                       <Td>
-                        {no}
+                        {props.logHarian_data?.no}
                       </Td>
                       <Td>
                         <Input value={kegiatan} onChange={(e) => { setKegiatan(e.target.value) }} />
