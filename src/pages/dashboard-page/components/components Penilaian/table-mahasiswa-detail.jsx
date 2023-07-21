@@ -36,9 +36,8 @@ const TableMahasiswaDetail = (props) => {
         };
 
         fetchPKLData();
-    }, []);
+    }, [props.id]);
 
-    console.log("data pkl", dataPKL)
     useEffect(() => {
         const fetchPenilaianData = async () => {
             try {
@@ -57,6 +56,12 @@ const TableMahasiswaDetail = (props) => {
             fetchPenilaianData();
         }
     }, [dataPKL]);
+
+    // Conditional rendering based on data loading state
+    if (!dataPKL || !dataPenilaian) {
+        // While data is being fetched, display a loading state
+        return <div>Loading...</div>;
+    }
     // if (dataPenilaian == null) {
     //     return (
     //         <Center>

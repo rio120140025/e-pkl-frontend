@@ -84,8 +84,7 @@ const TableComponentPenilaian = (props) => {
         };
 
         fetchData();
-
-    }, [props.roles_id, props.pkl_id, props.id, cookies.jwt_token.data]);
+    }, [props.roles_id, props.pkl_id, props.id, pkl_id, cookies.jwt_token.data]);
 
     useEffect(() => {
         if (dataPKL.length === 0) {
@@ -110,8 +109,7 @@ const TableComponentPenilaian = (props) => {
         };
 
         fetchPenilaianData();
-
-    }, [dataPKL]);
+    }, [dataPKL, cookies.jwt_token.data]);
     const sortData = (data) => {
         const sorted = [...data].sort((a, b) => {
             const keyA = getSortValue(a, sortKey);
