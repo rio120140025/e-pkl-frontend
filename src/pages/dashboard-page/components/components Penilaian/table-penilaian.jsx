@@ -84,7 +84,7 @@ const TableComponentPenilaian = (props) => {
         };
 
         fetchData();
-    }, [cookies.jwt_token.data]);
+    }, [dataPKL, cookies.jwt_token.data]);
 
     useEffect(() => {
         if (dataPKL.length === 0) {
@@ -193,7 +193,7 @@ const TableComponentPenilaian = (props) => {
     console.log("nama", nama)
     console.log("currentRows", currentRows)
 
-    if (dataPKL === null) {
+    if (dataPKL == '') {
         return (
             <Center marginTop={100}>
                 <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />

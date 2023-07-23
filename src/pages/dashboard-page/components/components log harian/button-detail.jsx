@@ -31,7 +31,7 @@ function DetailMahasiswaDosen(props) {
     const navigate = useNavigate();
 
     const handleClick = (e) => {
-        navigate("/log-harian/detail");
+        navigate("/log-harian/detail", { state: { dataLogHarian: props.data } });
         localStorage.setItem("pkl_id", e.target.value);
     };
 

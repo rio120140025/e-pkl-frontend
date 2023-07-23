@@ -262,45 +262,45 @@ const TableDetail = () => {
                 {(roles_id == 1 ||
                   roles_id == 2 ||
                   (roles_id == 3 && row.status != 1)) && (
-                  <>
-                    {row.status == 1 && (
-                      <Td
-                        color="#93BFCF"
-                        fontFamily="Poppins"
-                        fontSize="12px"
-                        fontStyle="normal"
-                        fontWeight="700"
-                        lineHeight="20px"
-                      >
-                        Belum Diverifikasi
-                      </Td>
-                    )}
-                    {row.status == 2 && (
-                      <Td
-                        color="#20B95D"
-                        fontFamily="Poppins"
-                        fontSize="12px"
-                        fontStyle="normal"
-                        fontWeight="700"
-                        lineHeight="20px"
-                      >
-                        Diverifikasi
-                      </Td>
-                    )}
-                    {row.status == 3 && (
-                      <Td
-                        color="#F00"
-                        fontFamily="Poppins"
-                        fontSize="12px"
-                        fontStyle="normal"
-                        fontWeight="700"
-                        lineHeight="20px"
-                      >
-                        Ditolak
-                      </Td>
-                    )}
-                  </>
-                )}
+                    <>
+                      {row.status == 1 && (
+                        <Td
+                          color="#93BFCF"
+                          fontFamily="Poppins"
+                          fontSize="12px"
+                          fontStyle="normal"
+                          fontWeight="700"
+                          lineHeight="20px"
+                        >
+                          Belum Diverifikasi
+                        </Td>
+                      )}
+                      {row.status == 2 && (
+                        <Td
+                          color="#20B95D"
+                          fontFamily="Poppins"
+                          fontSize="12px"
+                          fontStyle="normal"
+                          fontWeight="700"
+                          lineHeight="20px"
+                        >
+                          Diverifikasi
+                        </Td>
+                      )}
+                      {row.status == 3 && (
+                        <Td
+                          color="#F00"
+                          fontFamily="Poppins"
+                          fontSize="12px"
+                          fontStyle="normal"
+                          fontWeight="700"
+                          lineHeight="20px"
+                        >
+                          Ditolak
+                        </Td>
+                      )}
+                    </>
+                  )}
                 {roles_id == 3 && row.status == 1 && (
                   <Td>
                     <VerifikasiDPL id_penilaian={row.id} />

@@ -42,6 +42,7 @@ function TableLogHarian() {
   const [data, setData] = useState([]);
   const [nama, setNama] = useState('');
   const [nim, setNim] = useState('');
+  const [dataJurnal, setDataJurnal] = useState([]);
   const [cookies, setCookie] = useCookies(['jwt_token']);
   const [pkl_id, setPkl_id] = useState('')
   const id = localStorage.getItem('id');
@@ -92,6 +93,7 @@ function TableLogHarian() {
     console.log('ini pkl_id', pkl_id)
     console.log('ini filteredData', filteredData)
   }, [pkl_id]);
+
   console.log("pkl_id", pkl_id)
   console.log("roles id", roles_id)
   useEffect(() => {
@@ -109,11 +111,34 @@ function TableLogHarian() {
           console.log(error.response.data);
         });
     }
-  }, [pkl_id]);
+  }, [pkl_id, cookies.jwt_token.data]);
+  console.log("data", data)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/user/jurnal/data",
+          {
+            headers: { Authorization: `Bearer ${cookies.jwt_token.data}` },
+          }
+        );
+        const combinedData = data.map((dataUser) => {
+          const dataLog = response.data.body.filter((data) => data.pkl_id == dataUser.id);
+          return { ...dataUser, dataLog };
+        });
+        setDataJurnal(combinedData)
+      } catch (error) {
+        console.log(error.response.data);
+      }
+    };
+
+    fetchData();
+  }, [data]);
 
 
-  console.log("ini  data", data)
-  const filteredData = data.filter((item) => {
+  console.log("ini  dataJurnal", dataJurnal)
+  const filteredData = dataJurnal.filter((item) => {
     const mahasiswaName = item.mahasiswa?.name || "";
     const mahasiswaNim = item.mahasiswa?.nim || "";
     const dospemName = item.dospem?.name || "";
@@ -284,7 +309,7 @@ function TableLogHarian() {
               <Td>{row.dospem.name}</Td>
               <Td>
                 <Flex justifyContent="center" gap='10px'>
-                  <DetailMahasiswaDosen pkl_id={row.id} />
+                  <DetailMahasiswaDosen pkl_id={row.id} data={row} />
                   <ExportPDF data={row} />
                 </Flex>
               </Td>
