@@ -127,7 +127,7 @@ const TableDetail = () => {
 
   console.log("updatedRows", updatedRows);
 
-  if (data.length === 0) {
+  if (data == '') {
     return (
       <Center>
         <img
