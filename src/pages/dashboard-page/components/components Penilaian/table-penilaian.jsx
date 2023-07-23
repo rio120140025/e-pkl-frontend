@@ -62,9 +62,9 @@ const TableComponentPenilaian = (props) => {
                 });
 
                 let filteredData = [];
-                if (props.roles_id === 1) {
+                if (props.roles_id == 1) {
                     filteredData = pklDataResponse.data.body.filter((dataPKL) => dataPKL.mahasiswa_id == props.id);
-                } else if (props.roles_id === 2) {
+                } else if (props.roles_id == 2) {
                     filteredData = pklDataResponse.data.body.filter((dataPKL) => dataPKL.dospem_id == props.id);
                 } else {
                     filteredData = pklDataResponse.data.body.filter((dataPKL) => dataPKL.dpl_id == props.id);

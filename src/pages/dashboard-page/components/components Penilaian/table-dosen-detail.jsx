@@ -29,7 +29,7 @@ const TableDosenDetail = (props) => {
             .then((response) => {
                 console.log("ini data", response.data.body)
                 response.data.body.map((dataNilai) => {
-                    if (dataNilai.id === props.id && found === false) {
+                    if (dataNilai.id == props.id && found === false) {
                         console.log(dataNilai)
                         found = true
                         setDataPenilaian(dataNilai)
