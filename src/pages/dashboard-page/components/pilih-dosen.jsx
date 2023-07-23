@@ -12,7 +12,7 @@ function PilihDosen(props) {
         // console.log("ini kode dosbim", props.IdDosbim)
         axios
             .get("http://127.0.0.1:8000/api/user/data/alluser", {
-                headers: { Authorization: "Bearer " + cookies.jwt_token.data }
+                headers: { Authorization: "Bearer " + cookies?.jwt_token?.data }
             })
             .then(response => {
                 // console.log("ini data buat baca dosen", response.data)

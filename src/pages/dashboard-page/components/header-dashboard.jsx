@@ -21,10 +21,13 @@ function Header(props) {
     setValueNavbar(value);
   };
 
-  const handleLogout = () => {
-    removeCookie("jwt_token");
-    localStorage.clear();
-    window.location.href = "/";
+  const handleLogout = async () => {
+    try {
+      await removeCookie("jwt_token");
+      localStorage.clear();
+      window.location.href = "/";
+    } catch (error) {
+    }
   };
 
   const links = [

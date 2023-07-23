@@ -25,7 +25,7 @@ const TableMahasiswaDetail = (props) => {
         const fetchPKLData = async () => {
             try {
                 const response = await axios.get("http://127.0.0.1:8000/api/user/pkl/data", {
-                    headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+                    headers: { Authorization: "Bearer " + cookies?.jwt_token?.data },
                 });
 
                 const dataPKL = response.data.body.find((data) => data.mahasiswa.id == props.id);
@@ -42,7 +42,7 @@ const TableMahasiswaDetail = (props) => {
         const fetchPenilaianData = async () => {
             try {
                 const response = await axios.get("http://127.0.0.1:8000/api/user/penilaian", {
-                    headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+                    headers: { Authorization: "Bearer " + cookies?.jwt_token?.data },
                 });
 
                 const dataPenilaian = response.data.body.find((data) => data.pkl_id == dataPKL.id);
@@ -58,10 +58,10 @@ const TableMahasiswaDetail = (props) => {
     }, [dataPKL]);
 
     // Conditional rendering based on data loading state
-    if (!dataPKL || !dataPenilaian) {
-        // While data is being fetched, display a loading state
-        return <div>Loading...</div>;
-    }
+    // if (!dataPKL || !dataPenilaian) {
+    //     // While data is being fetched, display a loading state
+    //     return <div>Loading...</div>;
+    // }
     // if (dataPenilaian == null) {
     //     return (
     //         <Center>

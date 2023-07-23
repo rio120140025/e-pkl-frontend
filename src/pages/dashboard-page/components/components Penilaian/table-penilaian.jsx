@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
     Box,
     Input,
@@ -25,7 +25,6 @@ import ButtonBoxDetailPenilaian from "./table-mahasiswa-detail";
 import ButtonBoxDetailPenilaianDosen from "./table-dosen-detail";
 
 const TableComponentPenilaian = (props) => {
-    const [dataPenilaian, setDataPenilaian] = useState([]);
     const [dataPKL, setDataPKL] = useState([]);
     const [search, setSearch] = useState("");
     const [sortKey, setSortKey] = useState("nama");
@@ -36,10 +35,13 @@ const TableComponentPenilaian = (props) => {
     const [cookies, setCookie] = useCookies(["jwt_token"]);
     const [nama, setNama] = useState('');
     const [pkl_id, setPkl_id] = useState('')
-    const [isDataLoaded, setIsDataLoaded] = useState(false);
+    const [isDataPKLLoaded, setIsDataPKLLoaded] = useState(false);
+    const [isPklDataFetched, setIsPklDataFetched] = useState(false);
+    const [isPenilaianDataFetched, setIsPenilaianDataFetched] = useState(false);
+    const dataPKLRef = useRef([]);
+
     let index = 0
-    console.log(props.pkl_id)
-    console.log(props.id)
+    console.log('props.id', props.id)
     const toggleSortOrder = (key) => {
         if (key === sortKey) {
             setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
@@ -60,9 +62,9 @@ const TableComponentPenilaian = (props) => {
                 });
 
                 let filteredData = [];
-                if (props.roles_id == 1) {
+                if (props.roles_id === 1) {
                     filteredData = pklDataResponse.data.body.filter((dataPKL) => dataPKL.mahasiswa_id == props.id);
-                } else if (props.roles_id == 2) {
+                } else if (props.roles_id === 2) {
                     filteredData = pklDataResponse.data.body.filter((dataPKL) => dataPKL.dospem_id == props.id);
                 } else {
                     filteredData = pklDataResponse.data.body.filter((dataPKL) => dataPKL.dpl_id == props.id);
@@ -70,12 +72,15 @@ const TableComponentPenilaian = (props) => {
 
                 setDataPKL(filteredData);
                 setPkl_id(filteredData.length > 0 ? filteredData[0].id : "");
-                setIsDataLoaded(true);
+                setIsDataPKLLoaded(true);
+                setIsPklDataFetched(true);
+                dataPKLRef.current = filteredData;
 
                 if (props.roles_id == 1 && pkl_id == "") {
                     const profileResponse = await axios.get("http://127.0.0.1:8000/api/user/profile", {
                         headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
                     });
+                    setDataPKL(profileResponse.data)
                     setNama(profileResponse.data.name);
                 }
             } catch (error) {
@@ -84,10 +89,10 @@ const TableComponentPenilaian = (props) => {
         };
 
         fetchData();
-    }, [dataPKL, cookies.jwt_token.data]);
+    }, [props.id, cookies?.jwt_token?.data]);
 
     useEffect(() => {
-        if (dataPKL.length === 0) {
+        if (!isPklDataFetched || isPenilaianDataFetched) {
             return;
         }
 
@@ -97,19 +102,22 @@ const TableComponentPenilaian = (props) => {
                     headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
                 });
 
-                const combinedData = dataPKL.map((pkl) => {
+                const combinedData = dataPKLRef.current.map((pkl) => {
                     const penilaian = penilaianResponse.data.body.find((nilai) => nilai.pkl_id === pkl.id);
                     return { ...pkl, penilaian };
                 });
 
                 setSortedData(combinedData);
+                setIsPenilaianDataFetched(true); // Mark penilaianData fetching as complete
             } catch (error) {
                 console.log(error.response.data);
             }
         };
 
         fetchPenilaianData();
-    }, [dataPKL, cookies.jwt_token.data]);
+    }, [isPklDataFetched, isPenilaianDataFetched, cookies?.jwt_token?.data]);
+
+
     const sortData = (data) => {
         const sorted = [...data].sort((a, b) => {
             const keyA = getSortValue(a, sortKey);
@@ -189,11 +197,13 @@ const TableComponentPenilaian = (props) => {
     const totalRows = sortedAndFilteredData.length;
     const firstRow = Math.min(totalRows, 1 + indexOfFirstRow);
     const lastRow = Math.min(totalRows, indexOfLastRow);
-    console.log("pkl_id", pkl_id)
+    console.log("dataPKL", dataPKL)
     console.log("nama", nama)
     console.log("currentRows", currentRows)
+    if (dataPKL == '' && props.roles_id == 2) {
 
-    if (dataPKL == '') {
+    }
+    else if (dataPKL == '') {
         return (
             <Center marginTop={100}>
                 <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
@@ -286,8 +296,8 @@ const TableComponentPenilaian = (props) => {
                         <Tr key={index} bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"} color="black">
                             <Td style={{ textAlign: "left" }}>{index += 1}</Td>
                             <Td style={{ textAlign: "left" }}>{nama}</Td>
-                            <Td></Td>
-                            <Td></Td>
+                            <Td ></Td>
+                            <Td style={{ textAlign: "left" }}>{dataPKL.lokasi}</Td>
                             <Td></Td>
                             <Td></Td>
                             <Td></Td>

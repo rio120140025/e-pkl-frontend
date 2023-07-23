@@ -36,7 +36,7 @@ function ProfileBoxMahasiswa(props) {
   useEffect(() => {
     axios
       .get("http://127.0.0.1:8000/api/user/profile", {
-        headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+        headers: { Authorization: "Bearer " + cookies?.jwt_token?.data },
       })
       .then((response) => {
         const dataServer = response.data;
@@ -59,7 +59,7 @@ function ProfileBoxMahasiswa(props) {
   useEffect(() => {
     axios
       .get("http://127.0.0.1:8000/api/user/pkl/data", {
-        headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+        headers: { Authorization: "Bearer " + cookies?.jwt_token?.data },
       })
       .then((response) => {
         setDataPKL(response.data.body);
@@ -178,7 +178,7 @@ function ChangeProfileBoxMahasiswa(props) {
   useEffect(() => {
     axios
       .get("http://127.0.0.1:8000/api/user/profile", {
-        headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+        headers: { Authorization: "Bearer " + cookies?.jwt_token?.data },
       })
       .then((response) => {
         // console.log("ini data yang diambil", response.data)
@@ -204,7 +204,7 @@ function ChangeProfileBoxMahasiswa(props) {
     if (rolesId == 1) {
       axios
         .get("http://127.0.0.1:8000/api/user/pkl/data", {
-          headers: { Authorization: "Bearer " + cookies.jwt_token.data },
+          headers: { Authorization: "Bearer " + cookies?.jwt_token?.data },
         })
         .then((response) => {
           response.data.body.map((data) => {
@@ -232,7 +232,7 @@ function ChangeProfileBoxMahasiswa(props) {
           }
         });
     }
-  }, [id, rolesId, cookies.jwt_token.data]);
+  }, [id, rolesId, cookies?.jwt_token?.data]);
 
   const toast = useToast();
 

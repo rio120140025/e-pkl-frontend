@@ -16,7 +16,7 @@ function GetDataLogin() {
     useEffect(() => {
         axios
             .get("http://127.0.0.1:8000/api/user/profile", {
-                headers: { Authorization: "Bearer " + cookies.jwt_token.data }
+                headers: { Authorization: "Bearer " + cookies?.jwt_token?.data }
             })
             .then(response => {
                 const dataServer = response.data;

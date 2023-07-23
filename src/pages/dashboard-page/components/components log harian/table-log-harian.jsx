@@ -111,7 +111,7 @@ function TableLogHarian() {
           console.log(error.response.data);
         });
     }
-  }, [pkl_id, cookies.jwt_token.data]);
+  }, [pkl_id, cookies?.jwt_token?.data]);
   console.log("data", data)
 
   useEffect(() => {
@@ -120,7 +120,7 @@ function TableLogHarian() {
         const response = await axios.get(
           "http://127.0.0.1:8000/api/user/jurnal/data",
           {
-            headers: { Authorization: `Bearer ${cookies.jwt_token.data}` },
+            headers: { Authorization: `Bearer ${cookies?.jwt_token?.data}` },
           }
         );
         const combinedData = data.map((dataUser) => {
