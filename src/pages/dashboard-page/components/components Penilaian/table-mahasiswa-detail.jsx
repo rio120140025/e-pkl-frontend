@@ -12,51 +12,10 @@ import {
     Center
 } from "@chakra-ui/react";
 import { Button } from "@chakra-ui/button";
-import axios from "axios";
-import { useCookies } from "react-cookie";
 import ExportPDF from "./export-penilaian";
 import Loading from "../../../../assets/74eD.gif";
 
 const TableMahasiswaDetail = (props) => {
-    const [cookies, setCookie] = useCookies(["jwt_token"]);
-    const [dataPenilaian, setDataPenilaian] = useState(null);
-    const [dataPKL, setDataPKL] = useState([]);
-    useEffect(() => {
-        const fetchPKLData = async () => {
-            try {
-                const response = await axios.get("http://127.0.0.1:8000/api/user/pkl/data", {
-                    headers: { Authorization: "Bearer " + cookies?.jwt_token?.data },
-                });
-
-                const dataPKL = response.data.body.find((data) => data.mahasiswa.id == props.id);
-                setDataPKL(dataPKL);
-            } catch (error) {
-                console.log(error.response.data);
-            }
-        };
-
-        fetchPKLData();
-    }, [props.id]);
-
-    useEffect(() => {
-        const fetchPenilaianData = async () => {
-            try {
-                const response = await axios.get("http://127.0.0.1:8000/api/user/penilaian", {
-                    headers: { Authorization: "Bearer " + cookies?.jwt_token?.data },
-                });
-
-                const dataPenilaian = response.data.body.find((data) => data.pkl_id == dataPKL.id);
-                setDataPenilaian(dataPenilaian);
-            } catch (error) {
-                console.log(error.response.data);
-            }
-        };
-
-        if (dataPKL) {
-            fetchPenilaianData();
-        }
-    }, [dataPKL]);
-
     // Conditional rendering based on data loading state
     // if (!dataPKL || !dataPenilaian) {
     //     // While data is being fetched, display a loading state
@@ -99,13 +58,13 @@ const TableMahasiswaDetail = (props) => {
                 <Tbody>
                     <Tr color="black">
                         <Td>1</Td>
-                        <Td>{dataPenilaian && dataPenilaian.pengetahuan}</Td>
-                        <Td>{dataPenilaian && dataPenilaian.pelaksanaan}</Td>
-                        <Td>{dataPenilaian && dataPenilaian.kerjasama}</Td>
-                        <Td>{dataPenilaian && dataPenilaian.kreativitas}</Td>
-                        <Td>{dataPenilaian && dataPenilaian.kedisiplinan}</Td>
-                        <Td>{dataPenilaian && dataPenilaian.sikap}</Td>
-                        <Td>{dataPenilaian && dataPenilaian.rerata}</Td>
+                        <Td>{props.dataNilai?.penilaian?.pengetahuan}</Td>
+                        <Td>{props.dataNilai?.penilaian?.pelaksanaan}</Td>
+                        <Td>{props.dataNilai?.penilaian?.kerjasama}</Td>
+                        <Td>{props.dataNilai?.penilaian?.kreativitas}</Td>
+                        <Td>{props.dataNilai?.penilaian?.kedisiplinan}</Td>
+                        <Td>{props.dataNilai?.penilaian?.sikap}</Td>
+                        <Td>{props.dataNilai?.penilaian?.rerata}</Td>
                     </Tr>
                 </Tbody>
             </Table>
@@ -135,7 +94,7 @@ function ButtonBoxDetailPenilaian(props) {
                 <ModalContent>
                     <ModalBody>
                         <ModalCloseButton color={"#BDCDD6"} />
-                        <TableMahasiswaDetail pkl_id={props.pkl_id} penilaianId={props.penilaianId} id={props.id} />
+                        <TableMahasiswaDetail dataNilai={props.dataNilai} />
                     </ModalBody>
                     <ModalFooter>
                         <Flex gap='22px'>

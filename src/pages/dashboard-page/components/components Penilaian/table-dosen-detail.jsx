@@ -16,30 +16,6 @@ import { useCookies } from "react-cookie";
 import ExportPDF from "./export-penilaian";
 
 const TableDosenDetail = (props) => {
-    const [cookies, setCookie] = useCookies(["jwt_token"]);
-    const [dataPenilaian, setDataPenilaian] = useState([]);
-    const [dataPKL, setDataPKL] = useState([]);
-    const id = localStorage.getItem('id');
-    useEffect(() => {
-        let found = false
-        axios
-            .get("http://127.0.0.1:8000/api/user/penilaian", {
-                headers: { Authorization: "Bearer " + cookies.jwt_token.data },
-            })
-            .then((response) => {
-                console.log("ini data", response.data.body)
-                response.data.body.map((dataNilai) => {
-                    if (dataNilai.id == props.id && found === false) {
-                        console.log(dataNilai)
-                        found = true
-                        setDataPenilaian(dataNilai)
-                    }
-                })
-            })
-            .catch((error) => {
-                console.log(error.response.data);
-            });
-    }, [dataPKL]);
     return (
         <Box
             marginTop="75px"
@@ -64,13 +40,13 @@ const TableDosenDetail = (props) => {
                 <Tbody>
                     <Tr color="black">
                         <Td>{props.no}</Td>
-                        <Td>{dataPenilaian && dataPenilaian.pengetahuan}</Td>
-                        <Td>{dataPenilaian && dataPenilaian.pelaksanaan}</Td>
-                        <Td>{dataPenilaian && dataPenilaian.kerjasama}</Td>
-                        <Td>{dataPenilaian && dataPenilaian.kreativitas}</Td>
-                        <Td>{dataPenilaian && dataPenilaian.kedisiplinan}</Td>
-                        <Td>{dataPenilaian && dataPenilaian.sikap}</Td>
-                        <Td>{dataPenilaian && dataPenilaian.rerata}</Td>
+                        <Td>{props.dataNilai?.penilaian?.pengetahuan}</Td>
+                        <Td>{props.dataNilai?.penilaian?.pelaksanaan}</Td>
+                        <Td>{props.dataNilai?.penilaian?.kerjasama}</Td>
+                        <Td>{props.dataNilai?.penilaian?.kreativitas}</Td>
+                        <Td>{props.dataNilai?.penilaian?.kedisiplinan}</Td>
+                        <Td>{props.dataNilai?.penilaian?.sikap}</Td>
+                        <Td>{props.dataNilai?.penilaian?.rerata}</Td>
                     </Tr>
                 </Tbody>
             </Table>
@@ -116,7 +92,7 @@ function ButtonBoxDetailPenilaianDosen(props) {
                 <ModalContent>
                     <ModalBody>
                         <ModalCloseButton color="#BDCDD6" />
-                        <TableDosenDetail id={props.penilaianId} no={props.no} />
+                        <TableDosenDetail id={props.penilaianId} no={props.no} dataNilai={props.dataNilai} />
                     </ModalBody>
                     <ModalFooter>
                         <Flex gap='22px'>

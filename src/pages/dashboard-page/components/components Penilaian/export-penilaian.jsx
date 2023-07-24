@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
-import axios from "axios";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { Button } from "@chakra-ui/react";
@@ -19,11 +17,11 @@ const ExportPDF = (props) => {
       }
       return text || "";
     };
-    const name = formatText(props.dataNilai.mahasiswa?.name);
-    const nim = formatText(props.dataNilai.mahasiswa?.nim);
-    const dosenPembimbing = formatText(props.dataNilai.dospem?.name);
-    const dosenPembimbingLapangan = formatText(props.dataNilai.dpl?.name);
-    const lokasiPKL = formatText(props.dataNilai.mahasiswa?.lokasi);
+    const name = formatText(props.dataNilai?.mahasiswa?.name);
+    const nim = formatText(props.dataNilai?.mahasiswa?.nim);
+    const dosenPembimbing = formatText(props.dataNilai?.dospem?.name);
+    const dosenPembimbingLapangan = formatText(props.dataNilai?.dpl?.name);
+    const lokasiPKL = formatText(props.dataNilai?.mahasiswa?.lokasi);
 
     doc.setFontSize(16);
     doc.text("Penilaian PKL", 10, startY);
@@ -44,13 +42,13 @@ const ExportPDF = (props) => {
 
     const tableHeaders = ["Kategori", "Penilaian"];
     const tableData = [
-      ["Pengetahuan", props.dataNilai.penilaian?.pengetahuan],
-      ["Pelaksanaan", props.dataNilai.penilaian?.pelaksanaan],
-      ["Kerjasama", props.dataNilai.penilaian?.kerjasama],
-      ["Kreativitas", props.dataNilai.penilaian?.kreativitas],
-      ["Kedisiplinan", props.dataNilai.penilaian?.kedisiplinan],
-      ["Sikap", props.dataNilai.penilaian?.sikap],
-      ["Rata-rata", props.dataNilai.penilaian?.rerata],
+      ["Pengetahuan", props.dataNilai?.penilaian?.pengetahuan],
+      ["Pelaksanaan", props.dataNilai?.penilaian?.pelaksanaan],
+      ["Kerjasama", props.dataNilai?.penilaian?.kerjasama],
+      ["Kreativitas", props.dataNilai?.penilaian?.kreativitas],
+      ["Kedisiplinan", props.dataNilai?.penilaian?.kedisiplinan],
+      ["Sikap", props.dataNilai?.penilaian?.sikap],
+      ["Rata-rata", props.dataNilai?.penilaian?.rerata],
     ];
 
     doc.autoTable({

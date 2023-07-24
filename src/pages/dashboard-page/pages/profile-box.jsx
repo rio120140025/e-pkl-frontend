@@ -15,6 +15,7 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 import { Link as RouterLink } from "react-router-dom";
 import PilihDosen from "../components/pilih-dosen";
+import { useQuery } from "react-query";
 
 function ProfileBoxMahasiswa(props) {
   const [email, setEmail] = useState("");
@@ -173,68 +174,10 @@ function ChangeProfileBoxMahasiswa(props) {
   const [lokasi, setLokasi] = useState("");
   const [pkl_id, setPkl_id] = useState("");
   const [cookies, setCookie] = useCookies(["jwt_token"]);
-  const [existingPKLData, setExistingPKLData] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/api/user/profile", {
-        headers: { Authorization: "Bearer " + cookies?.jwt_token?.data },
-      })
-      .then((response) => {
-        // console.log("ini data yang diambil", response.data)
-        const dataServer = response.data;
-        setEmail(dataServer.email);
-        setPassword(dataServer.password);
-        setId(dataServer.id);
-        setName(dataServer.name);
-        setNim(dataServer.nim);
-        setNip(dataServer.nip);
-        setNoHp(dataServer.no_hp);
-        setJabatan(dataServer.jabatan);
-        setLokasi(dataServer.lokasi);
-        setRolesId(dataServer.roles_id);
-      })
-      .catch((error) => {
-        console.log(error.response);
-      });
-
-  }, []);
-
-  useEffect(() => {
-    if (rolesId == 1) {
-      axios
-        .get("http://127.0.0.1:8000/api/user/pkl/data", {
-          headers: { Authorization: "Bearer " + cookies?.jwt_token?.data },
-        })
-        .then((response) => {
-          response.data.body.map((data) => {
-            if (data.mahasiswa_id == id) {
-              setPkl_id(data.id);
-              setExistingPKLData(true);
-              console.log("ini data pkl dan dosen", data);
-              setDosbim(data.dospem_id);
-              setDpl(data.dpl_id);
-              setIsLoading(false); // Set isLoading to false once you get the value of dpl
-              return;
-            } else {
-              setExistingPKLData(false);
-            }
-          });
-        })
-        .catch((error) => {
-          if (error?.response?.data?.errors) {
-            Object.keys(error.response.data.errors).forEach(function (
-              key,
-              index
-            ) {
-              callToast(error.response.data.errors[key], "error");
-            });
-          }
-        });
-    }
-  }, [id, rolesId, cookies?.jwt_token?.data]);
-
   const toast = useToast();
+
+  let existingPKLData = false
 
   function callToast(title, status) {
     toast({
@@ -244,7 +187,67 @@ function ChangeProfileBoxMahasiswa(props) {
       isClosable: true,
     });
   }
-  console.log("existingPKLData", existingPKLData);
+
+  const fetchProfileData = async (jwtToken) => {
+    const response = await axios.get("http://127.0.0.1:8000/api/user/profile", {
+      headers: { Authorization: "Bearer " + jwtToken },
+    });
+    return response.data;
+  };
+
+  const { data: profileData, isLoading: isProfileLoading, isError: isProfileError } = useQuery('profileData', () =>
+    fetchProfileData(cookies.jwt_token?.data || '')
+  );
+
+
+  const fetchPKLDataForMahasiswa = async (jwtToken, id) => {
+    const response = await axios.get("http://127.0.0.1:8000/api/user/pkl/data", {
+      headers: { Authorization: "Bearer " + jwtToken },
+    });
+    return response.data.body.find(data => data.mahasiswa_id == id) || null;
+  };
+
+  const { data: pklData, isLoading: isPKLLoading, isError: isPKLError } = useQuery('pklData', () =>
+    fetchPKLDataForMahasiswa(cookies.jwt_token?.data || '', id),
+    { enabled: rolesId == 1 }
+  );
+
+  useEffect(() => {
+    if (!isProfileLoading && !isProfileError) {
+      const { id, name, email, nim, nip, no_hp, roles_id, dosbim, dpl, jabatan, lokasi } = profileData;
+      setId(id);
+      setName(name);
+      setEmail(email)
+      setNim(nim);
+      setNip(nip);
+      setNoHp(no_hp);
+      setRolesId(roles_id);
+      setJabatan(jabatan);
+      setLokasi(lokasi);
+    }
+  }, [isProfileLoading, isProfileError, profileData]);
+
+
+  useEffect(() => {
+    if (!isPKLLoading && !isPKLError && pklData) {
+      const { id, dospem_id, dpl_id } = pklData;
+      setPkl_id(id);
+      setDosbim(dospem_id);
+      setDpl(dpl_id);
+    }
+  }, [isPKLLoading, isPKLError, pklData]);
+
+  if (isProfileLoading || isPKLLoading) {
+    return
+
+  }
+
+  if (pklData) {
+    existingPKLData = true
+  }
+
+  // console.log("existingPKLData", existingPKLData);
+  // console.log("===============================", dosbim);
   const handleUpdate = () => {
     let updateData;
     let dataPKL;
@@ -253,7 +256,7 @@ function ChangeProfileBoxMahasiswa(props) {
       updateData = {
         name: name,
         nim: nim,
-        password: password,
+        password: 'haikal123',
         no_hp: no_hp,
         lokasi: lokasi,
       };
@@ -300,14 +303,14 @@ function ChangeProfileBoxMahasiswa(props) {
       updateData = {
         name: name,
         nip: nip,
-        password: password,
+        password: 'haikal123',
         no_hp: no_hp,
       };
     } else if (rolesId === 3) {
       updateData = {
         name: name,
         nip: nip,
-        password: password,
+        password: 'haikal123',
         no_hp: no_hp,
         lokasi: lokasi,
         jabatan: jabatan,
@@ -385,14 +388,14 @@ function ChangeProfileBoxMahasiswa(props) {
                 password={password}
                 handleSetPassword={(e) => setPassword(e.target.value)}
               /> */}
-            </Flex>
-
-            <Flex direction="column" w="max-content" gap="13.15px">
               <InputBox2
                 name="Nomor Telpon"
                 input={no_hp}
                 handleSet={(e) => setNoHp(e.target.value)}
               />
+            </Flex>
+
+            <Flex direction="column" w="max-content" gap="13.15px">
               <InputBox2
                 name="Tempat PKL"
                 input={lokasi}

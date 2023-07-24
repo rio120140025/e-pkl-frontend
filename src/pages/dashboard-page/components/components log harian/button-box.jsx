@@ -28,11 +28,11 @@ import { ReactComponent as PlusIcon } from "../../../../assets/icon-plus.svg";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import closeButton from '../../../../assets/close vector.svg'
+import { useQuery } from 'react-query';
 
 
 function ButtonBoxTambahRencanaLogHarian(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [no, setNo] = useState();
   const [kegiatan, setKegiatan] = useState(props.logHarian_data?.kegiatan || "");
   const [materi, setMateri] = useState(props.logHarian_data?.materi || "");
   const [prosedur, setProsedur] = useState(props.logHarian_data?.prosedur || "");
@@ -40,10 +40,9 @@ function ButtonBoxTambahRencanaLogHarian(props) {
   const [waktu, setWaktu] = useState(props.logHarian_data?.waktu || "");
   const [alat, setAlat] = useState(props.logHarian_data?.alatbahan || "");
   const [cookies, setCookie] = useCookies(["jwt_token"]);
-  const [filterData, setFilterData] = useState()
-  const [isGet, setIsGet] = useState(true)
   const toast = useToast();
 
+  let no = '';
   const {
     isOpen: isOpenQuitTambah,
     onOpen: onOpenQuitTambah,
@@ -59,28 +58,29 @@ function ButtonBoxTambahRencanaLogHarian(props) {
     });
   }
 
-  useEffect(() => {
-    console.log(cookies?.jwt_token?.data);
-    async function waitGetData() {
-      try {
-        const getDataJurnal = await axios.get("http://127.0.0.1:8000/api/user/jurnal/data", {
-          headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
-        });
-        const filteredData = getDataJurnal.data.body.filter((data) => data.pkl_id == props.pkl_id);
-        setFilterData(filteredData);
-        setNo(filteredData.length + 1);
-
-      } catch (error) {
-        // Handle the error if needed
-        console.error('Error fetching data:', error);
-      }
-    }
-
-    waitGetData();
-
-  }, [cookies.jwt_token.data, props.pkl_id]);
+  const fetchJurnalData = async (jwtToken, pklId) => {
+    const response = await axios.get('http://127.0.0.1:8000/api/user/jurnal/data', {
+      headers: { Authorization: `Bearer ${jwtToken}` },
+    });
+    const filteredData = response.data.body.filter((data) => data.pkl_id == pklId);
+    return filteredData;
+  };
 
   console.log('no', no);
+
+  const { data: filterData, isLoading: isFilterDataLoading, isError: isFilterDataError } = useQuery(
+    ['jurnalData', props.pkl_id, cookies?.jwt_token?.data],
+    () => fetchJurnalData(cookies?.jwt_token?.data ?? '', props.pkl_id)
+  );
+
+  if (isFilterDataLoading) {
+    return
+  }
+
+  // console.log('------------------------------------------', props.pkl_id)
+  console.log('------------------------------------------', filterData)
+  no = filterData.length + 1
+
 
   const fetchData = async () => {
     try {
@@ -138,35 +138,10 @@ function ButtonBoxTambahRencanaLogHarian(props) {
     await fetchData();
   };
 
-  useEffect(() => {
-    console.log(cookies?.jwt_token?.data)
-    axios
-      .get("http://127.0.0.1:8000/api/user/jurnal/data", {
-        headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
-      })
-      .then((response) => {
-        console.log('pkl_id', props.pkl_id)
-        console.log('response.data.body', response.data.body)
-        const filterData = response.data.body.filter((data) => data.pkl_id == props.pkl_id)
-        console.log("ini filter data", filterData)
-        console.log("filterData.length", filterData.length)
-        setNo(filterData.length + 1)
-      })
-      .catch((error) => {
-        console.log(error.response.data);
-      });
-  }, [cookies.jwt_token.data, props.pkl_id]);
 
   function CloseModal() {
     onClose();
     onCloseQuitTambah();
-  }
-  if (no === '') {
-    return (
-      <Center >
-        <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
-      </Center>
-    );
   }
   return (
     <>

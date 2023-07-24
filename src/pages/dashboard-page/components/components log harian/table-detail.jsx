@@ -27,6 +27,7 @@ import { DetailLogHarianMahasiswaDosenDetail } from "./button-detail";
 import { Link, useLocation } from "react-router-dom";
 import { ReactComponent as BackButton } from "../../../../assets/button-back.svg";
 import Loading from "../../../../assets/74eD.gif";
+import { useQuery } from 'react-query';
 
 const TableDetail = () => {
   const [search, setSearch] = useState("");
@@ -36,32 +37,39 @@ const TableDetail = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [cookies, setCookie] = useCookies(["jwt_token"]);
   const id = localStorage.getItem("id");
-  const [data, setData] = useState([]);
 
   const roles_id = localStorage.getItem("roles_id");
   const pkl_id = localStorage.getItem("pkl_id");
   console.log("pkl_id", pkl_id);
   console.log("roles_id", roles_id);
-  useEffect(() => {
-    axios
-      .get("http://127.0.0.1:8000/api/user/jurnal/data", {
-        headers: {
-          Authorization: "Bearer " + (cookies?.jwt_token?.data ?? ""),
-        },
-      })
-      .then((response) => {
-        const filteredData = response.data.body.filter((dataPKL) => {
-          if (dataPKL.pkl_id == pkl_id) {
-            return true;
-          }
-        });
-        // console.log("test", filteredData);
-        setData(filteredData);
-      })
-      .catch((error) => {
-        console.log(error.response.data);
-      });
-  }, []);
+  const fetchJurnalData = async (jwtToken) => {
+    const response = await axios.get('http://127.0.0.1:8000/api/user/jurnal/data', {
+      headers: { Authorization: `Bearer ${jwtToken}` },
+    });
+    return response.data;
+  };
+  const { data, isLoading, isError } = useQuery('jurnalData.body', () =>
+    fetchJurnalData(cookies.jwt_token?.data || '')
+  );
+  if (isLoading) {
+    return (
+      <Center>
+        <img
+          width="200px"
+          height="200px"
+          sizes="1000px"
+          src={Loading}
+          alt="loading..."
+        />
+      </Center>
+    );
+  }
+  // console.log('======================================', data)
+  const findaData = data?.body?.filter((dataPKL) => {
+    if (dataPKL.pkl_id == pkl_id) {
+      return true;
+    }
+  });
   const getStatusString = (status) => {
     switch (status) {
       case "1":
@@ -75,7 +83,7 @@ const TableDetail = () => {
     }
   };
 
-  const filteredData = data.filter((item) => {
+  const filteredData = findaData.filter((item) => {
     const formattedDate = new Date(item.waktu).toISOString().slice(0, 10);
     const statusString = getStatusString(item.status).toLowerCase();
     console.log("statusString", statusString);
@@ -127,19 +135,7 @@ const TableDetail = () => {
 
   console.log("updatedRows", updatedRows);
 
-  if (data === '') {
-    return (
-      <Center>
-        <img
-          width="200px"
-          height="200px"
-          sizes="1000px"
-          src={Loading}
-          alt="loading..."
-        />
-      </Center>
-    );
-  }
+
 
   return (
     // <Box

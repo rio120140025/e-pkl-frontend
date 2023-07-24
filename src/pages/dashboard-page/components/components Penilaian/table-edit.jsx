@@ -25,12 +25,14 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import { useQuery } from 'react-query';
 import trash from "../../../../assets/iconamoon_trash-duotone.svg"
 import edit from "../../../../assets/pepicons-pop_pen.svg"
 
 function ButtonBeriNilai(props) {
   const { isOpen: isOpenEdit, onOpen: onOpenEdit, onClose: onCloseEdit } =
     useDisclosure();
+
   const [pengetahuan, setPengetahuan] = useState('');
   const [pelaksanaan, setPelaksanaan] = useState('');
   const [kerjaSama, setKerjaSama] = useState('');
@@ -41,6 +43,34 @@ function ButtonBeriNilai(props) {
   const [mulai, setMulai] = useState(null); // Set initial value to null
   const [selesai, setSelesai] = useState(null); // Set initial value to null
   const [cookies, setCookie] = useCookies(['jwt_token']);
+
+  const fetchPenilaianData = async (jwtToken, pkl_id) => {
+    const response = await axios.get('http://127.0.0.1:8000/api/user/penilaian', {
+      headers: { Authorization: 'Bearer ' + jwtToken },
+    });
+    return response.data.body.find((data) => data.pkl_id === pkl_id);
+  };
+
+  const penilaianDataQuery = useQuery(['penilaian', cookies?.jwt_token?.data, props.pkl_id], () =>
+    fetchPenilaianData(cookies?.jwt_token?.data, props.pkl_id)
+  );
+
+  const { data: penilaianData, isLoading, isError } = penilaianDataQuery;
+
+
+  useEffect(() => {
+    if (penilaianData) {
+      setPengetahuan(penilaianData.pengetahuan);
+      setMulai(new Date(penilaianData.tgl_mulai));
+      setSelesai(new Date(penilaianData.tgl_selesai));
+      setRata(penilaianData.rerata);
+      setPelaksanaan(penilaianData.pelaksanaan);
+      setKerjaSama(penilaianData.kerjasama);
+      setKreativitas(penilaianData.kreativitas);
+      setKedisplinan(penilaianData.kedisiplinan);
+      setSikap(penilaianData.sikap);
+    }
+  }, [penilaianData]);
 
 
   function handleDateChange(e, setter) {
@@ -88,38 +118,6 @@ function ButtonBeriNilai(props) {
     sikap: sikap,
     rerata: rata,
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://127.0.0.1:8000/api/user/penilaian', {
-          headers: { Authorization: 'Bearer ' + (cookies?.jwt_token?.data ?? '') },
-        });
-
-        const data = response?.data?.body || [];
-
-        for (const item of data) {
-          if (item.pkl_id == props.pkl_id) {
-            console.log('response.data.body', data);
-            setPengetahuan(item.pengetahuan);
-            setMulai(new Date(item.tgl_mulai));
-            setSelesai(new Date(item.tgl_selesai));
-            setRata(item.rerata);
-            setPelaksanaan(item.pelaksanaan);
-            setKerjaSama(item.kerjasama);
-            setKreativitas(item.kreativitas);
-            setKedisplinan(item.kedisiplinan);
-            setSikap(item.sikap);
-            break;
-          }
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const toast = useToast();
 
@@ -274,8 +272,8 @@ const ButtonEditandDelete = (props) => {
   const [kedisplinan, setKedisplinan] = useState('');
   const [sikap, setSikap] = useState('');
   const [rata, setRata] = useState('');
-  const [mulai, setMulai] = useState(null); // Set initial value to null
-  const [selesai, setSelesai] = useState(null); // Set initial value to null
+  const [mulai, setMulai] = useState(null);
+  const [selesai, setSelesai] = useState(null);
 
   function handleDateChange(e, setter) {
     const dateValue = e.target.value;

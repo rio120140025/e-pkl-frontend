@@ -286,7 +286,7 @@ const TableLogHarianMahasiswa = () => {
           ))}
         </Tbody>
       </Table>
-      <Modal isOpen={isOpenDelete} onClose={onCloseDelete}>
+      <Modal isOpen={isOpenDelete} onClose={onCloseDelete} isLazy={true} closeOnOverlayClick={false}>
         <ModalOverlay />
         <ModalContent>
           <ModalBody mt={10} textAlign={"center"} fontWeight={"bolder"}>
@@ -317,7 +317,8 @@ const TableLogHarianMahasiswa = () => {
           </Center>
         </ModalContent>
       </Modal>
-      <Modal isOpen={isOpenEdit} onClose={onCloseEdit} size={"1"}>
+      <Modal isOpen={isOpenEdit} onClose={onCloseEdit} size={"1"} isLazy={true}
+        closeOnOverlayClick={false}>
         <ModalOverlay />
         <ModalContent>
           <ModalBody>

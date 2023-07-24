@@ -7,6 +7,7 @@ import { useCookies } from "react-cookie";
 
 function Header(props) {
   const [cookies, , removeCookie] = useCookies(["jwt_token"]);
+  const roles_id = localStorage.getItem('roles_id');
 
   if (cookies.jwt_token != null) {
     if (window.location.pathname === "/") {
@@ -54,35 +55,38 @@ function Header(props) {
       <Spacer />
       <ButtonGroup gap="1em" marginLeft="80px">
         {links.map((link) =>
-          link.to ? (
-            <Link
-              onClick={(e) => handleLinkClick(e, link.id)}
-              key={link.id}
-              className={
-                valueNavbar === link.id
-                  ? "button-click-dashboard"
-                  : "button-nonclick-dashboard"
-              }
-              to={link.to}
-              fontSize="14px"
-            >
-              {link.label}
-            </Link>
-          ) : (
-            <button
-              key={link.id}
-              className={
-                valueNavbar === link.id
-                  ? "button-click-dashboard"
-                  : "button-nonclick-dashboard"
-              }
-              onClick={link.onClick}
-              fontSize="14px"
-            >
-              {link.label}
-            </button>
-          )
+          roles_id == 1 || link.id !== '7' ? // Add condition to check if roles_id is 1 or if the link id is not '7'
+            link.to ? (
+              <Link
+                onClick={(e) => handleLinkClick(e, link.id)}
+                key={link.id}
+                className={
+                  valueNavbar === link.id
+                    ? "button-click-dashboard"
+                    : "button-nonclick-dashboard"
+                }
+                to={link.to}
+                fontSize="14px"
+              >
+                {link.label}
+              </Link>
+            ) : (
+              <button
+                key={link.id}
+                className={
+                  valueNavbar === link.id
+                    ? "button-click-dashboard"
+                    : "button-nonclick-dashboard"
+                }
+                onClick={link.onClick}
+                fontSize="14px"
+              >
+                {link.label}
+              </button>
+            )
+            : null // Return null if the condition is not met (roles_id is not 1 and link id is '7')
         )}
+
       </ButtonGroup>
     </Flex>
   );

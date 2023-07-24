@@ -55,6 +55,7 @@ import { PenilaianPKL } from "./pages/penilaian";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import GetDataLogin from "./components/get-data-login";
+import { useQuery } from 'react-query';
 
 function Dashboard() {
   const [data1, setData1] = useState(null);
@@ -88,6 +89,27 @@ function Dashboard() {
 
     fetchData();
   }, [cookies.jwt_token.data]);
+  // const fetchProfileData = async (jwtToken) => {
+  //   const response = await axios.get('http://127.0.0.1:8000/api/user/profile', {
+  //     headers: { Authorization: `Bearer ${jwtToken}` },
+  //   });
+  //   return response.data;
+  // };
+  // const { data: data, isLoading: isData1Loading, isError: isData1Error } = useQuery(
+  //   'profileData',
+  //   () => fetchProfileData(cookies.jwt_token?.data || ''),
+  //   {
+  //     onSuccess: (data) => {
+  //       setData1(data);
+  //       setRolesId(data?.roles_id);
+  //       setId(data?.id);
+  //       localStorage.setItem('roles_id', data?.roles_id);
+  //       localStorage.setItem('id', data?.id);
+  //       console.log(data);
+  //       console.log('id', data?.id);
+  //     },
+  //   }
+  // );
 
   return (
     <>

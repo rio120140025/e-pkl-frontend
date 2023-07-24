@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import {
     Box,
     Input,
@@ -17,6 +17,7 @@ import {
     Center
 } from "@chakra-ui/react";
 import axios from "axios";
+import { useQuery } from 'react-query';
 import { useCookies } from "react-cookie";
 import { ReactComponent as SortButton } from "../../../../assets/button-sort.svg";
 import { ReactComponent as SearchIcon } from "../../../../assets/icon-search.svg";
@@ -31,14 +32,10 @@ const TableComponentPenilaian = (props) => {
     const [sortOrder, setSortOrder] = useState("asc");
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [sortedData, setSortedData] = useState([]);
     const [cookies, setCookie] = useCookies(["jwt_token"]);
-    const [nama, setNama] = useState('');
     const [pkl_id, setPkl_id] = useState('')
-    const [isDataPKLLoaded, setIsDataPKLLoaded] = useState(false);
-    const [isPklDataFetched, setIsPklDataFetched] = useState(false);
-    const [isPenilaianDataFetched, setIsPenilaianDataFetched] = useState(false);
-    const dataPKLRef = useRef([]);
+    let sortedData = ''
+    let nama = ''
 
     let index = 0
     console.log('props.id', props.id)
@@ -54,68 +51,63 @@ const TableComponentPenilaian = (props) => {
     const paginate = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const pklDataResponse = await axios.get("http://127.0.0.1:8000/api/user/pkl/data", {
-                    headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
-                });
+    const fetchPKLData = async () => {
+        const pklDataResponse = await axios.get("http://127.0.0.1:8000/api/user/pkl/data", {
+            headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
+        });
+        return pklDataResponse.data.body;
+    };
 
-                let filteredData = [];
-                if (props.roles_id == 1) {
-                    filteredData = pklDataResponse.data.body.filter((dataPKL) => dataPKL.mahasiswa_id == props.id);
-                } else if (props.roles_id == 2) {
-                    filteredData = pklDataResponse.data.body.filter((dataPKL) => dataPKL.dospem_id == props.id);
-                } else {
-                    filteredData = pklDataResponse.data.body.filter((dataPKL) => dataPKL.dpl_id == props.id);
-                }
+    const fetchPenilaianData = async () => {
+        const penilaianResponse = await axios.get("http://127.0.0.1:8000/api/user/penilaian", {
+            headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
+        });
+        return penilaianResponse.data.body;
+    };
 
-                setDataPKL(filteredData);
-                setPkl_id(filteredData.length > 0 ? filteredData[0].id : "");
-                setIsDataPKLLoaded(true);
-                setIsPklDataFetched(true);
-                dataPKLRef.current = filteredData;
+    const fetchProfileData = async (jwtToken) => {
+        const response = await axios.get("http://127.0.0.1:8000/api/user/profile", {
+            headers: { Authorization: "Bearer " + jwtToken },
+        });
+        return response.data;
+    };
 
-                if (props.roles_id == 1 && pkl_id == "") {
-                    const profileResponse = await axios.get("http://127.0.0.1:8000/api/user/profile", {
-                        headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
-                    });
-                    setDataPKL(profileResponse.data)
-                    setNama(profileResponse.data.name);
-                }
-            } catch (error) {
-                console.log(error.response.data);
-            }
-        };
+    const pklDataQuery = useQuery("pklData", fetchPKLData);
+    const penilaianDataQuery = useQuery("penilaianData", fetchPenilaianData);
+    const profileDataQuery = useQuery("profileData", () =>
+        fetchProfileData(cookies?.jwt_token?.data ?? "")
+    );
 
-        fetchData();
-    }, [props.id, cookies?.jwt_token?.data]);
+    const { data: pklData, isLoading: isPklDataLoading, isError: isPklDataError } = pklDataQuery;
+    const { data: penilaianData, isLoading: isPenilaianDataLoading, isError: isPenilaianDataError } = penilaianDataQuery;
+    const { data: profileData, isLoading: isProfileDataLoading, isError: isProfileDataError } = profileDataQuery;
 
-    useEffect(() => {
-        if (!isPklDataFetched || isPenilaianDataFetched) {
-            return;
-        }
+    if (isPklDataLoading || isPenilaianDataLoading || isProfileDataLoading) {
+        return (
+            <Center marginTop={100}>
+                <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
+            </Center>
+        );
+    }
 
-        const fetchPenilaianData = async () => {
-            try {
-                const penilaianResponse = await axios.get("http://127.0.0.1:8000/api/user/penilaian", {
-                    headers: { Authorization: "Bearer " + (cookies?.jwt_token?.data ?? "") },
-                });
+    let filteredData = [];
+    if (props.roles_id == 1) {
+        filteredData = pklData.filter((dataPKL) => dataPKL.mahasiswa_id == props.id);
+    } else if (props.roles_id == 2) {
+        filteredData = pklData.filter((dataPKL) => dataPKL.dospem_id == props.id);
+    } else {
+        filteredData = pklData.filter((dataPKL) => dataPKL.dpl_id == props.id);
+    }
 
-                const combinedData = dataPKLRef.current.map((pkl) => {
-                    const penilaian = penilaianResponse.data.body.find((nilai) => nilai.pkl_id === pkl.id);
-                    return { ...pkl, penilaian };
-                });
-
-                setSortedData(combinedData);
-                setIsPenilaianDataFetched(true); // Mark penilaianData fetching as complete
-            } catch (error) {
-                console.log(error.response.data);
-            }
-        };
-
-        fetchPenilaianData();
-    }, [isPklDataFetched, isPenilaianDataFetched, cookies?.jwt_token?.data]);
+    if (props.roles_id == 1 && filteredData == "") {
+        nama = profileData.name
+    }
+    const combinedData = filteredData.map((pkl) => {
+        const penilaian = penilaianData.find((nilai) => nilai.pkl_id === pkl.id);
+        return { ...pkl, penilaian };
+    });
+    console.log('combinedData', combinedData)
+    sortedData = combinedData
 
 
     const sortData = (data) => {
@@ -134,7 +126,6 @@ const TableComponentPenilaian = (props) => {
 
         return sorted;
     };
-    // Helper function to compare dates
     const compareDates = (dateA, dateB) => {
         const a = new Date(dateA);
         const b = new Date(dateB);
@@ -200,16 +191,7 @@ const TableComponentPenilaian = (props) => {
     console.log("dataPKL", dataPKL)
     console.log("nama", nama)
     console.log("currentRows", currentRows)
-    if (dataPKL == '' && props.roles_id == 2) {
 
-    }
-    else if (dataPKL == '') {
-        return (
-            <Center marginTop={100}>
-                <img width="200px" height="200px" sizes="1000px" src="74ed.gif" alt="loading..." />
-            </Center>
-        );
-    }
     const updatedRows = currentRows.map((item, index) => ({
         ...item,
         no: firstRow + index, // Calculate the correct "no" for each row on the current page.
@@ -292,7 +274,7 @@ const TableComponentPenilaian = (props) => {
                 </Thead>
                 <Tbody>
                     {console.log('ini id pkl', pkl_id)}
-                    {(props.roles_id == 1 && (pkl_id == undefined || pkl_id == null || pkl_id == '')) ?
+                    {(props.roles_id == 1 && (filteredData == "")) ?
                         <Tr key={index} bg={index % 2 === 0 ? "#FFFFFF" : "#F9FAFC"} color="black">
                             <Td style={{ textAlign: "left" }}>{index += 1}</Td>
                             <Td style={{ textAlign: "left" }}>{nama}</Td>
@@ -348,6 +330,7 @@ const TableComponentPenilaian = (props) => {
                                                 width='max-content'
                                                 pkl_id={row && row.id}
                                                 penilaian_id={row && row.penilaian && row.penilaian.id}
+                                                dataNilai={row && row.penilaian}
                                                 no={index + 1}
                                             />
                                         }
@@ -359,43 +342,46 @@ const TableComponentPenilaian = (props) => {
                 </Tbody>
             </Table>
 
-            <Flex>
-                <Box marginLeft="25px" fontSize="14px" color="#687182">
-                    {firstRow} - {lastRow} of {totalRows}
-                </Box>
-                <Spacer />
-                <Box
-                    display="flex"
-                    fontSize="14px"
-                    color="#687182"
-                    alignItems="center"
-                    marginRight={25}
-                >
-                    <Box width={200} marginRight={2}>
-                        Rows per page:
+            <Box>
+                <Flex>
+                    <Box marginLeft="25px" fontSize="14px" color="#687182">
+                        {firstRow} - {lastRow} of {totalRows}
                     </Box>
-                    <Select
-                        variant="unstyled"
-                        value={rowsPerPage}
-                        onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
-                        border="none"
-                        marginBlock={1}
+                    <Spacer />
+                    <Box
+                        display="flex"
+                        fontSize="14px"
+                        color="#687182"
+                        alignItems="center"
+                        marginRight={25}
                     >
-                        <option value={5}>5</option>
-                        <option value={10}>10</option>
-                        <option value={15}>15</option>
-                    </Select>
-                </Box>
-                <Box>
-                    {totalRows > rowsPerPage && (
-                        <Pagination
-                            rowsPerPage={rowsPerPage}
-                            totalRows={totalRows}
-                            paginate={paginate}
-                        />
-                    )}
-                </Box>
-            </Flex>
+                        <Box width={200} marginRight={2}>
+                            Rows per page:
+                        </Box>
+                        <Select
+                            variant="unstyled"
+                            value={rowsPerPage}
+                            onChange={(e) => setRowsPerPage(parseInt(e.target.value))}
+                            border="none"
+                            marginBlock={1}
+                        >
+                            <option value={5}>5</option>
+                            <option value={10}>10</option>
+                            <option value={15}>15</option>
+                        </Select>
+                    </Box>
+                </Flex>
+            </Box>
+
+            <Box>
+                {totalRows > rowsPerPage && (
+                    <Pagination
+                        rowsPerPage={rowsPerPage}
+                        totalRows={totalRows}
+                        paginate={paginate}
+                    />
+                )}
+            </Box>
         </Box >
     );
 };

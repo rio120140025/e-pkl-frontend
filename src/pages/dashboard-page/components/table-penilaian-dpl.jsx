@@ -255,7 +255,8 @@ const TablePenilaianDPL = () => {
           ))}
         </Tbody>
       </Table>
-      <Modal isOpen={isOpenDelete} onClose={onCloseDelete}>
+      <Modal isOpen={isOpenDelete} onClose={onCloseDelete} isLazy={true}
+        closeOnOverlayClick={false}>
         <ModalOverlay />
         <ModalContent>
           <ModalBody mt={10} textAlign={"center"} fontWeight={"bolder"}>

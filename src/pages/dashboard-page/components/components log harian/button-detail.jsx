@@ -94,7 +94,7 @@ function DetailLogHarianMahasiswaDosenDetail(props) {
         console.log(updateData)
         axios
             .post(`http://127.0.0.1:8000/api/user/jurnal/update/${props.logHarian_data.id}`, updateData, {
-                headers: { Authorization: "Bearer " + cookies.jwt_token.data }
+                headers: { Authorization: "Bearer " + cookies?.jwt_token?.data }
             })
             .then(response => {
                 async function notif() {
@@ -106,10 +106,13 @@ function DetailLogHarianMahasiswaDosenDetail(props) {
                 notif()
             })
             .catch(error => {
-                Object.keys(error?.response?.data?.errors).forEach(function (key, index) {
-                    callToast(error.response.data.errors[key], 'error');
-                });
+                if (error?.response?.data?.errors) {
+                    Object.keys(error.response.data.errors).forEach(function (key, index) {
+                        callToast(error.response.data.errors[key], 'error');
+                    });
+                }
             });
+
     }
     return (
         <>
